@@ -1,502 +1,1084 @@
 <!DOCTYPE html>
 <html lang="sv">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIDPUNKT</title>
 
-<meta charset="UTF-8">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    body {
+      font-family: Arial, sans-serif;
+      background: #061b3a;
+      color: white;
+      min-height: 100vh;
+    }
 
-<title>TIDPUNKT</title>
+    button, select {
+      font: inherit;
+    }
 
-<style>
+    .app {
+      max-width: 520px;
+      margin: auto;
+      min-height: 100vh;
+      padding-bottom: 90px;
+    }
 
-* {
-  box-sizing: border-box;
-}
+    header {
+      padding: 28px 20px 18px;
+      text-align: center;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b1626;
-  color: white;
-}
+    header h1 {
+      font-size: 38px;
+      letter-spacing: 4px;
+      margin-bottom: 5px;
+    }
 
-.app {
-  max-width: 480px;
-  margin: auto;
-  min-height: 100vh;
-  background: #0f1d30;
-  padding-bottom: 90px;
-}
+    header p {
+      color: #d5def0;
+      font-size: 15px;
+    }
 
-.header {
-  padding: 25px 20px 15px;
-}
+    .page {
+      display: none;
+      padding: 0 16px;
+    }
 
-.logo {
-  font-size: 30px;
-  font-weight: bold;
-  letter-spacing: 4px;
-}
+    .page.active {
+      display: block;
+    }
 
-.subtitle {
-  color: #9aa9bd;
-  font-size: 13px;
-  margin-top: 5px;
-}
+    .card {
+      background: #164b96;
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.18);
+    }
 
-.content {
-  padding: 15px;
-}
+    .card h2 {
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
 
-.card {
-  background: #17263b;
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 15px;
-}
+    .label {
+      display: block;
+      color: #dbe7fa;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
 
-.label {
-  color: #9aa9bd;
-  font-size: 12px;
-  margin-bottom: 8px;
-}
+    select {
+      width: 100%;
+      padding: 16px;
+      border: 0;
+      border-radius: 14px;
+      background: #8794df;
+      color: white;
+      outline: none;
+      margin-bottom: 14px;
+    }
 
-select {
-  width: 100%;
-  padding: 15px;
-  border-radius: 12px;
-  border: none;
-  background: #24364e;
-  color: white;
-  font-size: 16px;
-}
+    button {
+      border: 0;
+      border-radius: 15px;
+      padding: 16px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+    }
 
-.timer {
-  text-align: center;
-  font-size: 44px;
-  font-weight: bold;
-  margin: 20px 0 5px;
-}
+    .green {
+      background: #8cff80;
+      color: #123c22;
+    }
 
-.status {
-  text-align: center;
-  color: #9aa9bd;
-  margin-bottom: 20px;
-}
+    .red {
+      background: #ff695c;
+      color: white;
+    }
 
-button {
-  width: 100%;
-  border: none;
-  border-radius: 13px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 10px;
-}
+    .purple {
+      background: #8794df;
+      color: white;
+    }
 
-.start {
-  background: #22c55e;
-  color: white;
-}
+    .gray {
+      background: #71809b;
+      color: white;
+    }
 
-.pause {
-  background: #eab308;
-  color: white;
-}
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
 
-.stop {
-  background: #ef4444;
-  color: white;
-}
+    .timer {
+      text-align: center;
+      font-size: 46px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin: 15px 0 5px;
+    }
 
-.secondary {
-  background: #24364e;
-  color: white;
-}
+    .status {
+      text-align: center;
+      color: #dbe7fa;
+      margin-bottom: 18px;
+    }
 
-.nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  background: #101c2d;
-  border-top: 1px solid #26374d;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 5px;
-}
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
 
-.nav button {
-  background: none;
-  color: #9aa9bd;
-  padding: 8px 4px;
-  margin: 0;
-  font-size: 11px;
-}
+    .actions button {
+      min-height: 55px;
+    }
 
-.nav button.active {
-  color: #22c55e;
-}
+    .full {
+      grid-column: 1 / -1;
+    }
 
-.record {
-  border-bottom: 1px solid #293a51;
-  padding: 13px 0;
-}
+    .work-row {
+      background: rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 15px;
+      margin-top: 10px;
+    }
 
-.record:last-child {
-  border-bottom: none;
-}
+    .work-row strong {
+      display: block;
+      margin-bottom: 5px;
+    }
 
-.profile-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #293a51;
-}
+    .small {
+      color: #cbd8ee;
+      font-size: 13px;
+    }
 
-.profile-row:last-child {
-  border-bottom: none;
-}
+    .empty {
+      color: #cbd8ee;
+      text-align: center;
+      padding: 15px 0;
+    }
 
-.hidden {
-  display: none;
-}
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(520px, 100%);
+      background: #0c3269;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 6px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      z-index: 10;
+    }
 
-h2 {
-  margin-top: 5px;
-}
+    .nav-btn {
+      background: transparent;
+      color: #dbe7fa;
+      padding: 8px 3px;
+      font-size: 12px;
+    }
 
-</style>
+    .nav-btn.active {
+      color: #8cff80;
+    }
 
+    .nav-icon {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 12px;
+      background: rgba(140,255,128,.12);
+      color: #aaff9f;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .danger-text {
+      color: #ff9a92;
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="app">
 
-<div class="header">
+  <header>
+    <h1>TIDPUNKT</h1>
+    <p>Tid. Personal. Arbete.</p>
+  </header>
 
-<div class="logo">
-TIDPUNKT
-</div>
+  <!-- START -->
+  <section id="startPage" class="page active">
 
-<div class="subtitle">
-Tid. Personal. Arbete.
-</div>
+    <div class="card">
+      <h2>Hej!</h2>
 
-</div>
+      <label class="label">Välj arbetsplats</label>
 
+      <select id="workplaceSelect">
+        <option value="Uppsala – Kontor">Uppsala – Kontor</option>
+        <option value="Peab – Tärnsjö">Peab – Tärnsjö</option>
+        <option value="Kund – Hemstädning">Kund – Hemstädning</option>
+        <option value="Flyttstädning">Flyttstädning</option>
+      </select>
 
-<div class="content">
+      <button id="startBtn" class="green" onclick="startWork()">
+        ▶ STÄMPLA IN
+      </button>
 
+      <div id="message" class="message"></div>
+    </div>
 
-<div id="startPage">
+    <div class="card">
+      <h2>Dagens arbetstid</h2>
 
-<div class="card">
+      <div id="timer" class="timer">00:00:00</div>
 
-<h2>Hej!</h2>
+      <div id="status" class="status">
+        Inte arbetar
+      </div>
 
-<p class="label">
-Välj arbetsplats
-</p>
+      <div id="workActions" class="actions" style="display:none;">
 
-<select id="workplace">
+        <button id="pauseBtn"
+                class="purple"
+                onclick="pauseWork()">
+          ☕ PAUS
+        </button>
 
-<option>
-Peab – Tärnsjö
-</option>
+        <button id="resumeBtn"
+                class="green"
+                onclick="resumeWork()"
+                disabled>
+          ▶ FORTSÄTT
+        </button>
 
-<option>
-Uppsala – Kontor
-</option>
+        <button class="red full"
+                onclick="stopWork()">
+          ■ STÄMPLA UT
+        </button>
 
-<option>
-Gävle – Trappstädning
-</option>
+      </div>
+    </div>
 
-</select>
+  </section>
 
-<button
-class="start"
-onclick="clockIn()">
 
-STÄMPLA IN
+  <!-- MIN TID -->
+  <section id="timePage" class="page">
 
-</button>
+    <div class="card">
+      <h2>Min tid</h2>
 
-</div>
+      <div id="todayTotal" class="timer">
+        00:00:00
+      </div>
 
+      <div class="status">
+        Total arbetstid idag
+      </div>
 
-<div class="card">
+      <div id="timeEntries"></div>
+    </div>
 
-<div class="label">
-Dagens arbetstid
-</div>
+  </section>
 
-<div
-id="todayTime"
-class="timer">
 
-00:00:00
+  <!-- ARBETSPLATSER -->
+  <section id="placesPage" class="page">
 
-</div>
+    <div class="card">
+      <h2>Arbetsplatser</h2>
 
-</div>
+      <div class="work-row">
+        <strong>Uppsala – Kontor</strong>
+        <span class="small">Kontor</span>
+      </div>
 
-</div>
+      <div class="work-row">
+        <strong>Peab – Tärnsjö</strong>
+        <span class="small">Arbetsplats</span>
+      </div>
 
-
-<div id="workingPage"
-class="hidden">
-
-<div class="card">
-
-<div class="label">
-PÅGÅENDE ARBETE
-</div>
-
-<div
-id="workplaceName">
-
-</div>
-
-<div
-id="timer"
-class="timer">
-
-00:00:00
-
-</div>
-
-<div
-id="workStatus"
-class="status">
-
-Arbetar
-
-</div>
-
-<button
-class="pause"
-onclick="pauseWork()">
-
-☕ PAUS
-
-</button>
-
-<button
-class="stop"
-onclick="clockOut()">
-
-STÄMPLA UT
-
-</button>
-
-</div>
-
-</div>
-
-
-<div id="timePage"
-class="hidden">
-
-<div class="card">
-
-<h2>Min tid</h2>
-
-<div
-id="records">
-
-Inga registrerade arbetspass.
-
-</div>
-
-</div>
-
-</div>
-
-
-<div id="placesPage"
-class="hidden">
-
-<div class="card">
-
-<h2>Mina arbetsplatser</h2>
-
-<div class="profile-row">
-
-<span>
-Peab – Tärnsjö
-</span>
-
-<span>
-✓
-</span>
-
-</div>
-
-<div class="profile-row">
-
-<span>
-Uppsala – Kontor
-</span>
-
-<span>
-✓
-</span>
-
-</div>
-
-<div class="profile-row">
-
-<span>
-Gävle – Trappstädning
-</span>
-
-<span>
-✓
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div id="profilePage"
-class="hidden">
-
-<div class="card">
-
-<h2>Min profil</h2>
-
-<div class="profile-row">
-
-<span>
-Namn
-</span>
-
-<strong>
-Anställd
-</strong>
-
-</div>
-
-<div class="profile-row">
-
-<span>
-Roll
-</span>
-
-<strong>
-Medarbetare
-</strong>
-
-</div>
-
-</div>
-
-</div>
-
-
-</div>
-
-
-<div class="nav">
-
-<button
-class="active"
-onclick="showPage('start')">
-
-🏠<br>
-Start
-
-</button>
-
-<button
-onclick="showPage('time')">
-
-📅<br>
-Min tid
-
-</button>
-
-<button
-onclick="showPage('places')">
-
-🏢<br>
-Arbetsplatser
-
-</button>
-
-<button
-onclick="showPage('profile')">
-
-👤<br>
-Profil
-
-</button>
-
-</div>
+      <div class="work-row">
+        <strong>Kund – Hemstädning</strong>
+        <span class="small">Kunduppdrag</span>
+      </div>
+
+      <div class="work-row">
+        <strong>Flyttstädning</strong>
+        <span class="small">Kunduppdrag</span>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- PROFIL -->
+  <section id="profilePage" class="page">
+
+    <div class="card">
+      <h2>Min profil</h2>
+
+      <div class="work-row">
+        <strong>Anställd</strong>
+        <span class="small">TIDPUNKT</span>
+      </div>
+
+      <div class="work-row">
+        <strong>Roll</strong>
+        <span class="small">Personal</span>
+      </div>
+
+      <div class="work-row">
+        <strong>Status</strong>
+        <span id="profileStatus" class="small">
+          Inte arbetar
+        </span>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- NAVIGATION -->
+  <nav class="bottom-nav">
+
+    <button class="nav-btn active"
+            id="navStart"
+            onclick="showPage('start')">
+      <span class="nav-icon">🏠</span>
+      Start
+    </button>
+
+    <button class="nav-btn"
+            id="navTime"
+            onclick="showPage('time')">
+      <span class="nav-icon">📅</span>
+      Min tid
+    </button>
+
+    <button class="nav-btn"
+            id="navPlaces"
+            onclick="showPage('places')">
+      <span class="nav-icon">🏢</span>
+      Arbetsplatser
+    </button>
+
+    <button class="nav-btn"
+            id="navProfile"
+            onclick="showPage('profile')">
+      <span class="nav-icon">👤</span>
+      Profil
+    </button>
+
+  </nav>
 
 </div>
 
 
 <script>
 
-let startTime = null;
+  /* =========================
+     TIDPUNKT - DATA
+     ========================= */
 
-let timerInterval = null;
+  let startTime = null;
+  let pauseStart = null;
+  let totalPause = 0;
+  let isPaused = false;
+  let timerInterval = null;
 
-let isPaused = false;
-
-let pauseStart = null;
-
-let totalPause = 0;
-
-
-function clockIn() {
-
-const workplace =
-document.getElementById("workplace").value;
-
-startTime = new Date();
-
-totalPause = 0;
-
-isPaused = false;
-
-document.getElementById(
-"workplaceName"
-).textContent = workplace;
-
-document.getElementById(
-"startPage"
-).classList.add("hidden");
-
-document.getElementById(
-"workingPage"
-).classList.remove("hidden");
-
-startTimer();
-
-}
+  const STORAGE_KEY = "tidpunkt_data";
 
 
-function startTimer() {
+  /* =========================
+     HELPERS
+     ========================= */
 
-clearInterval(timerInterval);
+  function getData() {
 
-timerInterval = setInterval(function() {
+    const saved = localStorage.getItem(STORAGE_KEY);
 
-if (!startTime || isPaused) {
-return;
-}
+    if (!saved) {
+      return {
+        entries: [],
+        active: null
+      };
+    }
 
-cons
+    try {
+      return JSON.parse(saved);
+    } catch (error) {
+      return {
+        entries: [],
+        active: null
+      };
+    }
+  }
+
+
+  function saveData(data) {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(data)
+    );
+  }
+
+
+  function formatTime(seconds) {
+
+    seconds = Math.max(0, Math.floor(seconds));
+
+    const hours =
+      Math.floor(seconds / 3600);
+
+    const minutes =
+      Math.floor((seconds % 3600) / 60);
+
+    const secs =
+      seconds % 60;
+
+    return [
+      String(hours).padStart(2, "0"),
+      String(minutes).padStart(2, "0"),
+      String(secs).padStart(2, "0")
+    ].join(":");
+  }
+
+
+  function showMessage(text) {
+
+    const box =
+      document.getElementById("message");
+
+    box.textContent = text;
+    box.classList.add("show");
+
+    setTimeout(() => {
+      box.classList.remove("show");
+    }, 3000);
+  }
+
+
+  /* =========================
+     NAVIGATION
+     ========================= */
+
+  function showPage(page) {
+
+    document
+      .querySelectorAll(".page")
+      .forEach(section => {
+        section.classList.remove("active");
+      });
+
+    document
+      .getElementById(page + "Page")
+      .classList.add("active");
+
+
+    document
+      .querySelectorAll(".nav-btn")
+      .forEach(button => {
+        button.classList.remove("active");
+      });
+
+
+    const navMap = {
+      start: "navStart",
+      time: "navTime",
+      places: "navPlaces",
+      profile: "navProfile"
+    };
+
+    document
+      .getElementById(navMap[page])
+      .classList.add("active");
+
+
+    if (page === "time") {
+      renderTimeEntries();
+    }
+  }
+
+
+  /* =========================
+     STÄMPLA IN
+     ========================= */
+
+  function startWork() {
+
+    if (startTime) {
+      showMessage("Du arbetar redan.");
+      return;
+    }
+
+
+    const workplace =
+      document.getElementById(
+        "workplaceSelect"
+      ).value;
+
+
+    startTime = Date.now();
+
+    pauseStart = null;
+
+    totalPause = 0;
+
+    isPaused = false;
+
+
+    const data = getData();
+
+    data.active = {
+      startTime: startTime,
+      workplace: workplace,
+      totalPause: 0,
+      paused: false
+    };
+
+    saveData(data);
+
+
+    document
+      .getElementById("startBtn")
+      .style.display = "none";
+
+
+    document
+      .getElementById("workActions")
+      .style.display = "grid";
+
+
+    document
+      .getElementById("pauseBtn")
+      .disabled = false;
+
+
+    document
+      .getElementById("resumeBtn")
+      .disabled = true;
+
+
+    document
+      .getElementById("status")
+      .textContent =
+      "Arbetar – " + workplace;
+
+
+    document
+      .getElementById("profileStatus")
+      .textContent =
+      "Arbetar – " + workplace;
+
+
+    startTimer();
+
+    showMessage(
+      "Stämplad in på " + workplace
+    );
+  }
+
+
+  /* =========================
+     PAUS
+     ========================= */
+
+  function pauseWork() {
+
+    if (!startTime || isPaused) {
+      return;
+    }
+
+
+    pauseStart = Date.now();
+
+    isPaused = true;
+
+
+    const data = getData();
+
+    if (data.active) {
+      data.active.paused = true;
+      saveData(data);
+    }
+
+
+    document
+      .getElementById("pauseBtn")
+      .disabled = true;
+
+
+    document
+      .getElementById("resumeBtn")
+      .disabled = false;
+
+
+    document
+      .getElementById("status")
+      .textContent =
+      "☕ Paus";
+
+
+    document
+      .getElementById("profileStatus")
+      .textContent =
+      "Paus";
+
+
+    showMessage("Paus startad.");
+  }
+
+
+  /* =========================
+     FORTSÄTT
+     ========================= */
+
+  function resumeWork() {
+
+    if (!startTime || !isPaused) {
+      return;
+    }
+
+
+    totalPause +=
+      Date.now() - pauseStart;
+
+
+    pauseStart = null;
+
+    isPaused = false;
+
+
+    const data = getData();
+
+    if (data.active) {
+
+      data.active.totalPause =
+        totalPause;
+
+      data.active.paused = false;
+
+      saveData(data);
+    }
+
+
+    document
+      .getElementById("pauseBtn")
+      .disabled = false;
+
+
+    document
+      .getElementById("resumeBtn")
+      .disabled = true;
+
+
+    const workplace =
+      data.active
+        ? data.active.workplace
+        : "";
+
+
+    document
+      .getElementById("status")
+      .textContent =
+      "Arbetar – " + workplace;
+
+
+    document
+      .getElementById("profileStatus")
+      .textContent =
+      "Arbetar";
+
+
+    showMessage("Arbetet fortsätter.");
+  }
+
+
+  /* =========================
+     STÄMPLA UT
+     ========================= */
+
+  function stopWork() {
+
+    if (!startTime) {
+      return;
+    }
+
+
+    if (isPaused && pauseStart) {
+
+      totalPause +=
+        Date.now() - pauseStart;
+
+      pauseStart = null;
+    }
+
+
+    const endTime = Date.now();
+
+
+    const data = getData();
+
+    const workplace =
+      data.active
+        ? data.active.workplace
+        : "Okänd arbetsplats";
+
+
+    const workedSeconds =
+      Math.max(
+        0,
+        Math.floor(
+          (endTime - startTime - totalPause)
+          / 1000
+        )
+      );
+
+
+    data.entries.push({
+
+      date:
+        new Date(startTime)
+          .toISOString()
+          .slice(0, 10),
+
+      workplace:
+        workplace,
+
+      start:
+        new Date(startTime)
+          .toLocaleTimeString(
+            "sv-SE",
+            {
+              hour: "2-digit",
+              minute: "2-digit"
+            }
+          ),
+
+      end:
+        new Date(endTime)
+          .toLocaleTimeString(
+            "sv-SE",
+            {
+              hour: "2-digit",
+              minute: "2-digit"
+            }
+          ),
+
+      seconds:
+        workedSeconds,
+
+      pause:
+        Math.floor(totalPause / 1000)
+
+    });
+
+
+    data.active = null;
+
+    saveData(data);
+
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    startTime = null;
+
+    pauseStart = null;
+
+    totalPause = 0;
+
+    isPaused = false;
+
+
+    document
+      .getElementById("timer")
+      .textContent =
+      "00:00:00";
+
+
+    document
+      .getElementById("status")
+      .textContent =
+      "Inte arbetar";
+
+
+    document
+      .getElementById("profileStatus")
+      .textContent =
+      "Inte arbetar";
+
+
+    document
+      .getElementById("startBtn")
+      .style.display = "block";
+
+
+    document
+      .getElementById("workActions")
+      .style.display = "none";
+
+
+    showMessage(
+      "Stämplad ut. Tid sparad."
+    );
+  }
+
+
+  /* =========================
+     TIMER
+     ========================= */
+
+  function startTimer() {
+
+    clearInterval(timerInterval);
+
+
+    timerInterval =
+      setInterval(updateTimer, 1000);
+
+
+    updateTimer();
+  }
+
+
+  function updateTimer() {
+
+    if (!startTime || isPaused) {
+      return;
+    }
+
+
+    const now = Date.now();
+
+
+    const seconds =
+      Math.max(
+        0,
+        Math.floor(
+          (now - startTime - totalPause)
+          / 1000
+        )
+      );
+
+
+    document
+      .getElementById("timer")
+      .textContent =
+      formatTime(seconds);
+  }
+
+
+  /* =========================
+     MIN TID
+     ========================= */
+
+  function renderTimeEntries() {
+
+    const data = getData();
+
+    const container =
+      document.getElementById(
+        "timeEntries"
+      );
+
+
+    if (!data.entries.length) {
+
+      container.innerHTML =
+        '<div class="empty">' +
+        "Inga arbetstidsregistreringar ännu." +
+        "</div>";
+
+      document
+        .getElementById("todayTotal")
+        .textContent =
+        "00:00:00";
+
+      return;
+    }
+
+
+    const today =
+      new Date()
+        .toISOString()
+        .slice(0, 10);
+
+
+    const todayEntries =
+      data.entries.filter(
+        entry => entry.date === today
+      );
+
+
+    let total = 0;
+
+
+    todayEntries.forEach(
+      entry => {
+        total += entry.seconds;
+      }
+    );
+
+
+    document
+      .getElementById("todayTotal")
+      .textContent =
+      formatTime(total);
+
+
+    container.innerHTML = "";
+
+
+    [...data.entries]
+      .reverse()
+      .forEach(entry => {
+
+        const row =
+          document.createElement("div");
+
+        row.className =
+          "work-row";
+
+
+        row.innerHTML = `
+          <strong>${entry.workplace}</strong>
+          <span class="small">
+            ${entry.date}<br>
+            ${entry.start} – ${entry.end}<br>
+            Arbetstid: ${formatTime(entry.seconds)}<br>
+            Paus: ${formatTime(entry.pause)}
+          </span>
+        `;
+
+
+        container.appendChild(row);
+      });
+  }
+
+
+  /* =========================
+     LOAD ACTIVE SESSION
+     ========================= */
+
+  function restoreSession() {
+
+    const data = getData();
+
+
+    if (!data.active) {
+      return;
+    }
+
+
+    startTime =
+      data.active.startTime;
+
+
+    totalPause =
+      data.active.totalPause || 0;
+
+
+    isPaused =
+      data.active.paused || false;
+
+
+    const workplace =
+      data.active.workplace;
+
+
+    document
+      .getElementById(
+        "workplaceSelect"
+      ).value = workplace;
+
+
+    document
+      .getElementById("startBtn")
+      .style.display = "none";
+
+
+    document
+      .getElementById("workActions")
+      .style.display = "grid";
+
+
+    document
+      .getElementById("pauseBtn")
+      ).disabled = isPaused;
+
+
+    document
+      .getElementById("resumeBtn")
+      ).disabled = !isPaused;
+
+
+    if (isPaused) {
+
+      document
+        .getElementById("status")
+        .textContent =
+        "☕ Paus";
+
+    } else {
+
+      document
+        .getElementById("status")
+        .textContent =
+        "Arbetar – " + workplace;
+    }
+
+
+    document
+      .getElementById("profileStatus")
+      .textContent =
+      isPaused ? "Paus" : "Arbetar";
+
+
+    startTimer();
+  }
+
+
+  /* =========================
+     START APP
+     ========================= */
+
+  window.addEventListener(
+    "load",
+    function() {
+      restoreSession();
+      renderTimeEntries();
+    }
+  );
+
+</script>
+
+</body>
+</html>
