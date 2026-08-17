@@ -1,14 +1,263 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="el">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIDPUNK</title>
+<title>TIDPUNKT</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0b1220;
+  color:white;
+}
+
+.container{
+  max-width:500px;
+  margin:auto;
+  padding:25px 18px;
+}
+
+h1{
+  text-align:center;
+  font-size:38px;
+  letter-spacing:4px;
+  margin:15px 0 5px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#9ca8ba;
+  margin-bottom:30px;
+}
+
+.card{
+  background:#151f31;
+  border-radius:22px;
+  padding:25px;
+  margin-bottom:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.time{
+  text-align:center;
+  font-size:48px;
+  font-weight:bold;
+  margin:10px 0 5px;
+}
+
+.status{
+  text-align:center;
+  color:#8fa0b8;
+  margin-bottom:25px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  margin-top:10px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.start{
+  background:#22c55e;
+  color:white;
+}
+
+.stop{
+  background:#ef4444;
+  color:white;
+}
+
+.calendar{
+  background:#27344a;
+  color:white;
+}
+
+.today{
+  text-align:center;
+  color:#aebbd0;
+  margin-bottom:15px;
+}
+
+.record{
+  padding:12px 0;
+  border-bottom:1px solid #2b3850;
+}
+
+.record:last-child{
+  border-bottom:0;
+}
+</style>
 </head>
+
 <body>
+
+<div class="container">
+
   <h1>TIDPUNKT</h1>
-  <P>TID. Personal. Arbeta</P>
-  <button>Start</button>
-  <button>Kalender</button>
+  <div class="subtitle">TID. Personal. Arbeta.</div>
+
+  <div class="card">
+
+    <div class="today" id="date"></div>
+
+    <div class="time" id="timer">00:00:00</div>
+
+    <div class="status" id="status">
+      Δεν εργάζεσαι
+    </div>
+
+    <button class="start" id="startBtn" onclick="startWork()">
+      ▶ Start
+    </button>
+
+    <button class="stop" id="stopBtn" onclick="stopWork()" style="display:none">
+      ■ Stop
+    </button>
+
+    <button class="calendar" onclick="showRecords()">
+      📅 Kalender
+    </button>
+
+  </div>
+
+  <div class="card" id="records">
+    <h2>Arbetstid</h2>
+    <div id="recordList">
+      Δεν υπάρχουν καταγραφές.
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+let startTime = null;
+let timerInterval = null;
+
+const dateElement = document.getElementById("date");
+const timerElement = document.getElementById("timer");
+const statusElement = document.getElementById("status");
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+const recordList = document.getElementById("recordList");
+
+function updateDate(){
+  const now = new Date();
+
+  dateElement.textContent =
+    now.toLocaleDateString("sv-SE",{
+      weekday:"long",
+      year:"numeric",
+      month:"long",
+      day:"numeric"
+    });
+}
+
+function formatTime(seconds){
+
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+
+  return String(h).padStart(2,"0") + ":" +
+         String(m).padStart(2,"0") + ":" +
+         String(s).padStart(2,"0");
+}
+
+function startWork(){
+
+  startTime = new Date();
+
+  statusElement.textContent = "Arbetar...";
+  startBtn.style.display = "none";
+  stopBtn.style.display = "block";
+
+  timerInterval = setInterval(function(){
+
+    const seconds =
+      Math.floor((new Date() - startTime) / 1000);
+
+    timerElement.textContent = formatTime(seconds);
+
+  },1000);
+}
+
+function stopWork(){
+
+  if(!startTime) return;
+
+  clearInterval(timerInterval);
+
+  const endTime = new Date();
+
+  const seconds =
+    Math.floor((endTime - startTime) / 1000);
+
+  const records =
+    JSON.parse(localStorage.getItem("tidpunkt_records") || "[]");
+
+  records.push({
+    date: new Date().toLocaleDateString("sv-SE"),
+    start: startTime.toLocaleTimeString("sv-SE"),
+    end: endTime.toLocaleTimeString("sv-SE"),
+    duration: formatTime(seconds)
+  });
+
+  localStorage.setItem(
+    "tidpunkt_records",
+    JSON.stringify(records)
+  );
+
+  startTime = null;
+
+  timerElement.textContent = "00:00:00";
+  statusElement.textContent = "Inte arbetar";
+
+  startBtn.style.display = "block";
+  stopBtn.style.display = "none";
+
+  showRecords();
+}
+
+function showRecords(){
+
+  const records =
+    JSON.parse(localStorage.getItem("tidpunkt_records") || "[]");
+
+  if(records.length === 0){
+
+    recordList.innerHTML =
+      "Inga arbetstidsregistreringar ännu.";
+
+    return;
+  }
+
+  recordList.innerHTML = records
+    .slice()
+    .reverse()
+    .map(r => `
+      <div class="record">
+        <strong>${r.date}</strong><br>
+        ${r.start} – ${r.end}<br>
+        ⏱ ${r.duration}
+      </div>
+    `)
+    .join("");
+}
+
+updateDate();
+showRecords();
+
+</script>
+
 </body>
 </html>
