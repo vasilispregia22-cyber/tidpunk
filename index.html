@@ -364,6 +364,111 @@
   </section>
 
 
+  <!-- ADMIN DASHBOARD -->
+<section id="adminPage" class="page">
+
+  <div class="card">
+    <h2>Admin Dashboard</h2>
+    <div class="status">
+      TIDPUNKT – Administration
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Översikt</h2>
+
+    <div class="work-row">
+      <strong>Personal</strong>
+      <span class="small">1 anställd</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Arbetar nu</strong>
+      <span class="small">0 personer</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Totala arbetstimmar</strong>
+      <span class="small">00:00:00</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Övertid</strong>
+      <span class="small">00:00:00</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Personal</h2>
+
+    <div class="work-row">
+      <strong>TIDPUNKT</strong>
+      <span class="small">Personal</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Kunder</h2>
+
+    <div class="work-row">
+      <strong>Hemstädning</strong>
+      <span class="small">Kunduppdrag</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Flyttstädning</strong>
+      <span class="small">Kunduppdrag</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Arbetsplatser</h2>
+
+    <div class="work-row">
+      <strong>Uppsala – Kontor</strong>
+      <span class="small">Kontor</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Peab – Tärnsjö</strong>
+      <span class="small">Arbetsplats</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Lönekostnad</h2>
+
+    <div class="work-row">
+      <strong>Timlön</strong>
+      <span class="small">0 kr</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Lönekostnad</strong>
+      <span class="small">0 kr</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Månadskostnad</strong>
+      <span class="small">0 kr</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Rapporter</h2>
+
+    <div class="work-row">
+      <strong>Arbetstid</strong>
+      <span class="small">Tillgänglig</span>
+    </div>
+
+    <div class="work-row">
+      <strong>Lönekostnad</strong>
+      <span class="small">Tillgänglig</span>
+    </div>
+  </div>
+
+</section>
   <!-- NAVIGATION -->
   <nav class="bottom-nav">
 
@@ -870,7 +975,24 @@
 
 
   function updateTimer() {
+ const breakNow = new Date();   
+  const minutes = breakNow.getHours() * 60 + breakNow.getMinutes();
 
+  const inScheduledBreak =
+    (minutes >= 600 && minutes < 615) ||   // 10:00–10:15
+    (minutes >= 720 && minutes < 750) ||   // 12:00–12:30
+    (minutes >= 920 && minutes < 945);    // 15:20–15:45
+
+  if (inScheduledBreak && !isPaused) {
+    window.autoBreakActive = true;
+    pauseWork();
+    return;
+  }
+
+  if (!inScheduledBreak && isPaused && window.autoBreakActive) {
+    window.autoBreakActive = false;
+    resumeWork();
+    }
     if (!startTime || isPaused) {
       return;
     }
@@ -1008,7 +1130,8 @@
 
     isPaused =
       data.active.paused || false;
-
+    
+pauseStart = data.active.pauseStart || null;
 
     const workplace =
       data.active.workplace;
