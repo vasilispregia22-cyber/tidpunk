@@ -1,263 +1,502 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="sv">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>TIDPUNKT</title>
 
 <style>
-*{box-sizing:border-box}
 
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#0b1220;
-  color:white;
+* {
+  box-sizing: border-box;
 }
 
-.container{
-  max-width:500px;
-  margin:auto;
-  padding:25px 18px;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1626;
+  color: white;
 }
 
-h1{
-  text-align:center;
-  font-size:38px;
-  letter-spacing:4px;
-  margin:15px 0 5px;
+.app {
+  max-width: 480px;
+  margin: auto;
+  min-height: 100vh;
+  background: #0f1d30;
+  padding-bottom: 90px;
 }
 
-.subtitle{
-  text-align:center;
-  color:#9ca8ba;
-  margin-bottom:30px;
+.header {
+  padding: 25px 20px 15px;
 }
 
-.card{
-  background:#151f31;
-  border-radius:22px;
-  padding:25px;
-  margin-bottom:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
+.logo {
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 4px;
 }
 
-.time{
-  text-align:center;
-  font-size:48px;
-  font-weight:bold;
-  margin:10px 0 5px;
+.subtitle {
+  color: #9aa9bd;
+  font-size: 13px;
+  margin-top: 5px;
 }
 
-.status{
-  text-align:center;
-  color:#8fa0b8;
-  margin-bottom:25px;
+.content {
+  padding: 15px;
 }
 
-button{
-  width:100%;
-  border:0;
-  border-radius:14px;
-  padding:16px;
-  margin-top:10px;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
+.card {
+  background: #17263b;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 15px;
 }
 
-.start{
-  background:#22c55e;
-  color:white;
+.label {
+  color: #9aa9bd;
+  font-size: 12px;
+  margin-bottom: 8px;
 }
 
-.stop{
-  background:#ef4444;
-  color:white;
+select {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  background: #24364e;
+  color: white;
+  font-size: 16px;
 }
 
-.calendar{
-  background:#27344a;
-  color:white;
+.timer {
+  text-align: center;
+  font-size: 44px;
+  font-weight: bold;
+  margin: 20px 0 5px;
 }
 
-.today{
-  text-align:center;
-  color:#aebbd0;
-  margin-bottom:15px;
+.status {
+  text-align: center;
+  color: #9aa9bd;
+  margin-bottom: 20px;
 }
 
-.record{
-  padding:12px 0;
-  border-bottom:1px solid #2b3850;
+button {
+  width: 100%;
+  border: none;
+  border-radius: 13px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
-.record:last-child{
-  border-bottom:0;
+.start {
+  background: #22c55e;
+  color: white;
 }
+
+.pause {
+  background: #eab308;
+  color: white;
+}
+
+.stop {
+  background: #ef4444;
+  color: white;
+}
+
+.secondary {
+  background: #24364e;
+  color: white;
+}
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: #101c2d;
+  border-top: 1px solid #26374d;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 5px;
+}
+
+.nav button {
+  background: none;
+  color: #9aa9bd;
+  padding: 8px 4px;
+  margin: 0;
+  font-size: 11px;
+}
+
+.nav button.active {
+  color: #22c55e;
+}
+
+.record {
+  border-bottom: 1px solid #293a51;
+  padding: 13px 0;
+}
+
+.record:last-child {
+  border-bottom: none;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #293a51;
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.hidden {
+  display: none;
+}
+
+h2 {
+  margin-top: 5px;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="container">
+<div class="app">
 
-  <h1>TIDPUNKT</h1>
-  <div class="subtitle">TID. Personal. Arbeta.</div>
+<div class="header">
 
-  <div class="card">
+<div class="logo">
+TIDPUNKT
+</div>
 
-    <div class="today" id="date"></div>
-
-    <div class="time" id="timer">00:00:00</div>
-
-    <div class="status" id="status">
-      Δεν εργάζεσαι
-    </div>
-
-    <button class="start" id="startBtn" onclick="startWork()">
-      ▶ Start
-    </button>
-
-    <button class="stop" id="stopBtn" onclick="stopWork()" style="display:none">
-      ■ Stop
-    </button>
-
-    <button class="calendar" onclick="showRecords()">
-      📅 Kalender
-    </button>
-
-  </div>
-
-  <div class="card" id="records">
-    <h2>Arbetstid</h2>
-    <div id="recordList">
-      Δεν υπάρχουν καταγραφές.
-    </div>
-  </div>
+<div class="subtitle">
+Tid. Personal. Arbete.
+</div>
 
 </div>
+
+
+<div class="content">
+
+
+<div id="startPage">
+
+<div class="card">
+
+<h2>Hej!</h2>
+
+<p class="label">
+Välj arbetsplats
+</p>
+
+<select id="workplace">
+
+<option>
+Peab – Tärnsjö
+</option>
+
+<option>
+Uppsala – Kontor
+</option>
+
+<option>
+Gävle – Trappstädning
+</option>
+
+</select>
+
+<button
+class="start"
+onclick="clockIn()">
+
+STÄMPLA IN
+
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+Dagens arbetstid
+</div>
+
+<div
+id="todayTime"
+class="timer">
+
+00:00:00
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="workingPage"
+class="hidden">
+
+<div class="card">
+
+<div class="label">
+PÅGÅENDE ARBETE
+</div>
+
+<div
+id="workplaceName">
+
+</div>
+
+<div
+id="timer"
+class="timer">
+
+00:00:00
+
+</div>
+
+<div
+id="workStatus"
+class="status">
+
+Arbetar
+
+</div>
+
+<button
+class="pause"
+onclick="pauseWork()">
+
+☕ PAUS
+
+</button>
+
+<button
+class="stop"
+onclick="clockOut()">
+
+STÄMPLA UT
+
+</button>
+
+</div>
+
+</div>
+
+
+<div id="timePage"
+class="hidden">
+
+<div class="card">
+
+<h2>Min tid</h2>
+
+<div
+id="records">
+
+Inga registrerade arbetspass.
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="placesPage"
+class="hidden">
+
+<div class="card">
+
+<h2>Mina arbetsplatser</h2>
+
+<div class="profile-row">
+
+<span>
+Peab – Tärnsjö
+</span>
+
+<span>
+✓
+</span>
+
+</div>
+
+<div class="profile-row">
+
+<span>
+Uppsala – Kontor
+</span>
+
+<span>
+✓
+</span>
+
+</div>
+
+<div class="profile-row">
+
+<span>
+Gävle – Trappstädning
+</span>
+
+<span>
+✓
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="profilePage"
+class="hidden">
+
+<div class="card">
+
+<h2>Min profil</h2>
+
+<div class="profile-row">
+
+<span>
+Namn
+</span>
+
+<strong>
+Anställd
+</strong>
+
+</div>
+
+<div class="profile-row">
+
+<span>
+Roll
+</span>
+
+<strong>
+Medarbetare
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<div class="nav">
+
+<button
+class="active"
+onclick="showPage('start')">
+
+🏠<br>
+Start
+
+</button>
+
+<button
+onclick="showPage('time')">
+
+📅<br>
+Min tid
+
+</button>
+
+<button
+onclick="showPage('places')">
+
+🏢<br>
+Arbetsplatser
+
+</button>
+
+<button
+onclick="showPage('profile')">
+
+👤<br>
+Profil
+
+</button>
+
+</div>
+
+</div>
+
 
 <script>
 
 let startTime = null;
+
 let timerInterval = null;
 
-const dateElement = document.getElementById("date");
-const timerElement = document.getElementById("timer");
-const statusElement = document.getElementById("status");
-const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
-const recordList = document.getElementById("recordList");
+let isPaused = false;
 
-function updateDate(){
-  const now = new Date();
+let pauseStart = null;
 
-  dateElement.textContent =
-    now.toLocaleDateString("sv-SE",{
-      weekday:"long",
-      year:"numeric",
-      month:"long",
-      day:"numeric"
-    });
+let totalPause = 0;
+
+
+function clockIn() {
+
+const workplace =
+document.getElementById("workplace").value;
+
+startTime = new Date();
+
+totalPause = 0;
+
+isPaused = false;
+
+document.getElementById(
+"workplaceName"
+).textContent = workplace;
+
+document.getElementById(
+"startPage"
+).classList.add("hidden");
+
+document.getElementById(
+"workingPage"
+).classList.remove("hidden");
+
+startTimer();
+
 }
 
-function formatTime(seconds){
 
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
+function startTimer() {
 
-  return String(h).padStart(2,"0") + ":" +
-         String(m).padStart(2,"0") + ":" +
-         String(s).padStart(2,"0");
+clearInterval(timerInterval);
+
+timerInterval = setInterval(function() {
+
+if (!startTime || isPaused) {
+return;
 }
 
-function startWork(){
-
-  startTime = new Date();
-
-  statusElement.textContent = "Arbetar...";
-  startBtn.style.display = "none";
-  stopBtn.style.display = "block";
-
-  timerInterval = setInterval(function(){
-
-    const seconds =
-      Math.floor((new Date() - startTime) / 1000);
-
-    timerElement.textContent = formatTime(seconds);
-
-  },1000);
-}
-
-function stopWork(){
-
-  if(!startTime) return;
-
-  clearInterval(timerInterval);
-
-  const endTime = new Date();
-
-  const seconds =
-    Math.floor((endTime - startTime) / 1000);
-
-  const records =
-    JSON.parse(localStorage.getItem("tidpunkt_records") || "[]");
-
-  records.push({
-    date: new Date().toLocaleDateString("sv-SE"),
-    start: startTime.toLocaleTimeString("sv-SE"),
-    end: endTime.toLocaleTimeString("sv-SE"),
-    duration: formatTime(seconds)
-  });
-
-  localStorage.setItem(
-    "tidpunkt_records",
-    JSON.stringify(records)
-  );
-
-  startTime = null;
-
-  timerElement.textContent = "00:00:00";
-  statusElement.textContent = "Inte arbetar";
-
-  startBtn.style.display = "block";
-  stopBtn.style.display = "none";
-
-  showRecords();
-}
-
-function showRecords(){
-
-  const records =
-    JSON.parse(localStorage.getItem("tidpunkt_records") || "[]");
-
-  if(records.length === 0){
-
-    recordList.innerHTML =
-      "Inga arbetstidsregistreringar ännu.";
-
-    return;
-  }
-
-  recordList.innerHTML = records
-    .slice()
-    .reverse()
-    .map(r => `
-      <div class="record">
-        <strong>${r.date}</strong><br>
-        ${r.start} – ${r.end}<br>
-        ⏱ ${r.duration}
-      </div>
-    `)
-    .join("");
-}
-
-updateDate();
-showRecords();
-
-</script>
-
-</body>
-</html>
+cons
