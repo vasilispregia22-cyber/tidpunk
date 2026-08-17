@@ -1,1205 +1,2173 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TIDPUNKT</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIDPUNKT</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7f6;
+    color: #17231b;
+    min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    max-width: 520px;
+    min-height: 100vh;
+    margin: auto;
+    background: #fff;
+    position: relative;
+    padding-bottom: 75px;
+}
+
+/* HEADER */
+
+.header {
+    background: #00a94f;
+    color: white;
+    padding: 18px 18px 22px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,.18);
+    color: white;
+    font-size: 19px;
+}
+
+.header-title {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* CONTENT */
+
+.content {
+    padding: 14px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.card h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+/* HOME */
+
+.report-card {
+    text-align: center;
+}
+
+.report-link {
+    text-align: left;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+}
+
+.total-time {
+    font-size: 44px;
+    font-weight: 700;
+    margin: 18px 0 5px;
+}
+
+.total-label {
+    color: #777;
+}
+
+.quick-title {
+    margin-top: 28px;
+    text-align: left;
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+}
+
+.quick-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.quick-left {
+    border-left: 4px solid #00a94f;
+    padding-left: 10px;
+}
+
+.quick-project {
+    font-weight: 700;
+}
+
+.quick-task {
+    font-size: 13px;
+    color: #777;
+    margin-top: 3px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+
+.stat-number {
+    font-size: 28px;
+    color: #008d42;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+/* PROJECTS */
+
+.search {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    background: #f1f3f2;
+    border-radius: 9px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.project {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 4px;
+    border-bottom: 1px solid #eee;
+}
+
+.project-name {
+    font-weight: 700;
+}
+
+.project-client {
+    font-size: 13px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.project-hours {
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* CALENDAR */
+
+.view-tabs {
+    display: flex;
+    background: #00a94f;
+    color: white;
+    margin: -14px -14px 15px;
+}
+
+.view-tab {
+    flex: 1;
+    padding: 14px 5px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-weight: 600;
+}
+
+.view-tab.active {
+    background: rgba(0,0,0,.16);
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.calendar-header button {
+    border: none;
+    background: transparent;
+    color: #008d42;
+    font-size: 25px;
+}
+
+.calendar-title {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.weekdays,
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.weekdays div {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 8px 0;
+}
+
+.day {
+    min-height: 58px;
+    border: 1px solid #f0f0f0;
+    padding: 5px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.day-number {
+    font-weight: 700;
+}
+
+.day-hours {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 4px 6px;
+    border-radius: 12px;
+    background: #d9f2e3;
+    color: #087f3c;
+    font-size: 10px;
+}
+
+.today {
+    color: #00a94f;
+}
+
+.sunday {
+    color: #e33;
+}
+
+.empty-day {
+    text-align: center;
+    color: #888;
+    padding: 70px 10px;
+}
+
+/* DAILY REPORT */
+
+.entry {
+    border-left: 4px solid #00a94f;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f8faf9;
+    border-radius: 6px;
+}
+
+.entry-title {
+    font-weight: 700;
+}
+
+.entry-info {
+    color: #777;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.entry-hours {
+    margin-top: 6px;
+    font-weight: 700;
+}
+
+/* ADD TIME */
+
+.form-row {
+    border-bottom: 1px solid #eee;
+    padding: 14px 0;
+}
+
+.form-row label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 7px;
+    color: #333;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+}
+
+.form-row textarea {
+    min-height: 70px;
+    resize: vertical;
+}
+
+.save-button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    border: none;
+    border-radius: 9px;
+    background: #00a94f;
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+/* PROFILE */
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-label {
+    font-weight: 700;
+}
+
+.profile-value {
+    color: #777;
+}
+
+/* FLOATING BUTTON */
+
+.floating {
+    position: fixed;
+    right: max(20px, calc((100vw - 520px) / 2 + 20px));
+    bottom: 88px;
+    width: 54px;
+    height: 54px;
+    border: none;
+    border-radius: 50%;
+    background: #00a94f;
+    color: white;
+    font-size: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+    z-index: 30;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 520px;
+    height: 70px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    z-index: 25;
+}
+
+.nav-button {
+    border: none;
+    background: white;
+    color: #777;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.nav-icon {
+    font-size: 22px;
+}
+
+.nav-button.active {
+    color: #00a94f;
+    font-weight: 700;
+}
+
+/* WEEK */
+
+.week-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.week-day {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px;
+    border-radius: 9px;
+    background: #f5f7f6;
+}
+
+.week-day strong {
+    color: #222;
+}
+
+.week-hours {
+    font-weight: 700;
+    color: #008d42;
+}
+
+/* MONTH TOTAL */
+
+.month-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 17px 5px;
+    border-top: 1px solid #ddd;
+    margin-top: 15px;
+    font-weight: 700;
+}
+
+/* MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.modal.open {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border-radius: 18px 18px 0 0;
+    padding: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.close {
+    border: none;
+    background: none;
+    font-size: 28px;
+}
+
+/* RESPONSIVE */
+
+@media (min-width: 700px) {
     body {
-      font-family: Arial, sans-serif;
-      background: #061b3a;
-      color: white;
-      min-height: 100vh;
-    }
-
-    button, select {
-      font: inherit;
+        background: #e8ece9;
     }
 
     .app {
-      max-width: 520px;
-      margin: auto;
-      min-height: 100vh;
-      padding-bottom: 90px;
+        box-shadow: 0 0 30px rgba(0,0,0,.12);
     }
-
-    header {
-      padding: 28px 20px 18px;
-      text-align: center;
-    }
-
-    header h1 {
-      font-size: 38px;
-      letter-spacing: 4px;
-      margin-bottom: 5px;
-    }
-
-    header p {
-      color: #d5def0;
-      font-size: 15px;
-    }
-
-    .page {
-      display: none;
-      padding: 0 16px;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .card {
-      background: #164b96;
-      border-radius: 22px;
-      padding: 22px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 25px rgba(0,0,0,.18);
-    }
-
-    .card h2 {
-      font-size: 22px;
-      margin-bottom: 18px;
-    }
-
-    .label {
-      display: block;
-      color: #dbe7fa;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    select {
-      width: 100%;
-      padding: 16px;
-      border: 0;
-      border-radius: 14px;
-      background: #8794df;
-      color: white;
-      outline: none;
-      margin-bottom: 14px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 15px;
-      padding: 16px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-    }
-
-    .green {
-      background: #8cff80;
-      color: #123c22;
-    }
-
-    .red {
-      background: #ff695c;
-      color: white;
-    }
-
-    .purple {
-      background: #8794df;
-      color: white;
-    }
-
-    .gray {
-      background: #71809b;
-      color: white;
-    }
-
-    button:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
-
-    .timer {
-      text-align: center;
-      font-size: 46px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      margin: 15px 0 5px;
-    }
-
-    .status {
-      text-align: center;
-      color: #dbe7fa;
-      margin-bottom: 18px;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .actions button {
-      min-height: 55px;
-    }
-
-    .full {
-      grid-column: 1 / -1;
-    }
-
-    .work-row {
-      background: rgba(255,255,255,.08);
-      border-radius: 14px;
-      padding: 15px;
-      margin-top: 10px;
-    }
-
-    .work-row strong {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .small {
-      color: #cbd8ee;
-      font-size: 13px;
-    }
-
-    .empty {
-      color: #cbd8ee;
-      text-align: center;
-      padding: 15px 0;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(520px, 100%);
-      background: #0c3269;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 10px 6px;
-      border-top: 1px solid rgba(255,255,255,.12);
-      z-index: 10;
-    }
-
-    .nav-btn {
-      background: transparent;
-      color: #dbe7fa;
-      padding: 8px 3px;
-      font-size: 12px;
-    }
-
-    .nav-btn.active {
-      color: #8cff80;
-    }
-
-    .nav-icon {
-      display: block;
-      font-size: 20px;
-      margin-bottom: 3px;
-    }
-
-    .message {
-      padding: 12px;
-      border-radius: 12px;
-      margin-top: 12px;
-      background: rgba(140,255,128,.12);
-      color: #aaff9f;
-      display: none;
-    }
-
-    .message.show {
-      display: block;
-    }
-
-    .danger-text {
-      color: #ff9a92;
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <header>
-    <h1>TIDPUNKT</h1>
-    <p>Tid. Personal. Arbete.</p>
-  </header>
+    <!-- HEADER -->
+    <header class="header">
 
-  <!-- START -->
-  <section id="startPage" class="page active">
+        <div class="header-top">
 
-    <div class="card">
-      <h2>Hej!</h2>
+            <button class="header-icon" onclick="showNotifications()">
+                🔔
+            </button>
 
-      <label class="label">Välj arbetsplats</label>
+            <div class="logo">
+                TIDPUNKT
+            </div>
 
-      <select id="workplaceSelect">
-        <option value="Uppsala – Kontor">Uppsala – Kontor</option>
-        <option value="Peab – Tärnsjö">Peab – Tärnsjö</option>
-        <option value="Kund – Hemstädning">Kund – Hemstädning</option>
-        <option value="Flyttstädning">Flyttstädning</option>
-      </select>
+            <button class="header-icon" onclick="openPage('profile')">
+                👤
+            </button>
 
-      <button id="startBtn" class="green" onclick="startWork()">
-        ▶ STÄMPLA IN
-      </button>
+        </div>
 
-      <div id="message" class="message"></div>
-    </div>
+        <div class="header-title" id="headerTitle">
+            MÅNDAG 17:E AUGUSTI
+        </div>
 
-    <div class="card">
-      <h2>Dagens arbetstid</h2>
+    </header>
 
-      <div id="timer" class="timer">00:00:00</div>
 
-      <div id="status" class="status">
-        Inte arbetar
-      </div>
+    <!-- CONTENT -->
+    <main class="content">
 
-      <div id="workActions" class="actions" style="display:none;">
 
-        <button id="pauseBtn"
-                class="purple"
-                onclick="pauseWork()">
-          ☕ PAUS
+        <!-- ================= HOME ================= -->
+
+        <section id="home" class="page active">
+
+            <div class="card report-card">
+
+                <div class="report-link"
+                     onclick="openPage('report')">
+                    Rapporterat idag →
+                </div>
+
+                <div class="total-time"
+                     id="homeTotal">
+                    00,00
+                </div>
+
+                <div class="total-label">
+                    tim
+                </div>
+
+                <div class="quick-title">
+                    SNABBVAL
+                </div>
+
+                <div id="quickProjects"></div>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    Mina uppgifter
+                    <div class="stat-number">
+                        0
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    Förfrågningar
+                    <div class="stat-number">
+                        0
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= REPORT ================= -->
+
+        <section id="report" class="page">
+
+            <div class="card">
+
+                <h2>Min tid</h2>
+
+                <div class="total-time"
+                     id="reportTotal">
+                    00,00
+                </div>
+
+                <div class="total-label">
+                    Total arbetstid idag
+                </div>
+
+                <br>
+
+                <div id="todayEntries"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PLANNING ================= -->
+
+        <section id="planning" class="page">
+
+            <div class="card">
+
+                <div class="view-tabs">
+
+                    <button class="view-tab"
+                            id="monthTab"
+                            onclick="setPlanningView('month')">
+                        Månad
+                    </button>
+
+                    <button class="view-tab"
+                            id="weekTab"
+                            onclick="setPlanningView('week')">
+                        Vecka
+                    </button>
+
+                    <button class="view-tab"
+                            id="dayTab"
+                            onclick="setPlanningView('day')">
+                        Dag
+                    </button>
+
+                </div>
+
+
+                <!-- MONTH -->
+
+                <div id="monthView">
+
+                    <div class="calendar-header">
+
+                        <button onclick="changeMonth(-1)">
+                            ‹
+                        </button>
+
+                        <div class="calendar-title"
+                             id="monthTitle">
+                        </div>
+
+                        <button onclick="changeMonth(1)">
+                            ›
+                        </button>
+
+                    </div>
+
+                    <div class="weekdays">
+                        <div>MÅN</div>
+                        <div>TIS</div>
+                        <div>ONS</div>
+                        <div>TOR</div>
+                        <div>FRE</div>
+                        <div>LÖR</div>
+                        <div>SÖN</div>
+                    </div>
+
+                    <div class="calendar-grid"
+                         id="calendar">
+                    </div>
+
+                    <div class="month-total">
+
+                        <span>SUMMA:</span>
+
+                        <span id="monthTotal">
+                            00,00 tim
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEEK -->
+
+                <div id="weekView"
+                     style="display:none">
+
+                    <div class="calendar-header">
+
+                        <button onclick="changeWeek(-1)">
+                            ‹
+                        </button>
+
+                        <div class="calendar-title">
+                            Vecka
+                        </div>
+
+                        <button onclick="changeWeek(1)">
+                            ›
+                        </button>
+
+                    </div>
+
+                    <div id="weekList"
+                         class="week-list">
+                    </div>
+
+                </div>
+
+
+                <!-- DAY -->
+
+                <div id="dayView"
+                     style="display:none">
+
+                    <div class="calendar-header">
+
+                        <button onclick="changeDay(-1)">
+                            ‹
+                        </button>
+
+                        <div class="calendar-title"
+                             id="dayTitle">
+                        </div>
+
+                        <button onclick="changeDay(1)">
+                            ›
+                        </button>
+
+                    </div>
+
+                    <div id="dayEntries"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PROJECTS ================= -->
+
+        <section id="projects" class="page">
+
+            <div class="card">
+
+                <h2>Pågående</h2>
+
+                <input
+                    id="projectSearch"
+                    class="search"
+                    placeholder="Sök här om du inte ser projektet i listan"
+                    oninput="renderProjects()"
+                >
+
+                <div id="projectList"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PROFILE ================= -->
+
+        <section id="profile" class="page">
+
+            <div class="card">
+
+                <h2>Min profil</h2>
+
+                <div class="profile-row">
+                    <span class="profile-label">
+                        Anställd
+                    </span>
+
+                    <span class="profile-value">
+                        TIDPUNKT
+                    </span>
+                </div>
+
+                <div class="profile-row">
+                    <span class="profile-label">
+                        Roll
+                    </span>
+
+                    <span class="profile-value">
+                        Personal
+                    </span>
+                </div>
+
+                <div class="profile-row">
+                    <span class="profile-label">
+                        Status
+                    </span>
+
+                    <span class="profile-value"
+                          id="profileStatus">
+                        Inte arbetar
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- FLOATING + -->
+
+    <button class="floating"
+            onclick="openAddTime()">
+        +
+    </button>
+
+
+    <!-- BOTTOM NAV -->
+
+    <nav class="bottom-nav">
+
+        <button class="nav-button active"
+                data-page="home"
+                onclick="openPage('home')">
+
+            <span class="nav-icon">⌂</span>
+            <span>Hem</span>
+
         </button>
 
-        <button id="resumeBtn"
-                class="green"
-                onclick="resumeWork()"
-                disabled>
-          ▶ FORTSÄTT
+
+        <button class="nav-button"
+                data-page="report"
+                onclick="openPage('report')">
+
+            <span class="nav-icon">◷</span>
+            <span>Tidrapport</span>
+
         </button>
 
-        <button class="red full"
-                onclick="stopWork()">
-          ■ STÄMPLA UT
+
+        <button class="nav-button"
+                data-page="planning"
+                onclick="openPage('planning')">
+
+            <span class="nav-icon">▣</span>
+            <span>Planering</span>
+
         </button>
 
-      </div>
+
+        <button class="nav-button"
+                data-page="projects"
+                onclick="openPage('projects')">
+
+            <span class="nav-icon">▦</span>
+            <span>Projekt</span>
+
+        </button>
+
+
+        <button class="nav-button"
+                data-page="profile"
+                onclick="openPage('profile')">
+
+            <span class="nav-icon">♙</span>
+            <span>Profil</span>
+
+        </button>
+
+    </nav>
+
+</div>
+
+
+<!-- ================= ADD TIME MODAL ================= -->
+
+<div class="modal"
+     id="addTimeModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Lägg till tid</h2>
+
+            <button class="close"
+                    onclick="closeAddTime()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="form-row">
+
+            <label>Projekt</label>
+
+            <select id="entryProject">
+
+                <option>
+                    P8 Gullmarsvägen 50
+                </option>
+
+                <option>
+                    P7 Änghalsvägen 2B
+                </option>
+
+                <option>
+                    P6 Hasselbacken 3
+                </option>
+
+                <option>
+                    P5 Skolvägen 3, Torsvik
+                </option>
+
+                <option>
+                    P4 Mariatorget 6a
+                </option>
+
+                <option>
+                    P3 Torgstärket
+                </option>
+
+                <option>
+                    P2 Runiusgatan 9
+                </option>
+
+                <option>
+                    P1 Skogsslingan 11
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-row">
+
+            <label>Aktivitet</label>
+
+            <select id="entryActivity">
+
+                <option>Rivning</option>
+                <option>Städning</option>
+                <option>Flyttstädning</option>
+                <option>Hemstädning</option>
+                <option>Kontorsstädning</option>
+                <option>Övrigt</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-row">
+
+            <label>Datum</label>
+
+            <input
+                type="date"
+                id="entryDate"
+            >
+
+        </div>
+
+
+        <div class="form-row">
+
+            <label>Starttid</label>
+
+            <input
+                type="time"
+                id="entryStart"
+            >
+
+        </div>
+
+
+        <div class="form-row">
+
+            <label>Sluttid</label>
+
+            <input
+                type="time"
+                id="entryEnd"
+            >
+
+        </div>
+
+
+        <div class="form-row">
+
+            <label>Paus</label>
+
+            <input
+                type="number"
+                id="entryBreak"
+                min="0"
+                step="0.25"
+                value="0"
+                placeholder="0 timmar"
+            >
+
+        </div>
+
+
+        <div class="form-row">
+
+            <label>Anteckning</label>
+
+            <textarea
+                id="entryNote"
+                placeholder="Skriv anteckning (valfritt)">
+            </textarea>
+
+        </div>
+
+
+        <button class="save-button"
+                onclick="saveTime()">
+
+            Spara
+
+        </button>
+
     </div>
-
-  </section>
-
-
-  <!-- MIN TID -->
-  <section id="timePage" class="page">
-
-    <div class="card">
-      <h2>Min tid</h2>
-
-      <div id="todayTotal" class="timer">
-        00:00:00
-      </div>
-
-      <div class="status">
-        Total arbetstid idag
-      </div>
-
-      <div id="timeEntries"></div>
-    </div>
-
-  </section>
-
-
-  <!-- ARBETSPLATSER -->
-  <section id="placesPage" class="page">
-
-    <div class="card">
-      <h2>Arbetsplatser</h2>
-
-      <div class="work-row">
-        <strong>Uppsala – Kontor</strong>
-        <span class="small">Kontor</span>
-      </div>
-
-      <div class="work-row">
-        <strong>Peab – Tärnsjö</strong>
-        <span class="small">Arbetsplats</span>
-      </div>
-
-      <div class="work-row">
-        <strong>Kund – Hemstädning</strong>
-        <span class="small">Kunduppdrag</span>
-      </div>
-
-      <div class="work-row">
-        <strong>Flyttstädning</strong>
-        <span class="small">Kunduppdrag</span>
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- PROFIL -->
-  <section id="profilePage" class="page">
-
-    <div class="card">
-      <h2>Min profil</h2>
-
-      <div class="work-row">
-        <strong>Anställd</strong>
-        <span class="small">TIDPUNKT</span>
-      </div>
-
-      <div class="work-row">
-        <strong>Roll</strong>
-        <span class="small">Personal</span>
-      </div>
-
-      <div class="work-row">
-        <strong>Status</strong>
-        <span id="profileStatus" class="small">
-          Inte arbetar
-        </span>
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- ADMIN DASHBOARD -->
-<section id="adminPage" class="page">
-
-  <div class="card">
-    <h2>Admin Dashboard</h2>
-    <div class="status">
-      TIDPUNKT – Administration
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Översikt</h2>
-
-    <div class="work-row">
-      <strong>Personal</strong>
-      <span class="small">1 anställd</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Arbetar nu</strong>
-      <span class="small">0 personer</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Totala arbetstimmar</strong>
-      <span class="small">00:00:00</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Övertid</strong>
-      <span class="small">00:00:00</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Personal</h2>
-
-    <div class="work-row">
-      <strong>TIDPUNKT</strong>
-      <span class="small">Personal</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Kunder</h2>
-
-    <div class="work-row">
-      <strong>Hemstädning</strong>
-      <span class="small">Kunduppdrag</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Flyttstädning</strong>
-      <span class="small">Kunduppdrag</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Arbetsplatser</h2>
-
-    <div class="work-row">
-      <strong>Uppsala – Kontor</strong>
-      <span class="small">Kontor</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Peab – Tärnsjö</strong>
-      <span class="small">Arbetsplats</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Lönekostnad</h2>
-
-    <div class="work-row">
-      <strong>Timlön</strong>
-      <span class="small">0 kr</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Lönekostnad</strong>
-      <span class="small">0 kr</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Månadskostnad</strong>
-      <span class="small">0 kr</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Rapporter</h2>
-
-    <div class="work-row">
-      <strong>Arbetstid</strong>
-      <span class="small">Tillgänglig</span>
-    </div>
-
-    <div class="work-row">
-      <strong>Lönekostnad</strong>
-      <span class="small">Tillgänglig</span>
-    </div>
-  </div>
-
-</section>
-  <!-- NAVIGATION -->
-  <nav class="bottom-nav">
-
-    <button class="nav-btn active"
-            id="navStart"
-            onclick="showPage('start')">
-      <span class="nav-icon">🏠</span>
-      Start
-    </button>
-
-    <button class="nav-btn"
-            id="navTime"
-            onclick="showPage('time')">
-      <span class="nav-icon">📅</span>
-      Min tid
-    </button>
-
-    <button class="nav-btn"
-            id="navPlaces"
-            onclick="showPage('places')">
-      <span class="nav-icon">🏢</span>
-      Arbetsplatser
-    </button>
-
-    <button class="nav-btn"
-            id="navProfile"
-            onclick="showPage('profile')">
-      <span class="nav-icon">👤</span>
-      Profil
-    </button>
-
-  </nav>
 
 </div>
 
 
 <script>
 
-  /* =========================
-     TIDPUNKT - DATA
-     ========================= */
+/* ============================================
+   DATA
+============================================ */
 
-  let startTime = null;
-  let pauseStart = null;
-  let totalPause = 0;
-  let isPaused = false;
-  let timerInterval = null;
-
-  const STORAGE_KEY = "tidpunkt_data";
-
-
-  /* =========================
-     HELPERS
-     ========================= */
-
-  function getData() {
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    if (!saved) {
-      return {
-        entries: [],
-        active: null
-      };
+const projects = [
+    {
+        name: "P8 Gullmarsvägen 50",
+        client: "Rivning"
+    },
+    {
+        name: "P7 Änghalsvägen 2B",
+        client: "Plattsättarna västra i Stockholm"
+    },
+    {
+        name: "P6 Hasselbacken 3",
+        client: "Plattsättarna västra i Stockholm"
+    },
+    {
+        name: "P5 Skolvägen 3, Torsvik",
+        client: "Mp Projekt AB"
+    },
+    {
+        name: "P4 Mariatorget 6a",
+        client: "Lukas Kvisberg"
+    },
+    {
+        name: "P3 Torgstärket",
+        client: "Einar Mattsson Byggnads AB"
+    },
+    {
+        name: "P2 Runiusgatan 9",
+        client: "Plattsättarna västra i Stockholm"
+    },
+    {
+        name: "P1 Skogsslingan 11",
+        client: "Plattsättarna västra i Stockholm"
     }
-
-    try {
-      return JSON.parse(saved);
-    } catch (error) {
-      return {
-        entries: [],
-        active: null
-      };
-    }
-  }
+];
 
 
-  function saveData(data) {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(data)
+let entries =
+    JSON.parse(
+        localStorage.getItem("tidpunkt_entries") || "[]"
     );
-  }
 
 
-  function formatTime(seconds) {
-
-    seconds = Math.max(0, Math.floor(seconds));
-
-    const hours =
-      Math.floor(seconds / 3600);
-
-    const minutes =
-      Math.floor((seconds % 3600) / 60);
-
-    const secs =
-      seconds % 60;
-
-    return [
-      String(hours).padStart(2, "0"),
-      String(minutes).padStart(2, "0"),
-      String(secs).padStart(2, "0")
-    ].join(":");
-  }
+let currentMonth =
+    new Date();
 
 
-  function showMessage(text) {
-
-    const box =
-      document.getElementById("message");
-
-    box.textContent = text;
-    box.classList.add("show");
-
-    setTimeout(() => {
-      box.classList.remove("show");
-    }, 3000);
-  }
+let currentWeek =
+    new Date();
 
 
-  /* =========================
-     NAVIGATION
-     ========================= */
-
-  function showPage(page) {
-
-    document
-      .querySelectorAll(".page")
-      .forEach(section => {
-        section.classList.remove("active");
-      });
-
-    document
-      .getElementById(page + "Page")
-      .classList.add("active");
+let currentDay =
+    new Date();
 
 
-    document
-      .querySelectorAll(".nav-btn")
-      .forEach(button => {
-        button.classList.remove("active");
-      });
+let planningView =
+    "month";
 
 
-    const navMap = {
-      start: "navStart",
-      time: "navTime",
-      places: "navPlaces",
-      profile: "navProfile"
-    };
+/* ============================================
+   PAGE NAVIGATION
+============================================ */
 
-    document
-      .getElementById(navMap[page])
-      .classList.add("active");
+function openPage(page) {
 
+    document.querySelectorAll(".page")
+        .forEach(p => p.classList.remove("active"));
 
-    if (page === "time") {
-      renderTimeEntries();
-    }
-  }
+    const target =
+        document.getElementById(page);
 
-
-  /* =========================
-     STÄMPLA IN
-     ========================= */
-
-  function startWork() {
-
-    if (startTime) {
-      showMessage("Du arbetar redan.");
-      return;
+    if (target) {
+        target.classList.add("active");
     }
 
 
-    const workplace =
-      document.getElementById(
-        "workplaceSelect"
-      ).value;
+    document.querySelectorAll(".nav-button")
+        .forEach(btn => {
 
+            btn.classList.remove("active");
 
-    startTime = Date.now();
-
-    pauseStart = null;
-
-    totalPause = 0;
-
-    isPaused = false;
-
-
-    const data = getData();
-
-    data.active = {
-      startTime: startTime,
-      workplace: workplace,
-      totalPause: 0,
-      paused: false
-    };
-
-    saveData(data);
-
-
-    document
-      .getElementById("startBtn")
-      .style.display = "none";
-
-
-    document
-      .getElementById("workActions")
-      .style.display = "grid";
-
-
-    document
-      .getElementById("pauseBtn")
-      .disabled = false;
-
-
-    document
-      .getElementById("resumeBtn")
-      .disabled = true;
-
-
-    document
-      .getElementById("status")
-      .textContent =
-      "Arbetar – " + workplace;
-
-
-    document
-      .getElementById("profileStatus")
-      .textContent =
-      "Arbetar – " + workplace;
-
-
-    startTimer();
-
-    showMessage(
-      "Stämplad in på " + workplace
-    );
-  }
-
-
-  /* =========================
-     PAUS
-     ========================= */
-
-  function pauseWork() {
-
-    if (!startTime || isPaused) {
-      return;
-    }
-
-
-    pauseStart = Date.now();
-
-    isPaused = true;
-
-
-    const data = getData();
-
-    if (data.active) {
-      data.active.paused = true;
-      saveData(data);
-    }
-
-
-    document
-      .getElementById("pauseBtn")
-      .disabled = true;
-
-
-    document
-      .getElementById("resumeBtn")
-      .disabled = false;
-
-
-    document
-      .getElementById("status")
-      .textContent =
-      "☕ Paus";
-
-
-    document
-      .getElementById("profileStatus")
-      .textContent =
-      "Paus";
-
-
-    showMessage("Paus startad.");
-  }
-
-
-  /* =========================
-     FORTSÄTT
-     ========================= */
-
-  function resumeWork() {
-
-    if (!startTime || !isPaused) {
-      return;
-    }
-
-
-    totalPause +=
-      Date.now() - pauseStart;
-
-
-    pauseStart = null;
-
-    isPaused = false;
-
-
-    const data = getData();
-
-    if (data.active) {
-
-      data.active.totalPause =
-        totalPause;
-
-      data.active.paused = false;
-
-      saveData(data);
-    }
-
-
-    document
-      .getElementById("pauseBtn")
-      .disabled = false;
-
-
-    document
-      .getElementById("resumeBtn")
-      .disabled = true;
-
-
-    const workplace =
-      data.active
-        ? data.active.workplace
-        : "";
-
-
-    document
-      .getElementById("status")
-      .textContent =
-      "Arbetar – " + workplace;
-
-
-    document
-      .getElementById("profileStatus")
-      .textContent =
-      "Arbetar";
-
-
-    showMessage("Arbetet fortsätter.");
-  }
-
-
-  /* =========================
-     STÄMPLA UT
-     ========================= */
-
-  function stopWork() {
-
-    if (!startTime) {
-      return;
-    }
-
-
-    if (isPaused && pauseStart) {
-
-      totalPause +=
-        Date.now() - pauseStart;
-
-      pauseStart = null;
-    }
-
-
-    const endTime = Date.now();
-
-
-    const data = getData();
-
-    const workplace =
-      data.active
-        ? data.active.workplace
-        : "Okänd arbetsplats";
-
-
-    const workedSeconds =
-      Math.max(
-        0,
-        Math.floor(
-          (endTime - startTime - totalPause)
-          / 1000
-        )
-      );
-
-
-    data.entries.push({
-
-      date:
-        new Date(startTime)
-          .toISOString()
-          .slice(0, 10),
-
-      workplace:
-        workplace,
-
-      start:
-        new Date(startTime)
-          .toLocaleTimeString(
-            "sv-SE",
-            {
-              hour: "2-digit",
-              minute: "2-digit"
+            if (btn.dataset.page === page) {
+                btn.classList.add("active");
             }
-          ),
 
-      end:
-        new Date(endTime)
-          .toLocaleTimeString(
-            "sv-SE",
-            {
-              hour: "2-digit",
-              minute: "2-digit"
-            }
-          ),
+        });
 
-      seconds:
-        workedSeconds,
 
-      pause:
-        Math.floor(totalPause / 1000)
+    if (page === "home") {
+        updateHome();
+    }
+
+    if (page === "report") {
+        renderTodayEntries();
+    }
+
+    if (page === "planning") {
+        renderPlanning();
+    }
+
+    if (page === "projects") {
+        renderProjects();
+    }
+
+    if (page === "profile") {
+        updateProfile();
+    }
+
+}
+
+
+/* ============================================
+   ADD TIME
+============================================ */
+
+function openAddTime() {
+
+    document.getElementById(
+        "addTimeModal"
+    ).classList.add("open");
+
+
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    document.getElementById(
+        "entryDate"
+    ).value = today;
+
+}
+
+
+function closeAddTime() {
+
+    document.getElementById(
+        "addTimeModal"
+    ).classList.remove("open");
+
+}
+
+
+function saveTime() {
+
+    const project =
+        document.getElementById(
+            "entryProject"
+        ).value;
+
+    const activity =
+        document.getElementById(
+            "entryActivity"
+        ).value;
+
+    const date =
+        document.getElementById(
+            "entryDate"
+        ).value;
+
+    const start =
+        document.getElementById(
+            "entryStart"
+        ).value;
+
+    const end =
+        document.getElementById(
+            "entryEnd"
+        ).value;
+
+    const pause =
+        Number(
+            document.getElementById(
+                "entryBreak"
+            ).value || 0
+        );
+
+    const note =
+        document.getElementById(
+            "entryNote"
+        ).value.trim();
+
+
+    if (!date || !start || !end) {
+
+        alert(
+            "Fyll i datum, starttid och sluttid."
+        );
+
+        return;
+    }
+
+
+    const startDate =
+        new Date(`${date}T${start}`);
+
+    const endDate =
+        new Date(`${date}T${end}`);
+
+
+    let minutes =
+        (endDate - startDate) / 60000;
+
+
+    if (minutes < 0) {
+        minutes += 24 * 60;
+    }
+
+
+    minutes -= pause * 60;
+
+
+    if (minutes <= 0) {
+
+        alert(
+            "Tiden är inte korrekt."
+        );
+
+        return;
+    }
+
+
+    entries.push({
+
+        id: Date.now(),
+
+        project,
+
+        activity,
+
+        date,
+
+        start,
+
+        end,
+
+        pause,
+
+        minutes,
+
+        note
 
     });
 
 
-    data.active = null;
-
-    saveData(data);
-
-
-    clearInterval(timerInterval);
-
-    timerInterval = null;
-
-    startTime = null;
-
-    pauseStart = null;
-
-    totalPause = 0;
-
-    isPaused = false;
-
-
-    document
-      .getElementById("timer")
-      .textContent =
-      "00:00:00";
-
-
-    document
-      .getElementById("status")
-      .textContent =
-      "Inte arbetar";
-
-
-    document
-      .getElementById("profileStatus")
-      .textContent =
-      "Inte arbetar";
-
-
-    document
-      .getElementById("startBtn")
-      .style.display = "block";
-
-
-    document
-      .getElementById("workActions")
-      .style.display = "none";
-
-
-    showMessage(
-      "Stämplad ut. Tid sparad."
+    localStorage.setItem(
+        "tidpunkt_entries",
+        JSON.stringify(entries)
     );
-  }
 
 
-  /* =========================
-     TIMER
-     ========================= */
+    closeAddTime();
 
-  function startTimer() {
+    updateAll();
 
-    clearInterval(timerInterval);
+}
 
 
-    timerInterval =
-      setInterval(updateTimer, 1000);
+/* ============================================
+   TIME HELPERS
+============================================ */
+
+function minutesToHours(minutes) {
+
+    return minutes / 60;
+
+}
 
 
-    updateTimer();
-  }
+function formatHours(minutes) {
+
+    const hours =
+        minutesToHours(minutes);
+
+    return hours
+        .toFixed(2)
+        .replace(".", ",");
+
+}
 
 
-  function updateTimer() {
- const breakNow = new Date();   
-  const minutes = breakNow.getHours() * 60 + breakNow.getMinutes();
+function getTodayString() {
 
-  const inScheduledBreak =
-    (minutes >= 600 && minutes < 615) ||   // 10:00–10:15
-    (minutes >= 720 && minutes < 750) ||   // 12:00–12:30
-    (minutes >= 920 && minutes < 945);    // 15:20–15:45
+    const d = new Date();
 
-  if (inScheduledBreak && !isPaused) {
-    window.autoBreakActive = true;
-    pauseWork();
-    return;
-  }
+    return d.toISOString()
+        .split("T")[0];
 
-  if (!inScheduledBreak && isPaused && window.autoBreakActive) {
-    window.autoBreakActive = false;
-    resumeWork();
-    }
-    if (!startTime || isPaused) {
-      return;
-    }
+}
 
 
-    const now = Date.now();
+function getEntriesForDate(date) {
+
+    return entries.filter(
+        e => e.date === date
+    );
+
+}
 
 
-    const seconds =
-      Math.max(
-        0,
-        Math.floor(
-          (now - startTime - totalPause)
-          / 1000
-        )
-      );
+function getTotalForDate(date) {
+
+    return getEntriesForDate(date)
+        .reduce(
+            (sum, e) => sum + e.minutes,
+            0
+        );
+
+}
 
 
-    document
-      .getElementById("timer")
-      .textContent =
-      formatTime(seconds);
-  }
+function getTotalAll() {
+
+    return entries.reduce(
+        (sum, e) => sum + e.minutes,
+        0
+    );
+
+}
 
 
-  /* =========================
-     MIN TID
-     ========================= */
+/* ============================================
+   HOME
+============================================ */
 
-  function renderTimeEntries() {
-
-    const data = getData();
-
-    const container =
-      document.getElementById(
-        "timeEntries"
-      );
-
-
-    if (!data.entries.length) {
-
-      container.innerHTML =
-        '<div class="empty">' +
-        "Inga arbetstidsregistreringar ännu." +
-        "</div>";
-
-      document
-        .getElementById("todayTotal")
-        .textContent =
-        "00:00:00";
-
-      return;
-    }
-
+function updateHome() {
 
     const today =
-      new Date()
-        .toISOString()
-        .slice(0, 10);
+        getTodayString();
+
+
+    const total =
+        getTotalForDate(today);
+
+
+    document.getElementById(
+        "homeTotal"
+    ).textContent =
+        formatHours(total);
+
+
+    const container =
+        document.getElementById(
+            "quickProjects"
+        );
 
 
     const todayEntries =
-      data.entries.filter(
-        entry => entry.date === today
-      );
+        getEntriesForDate(today);
+
+
+    if (!todayEntries.length) {
+
+        container.innerHTML = `
+            <div class="quick-item">
+                <div class="quick-left">
+                    <div class="quick-project">
+                        Ingen rapporterad tid
+                    </div>
+                    <div class="quick-task">
+                        Lägg till tid med +
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        todayEntries
+        .slice(-3)
+        .reverse()
+        .map(e => `
+
+            <div class="quick-item">
+
+                <div class="quick-left">
+
+                    <div class="quick-project">
+                        ${escapeHtml(e.project)}
+                    </div>
+
+                    <div class="quick-task">
+                        ${escapeHtml(e.activity)}
+                    </div>
+
+                </div>
+
+                <strong>
+                    ${formatHours(e.minutes)} tim
+                </strong>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+/* ============================================
+   REPORT
+============================================ */
+
+function renderTodayEntries() {
+
+    const today =
+        getTodayString();
+
+
+    const list =
+        document.getElementById(
+            "todayEntries"
+        );
+
+
+    const todayEntries =
+        getEntriesForDate(today);
+
+
+    document.getElementById(
+        "reportTotal"
+    ).textContent =
+        formatHours(
+            getTotalForDate(today)
+        );
+
+
+    if (!todayEntries.length) {
+
+        list.innerHTML = `
+            <div class="empty-day">
+                Inget rapporterat
+                <br><br>
+                <strong>+</strong> Lägg till tid
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        todayEntries
+        .slice()
+        .reverse()
+        .map(e => `
+
+            <div class="entry">
+
+                <div class="entry-title">
+                    ${escapeHtml(e.project)}
+                </div>
+
+                <div class="entry-info">
+                    ${escapeHtml(e.activity)}
+                    · ${e.start} – ${e.end}
+                </div>
+
+                <div class="entry-hours">
+                    ${formatHours(e.minutes)} tim
+                </div>
+
+                ${
+                    e.note
+                    ? `
+                    <div class="entry-info">
+                        ${escapeHtml(e.note)}
+                    </div>
+                    `
+                    : ""
+                }
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+/* ============================================
+   PROJECTS
+============================================ */
+
+function renderProjects() {
+
+    const list =
+        document.getElementById(
+            "projectList"
+        );
+
+
+    const search =
+        document.getElementById(
+            "projectSearch"
+        ).value
+        .toLowerCase();
+
+
+    const filtered =
+        projects.filter(p =>
+            p.name.toLowerCase()
+                .includes(search)
+            ||
+            p.client.toLowerCase()
+                .includes(search)
+        );
+
+
+    list.innerHTML =
+        filtered.map(p => {
+
+            const hours =
+                entries
+                .filter(e =>
+                    e.project === p.name
+                )
+                .reduce(
+                    (sum,e) =>
+                        sum + e.minutes,
+                    0
+                );
+
+
+            return `
+
+                <div class="project">
+
+                    <div>
+
+                        <div class="project-name">
+                            ${escapeHtml(p.name)}
+                        </div>
+
+                        <div class="project-client">
+                            ${escapeHtml(p.client)}
+                        </div>
+
+                    </div>
+
+                    <div class="project-hours">
+                        ${formatHours(hours)} tim →
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ============================================
+   PLANNING
+============================================ */
+
+function setPlanningView(view) {
+
+    planningView = view;
+
+    document.getElementById(
+        "monthView"
+    ).style.display =
+        view === "month"
+        ? "block"
+        : "none";
+
+
+    document.getElementById(
+        "weekView"
+    ).style.display =
+        view === "week"
+        ? "block"
+        : "none";
+
+
+    document.getElementById(
+        "dayView"
+    ).style.display =
+        view === "day"
+        ? "block"
+        : "none";
+
+
+    document.querySelectorAll(
+        ".view-tab"
+    ).forEach(t =>
+        t.classList.remove("active")
+    );
+
+
+    document.getElementById(
+        view + "Tab"
+    ).classList.add("active");
+
+
+    renderPlanning();
+
+}
+
+
+function renderPlanning() {
+
+    if (planningView === "month") {
+        renderMonth();
+    }
+
+    if (planningView === "week") {
+        renderWeek();
+    }
+
+    if (planningView === "day") {
+        renderDay();
+    }
+
+}
+
+
+/* ============================================
+   MONTH
+============================================ */
+
+function renderMonth() {
+
+    const year =
+        currentMonth.getFullYear();
+
+    const month =
+        currentMonth.getMonth();
+
+
+    const monthNames = [
+        "januari",
+        "februari",
+        "mars",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "augusti",
+        "september",
+        "oktober",
+        "november",
+        "december"
+    ];
+
+
+    document.getElementById(
+        "monthTitle"
+    ).textContent =
+        `${monthNames[month]} ${year}`;
+
+
+    const first =
+        new Date(year, month, 1);
+
+
+    let start =
+        first.getDay();
+
+
+    start =
+        start === 0
+        ? 6
+        : start - 1;
+
+
+    const days =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    const calendar =
+        document.getElementById(
+            "calendar"
+        );
+
+
+    calendar.innerHTML = "";
+
+
+    for (let i = 0; i < start; i++) {
+
+        calendar.innerHTML += `
+            <div class="day"></div>
+        `;
+
+    }
 
 
     let total = 0;
 
 
-    todayEntries.forEach(
-      entry => {
-        total += entry.seconds;
-      }
-    );
+    for (let day = 1; day <= days; day++) {
+
+        const date =
+            `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
 
-    document
-      .getElementById("todayTotal")
-      .textContent =
-      formatTime(total);
+        const dayTotal =
+            getTotalForDate(date);
 
 
-    container.innerHTML = "";
+        total += dayTotal;
 
 
-    [...data.entries]
-      .reverse()
-      .forEach(entry => {
-
-        const row =
-          document.createElement("div");
-
-        row.className =
-          "work-row";
+        const d =
+            new Date(year, month, day);
 
 
-        row.innerHTML = `
-          <strong>${entry.workplace}</strong>
-          <span class="small">
-            ${entry.date}<br>
-            ${entry.start} – ${entry.end}<br>
-            Arbetstid: ${formatTime(entry.seconds)}<br>
-            Paus: ${formatTime(entry.pause)}
-          </span>
+        const sunday =
+            d.getDay() === 0;
+
+
+        const today =
+            date === getTodayString();
+
+
+        calendar.innerHTML += `
+
+            <div class="day">
+
+                <div class="
+                    day-number
+                    ${today ? "today" : ""}
+                    ${sunday ? "sunday" : ""}
+                ">
+                    ${day}
+                </div>
+
+                ${
+                    dayTotal > 0
+                    ?
+                    `
+                    <div class="day-hours">
+                        ${formatHours(dayTotal)}
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
         `;
 
-
-        container.appendChild(row);
-      });
-  }
-
-
-  /* =========================
-     LOAD ACTIVE SESSION
-     ========================= */
-
-  function restoreSession() {
-
-    const data = getData();
-
-
-    if (!data.active) {
-      return;
     }
 
 
-    startTime =
-      data.active.startTime;
+    document.getElementById(
+        "monthTotal"
+    ).textContent =
+        `${formatHours(total)} tim`;
+
+}
 
 
-    totalPause =
-      data.active.totalPause || 0;
+function changeMonth(direction) {
+
+    currentMonth.setMonth(
+        currentMonth.getMonth() + direction
+    );
+
+    renderMonth();
+
+}
 
 
-    isPaused =
-      data.active.paused || false;
-    
-pauseStart = data.active.pauseStart || null;
+/* ============================================
+   WEEK
+============================================ */
 
-    const workplace =
-      data.active.workplace;
+function getMonday(date) {
 
+    const d =
+        new Date(date);
 
-    document
-      .getElementById(
-        "workplaceSelect"
-      ).value = workplace;
+    const day =
+        d.getDay();
 
+    const diff =
+        day === 0
+        ? -6
+        : 1 - day;
 
-    document
-      .getElementById("startBtn")
-      .style.display = "none";
+    d.setDate(
+        d.getDate() + diff
+    );
 
+    return d;
 
-    document
-      .getElementById("workActions")
-      .style.display = "grid";
-
-
-    document
-      .getElementById("pauseBtn")
-      .disabled = isPaused;
+}
 
 
-    document
-      .getElementById("resumeBtn")
-      .disabled = !isPaused;
+function renderWeek() {
+
+    const monday =
+        getMonday(currentWeek);
 
 
-    if (isPaused) {
+    const list =
+        document.getElementById(
+            "weekList"
+        );
 
-      document
-        .getElementById("status")
-        .textContent =
-        "☕ Paus";
 
-    } else {
+    const names = [
+        "Måndag",
+        "Tisdag",
+        "Onsdag",
+        "Torsdag",
+        "Fredag",
+        "Lördag",
+        "Söndag"
+    ];
 
-      document
-        .getElementById("status")
-        .textContent =
-        "Arbetar – " + workplace;
+
+    list.innerHTML = "";
+
+
+    let total = 0;
+
+
+    for (let i = 0; i < 7; i++) {
+
+        const d =
+            new Date(monday);
+
+
+        d.setDate(
+            monday.getDate() + i
+        );
+
+
+        const date =
+            d.toISOString()
+                .split("T")[0];
+
+
+        const minutes =
+            getTotalForDate(date);
+
+
+        total += minutes;
+
+
+        list.innerHTML += `
+
+            <div class="week-day">
+
+                <strong>
+                    ${names[i]}
+                    ${d.getDate()}/${d.getMonth()+1}
+                </strong>
+
+                <span class="week-hours">
+                    ${formatHours(minutes)} tim
+                </span>
+
+            </div>
+
+        `;
+
     }
 
 
-    document
-      .getElementById("profileStatus")
-      .textContent =
-      isPaused ? "Paus" : "Arbetar";
+    list.innerHTML += `
+
+        <div class="month-total">
+
+            <span>SUMMA:</span>
+
+            <span>
+                ${formatHours(total)} tim
+            </span>
+
+        </div>
+
+    `;
+
+}
 
 
-    startTimer();
-  }
+function changeWeek(direction) {
+
+    currentWeek.setDate(
+        currentWeek.getDate() +
+        direction * 7
+    );
+
+    renderWeek();
+
+}
 
 
-  /* =========================
-     START APP
-     ========================= */
+/* ============================================
+   DAY
+============================================ */
 
-  window.addEventListener(
-    "load",
-    function() {
-      restoreSession();
-      renderTimeEntries();
+function renderDay() {
+
+    const date =
+        currentDay.toISOString()
+            .split("T")[0];
+
+
+    document.getElementById(
+        "dayTitle"
+    ).textContent =
+        currentDay.toLocaleDateString(
+            "sv-SE",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            }
+        );
+
+
+    const container =
+        document.getElementById(
+            "dayEntries"
+        );
+
+
+    const dayEntries =
+        getEntriesForDate(date);
+
+
+    if (!dayEntries.length) {
+
+        container.innerHTML = `
+            <div class="empty-day">
+                Inget rapporterat
+                <br><br>
+                <button
+                    onclick="openAddTime()"
+                    style="
+                    border:none;
+                    background:white;
+                    color:#00a94f;
+                    font-size:17px;
+                    font-weight:bold;
+                    ">
+                    ＋ Lägg till tid
+                </button>
+            </div>
+        `;
+
+        return;
     }
-  );
+
+
+    container.innerHTML =
+        dayEntries.map(e => `
+
+            <div class="entry">
+
+                <div class="entry-title">
+                    ${escapeHtml(e.project)}
+                </div>
+
+                <div class="entry-info">
+                    ${escapeHtml(e.activity)}
+                </div>
+
+                <div class="entry-info">
+                    ${e.start} – ${e.end}
+                </div>
+
+                <div class="entry-hours">
+                    ${formatHours(e.minutes)} tim
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+function changeDay(direction) {
+
+    currentDay.setDate(
+        currentDay.getDate() + direction
+    );
+
+    renderDay();
+
+}
+
+
+/* ============================================
+   PROFILE
+============================================ */
+
+function updateProfile() {
+
+    const today =
+        getTodayString();
+
+
+    const working =
+        getTotalForDate(today) > 0;
+
+
+    document.getElementById(
+        "profileStatus"
+    ).textContent =
+        working
+        ? "Arbetar"
+        : "Inte arbetar";
+
+}
+
+
+/* ============================================
+   NOTIFICATIONS
+============================================ */
+
+function showNotifications() {
+
+    alert(
+        "Inga nya aviseringar."
+    );
+
+}
+
+
+/* ============================================
+   SECURITY / HTML
+============================================ */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ============================================
+   UPDATE EVERYTHING
+============================================ */
+
+function updateAll() {
+
+    updateHome();
+
+    renderTodayEntries();
+
+    renderPlanning();
+
+    renderProjects();
+
+    updateProfile();
+
+}
+
+
+/* ============================================
+   START
+============================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const today =
+            getTodayString();
+
+
+        document.getElementById(
+            "entryDate"
+        ).value = today;
+
+
+        setPlanningView("month");
+
+        updateAll();
+
+    }
+);
 
 </script>
 
