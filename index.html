@@ -3815,56 +3815,120 @@ function permanentDeleteCompany(id) {
 
 
     deleteButton.addEventListener(
-        "click",
-        function () {
+    "click",
+    function () {
 
-            if (
-                input.value.trim() !==
-                "RADERA"
-            ) {
-                return;
-            }
+        const confirmation =
+            input.value
+                .trim()
+                .toUpperCase();
 
 
-            db.companies =
-                db.companies.filter(
-                    x =>
-                        x.id !== id
-                );
-
-
-            db.employees =
-                db.employees.filter(
-                    x =>
-                        x.company !==
-                        company.name
-                );
-
-
-            db.projects =
-                db.projects.filter(
-                    x =>
-                        x.company !==
-                        company.name
-                );
-
-
-            save();
-
-
-            modal.remove();
-
-
-            renderAll();
-
+        if (
+            confirmation !== "RADERA"
+        ) {
 
             toast(
-                "Företaget har raderats permanent."
+                "Skriv RADERA för att fortsätta."
             );
 
+            return;
         }
-    );
 
+
+        /*
+         * Hitta företaget igen
+         */
+
+        const companyToDelete =
+            db.companies.find(
+                x =>
+                    String(x.id) ===
+                    String(id)
+            );
+
+
+        if (!companyToDelete) {
+
+            toast(
+                "Företaget kunde inte hittas."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Ta bort företaget
+         */
+
+        db.companies =
+            db.companies.filter(
+                x =>
+                    String(x.id) !==
+                    String(id)
+            );
+
+
+        /*
+         * Ta bort företagets anställda
+         */
+
+        db.employees =
+            db.employees.filter(
+                x =>
+                    x.company !==
+                    companyToDelete.name
+            );
+
+
+        /*
+         * Ta bort företagets projekt
+         */
+
+        db.projects =
+            db.projects.filter(
+                x =>
+                    x.company !==
+                    companyToDelete.name
+            );
+
+
+        /*
+         * Spara databasen
+         */
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(db)
+        );
+
+
+        /*
+         * Stäng popup
+         */
+
+        modal.remove();
+
+
+        /*
+         * Uppdatera sidan
+         */
+
+        renderAll();
+
+
+        /*
+         * Bekräftelse
+         */
+
+        toast(
+            "Företaget har raderats permanent."
+        );
+
+    }
+);
+  
 }
 
 /* =====================================================
