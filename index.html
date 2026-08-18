@@ -4540,36 +4540,229 @@ function saveForm(type, button) {
    DELETE
    ===================================================== */
 
+/* =====================================================
+   CUSTOM CONFIRM MODAL
+   ===================================================== */
+
+function showConfirmModal(options) {
+
+    const {
+        title = "Bekräfta",
+        message = "Är du säker?",
+        danger = false,
+        confirmText = "Bekräfta",
+        onConfirm
+    } = options;
+
+
+    const modal = document.createElement("div");
+
+    modal.className = "modal-bg";
+
+    modal.innerHTML = `
+
+        <div class="modal confirm-modal">
+
+            <div class="modal-head">
+
+                <h2>
+                    ${escapeHTML(title)}
+                </h2>
+
+                <button
+                    class="close"
+                    onclick="
+                        this.closest('.modal-bg').remove()
+                    "
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                style="
+                    margin-top:15px;
+                    line-height:1.6;
+                    color:#52625b;
+                "
+            >
+
+                ${message}
+
+            </div>
+
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:flex-end;
+                    gap:10px;
+                    margin-top:22px;
+                "
+            >
+
+                <button
+                    class="btn"
+                    onclick="
+                        this.closest('.modal-bg').remove()
+                    "
+                >
+
+                    Avbryt
+
+                </button>
+
+
+                <button
+                    class="btn ${
+                        danger
+                        ? ""
+                        : "primary2"
+                    }"
+                    style="${
+                        danger
+                        ? `
+                            background:#b33b3b;
+                            color:#fff;
+                            border-color:#b33b3b;
+                        `
+                        : ""
+                    }"
+                    onclick="
+                        confirmModalAction(this)
+                    "
+                >
+
+                    ${escapeHTML(confirmText)}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    modal._confirmAction =
+        onConfirm;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+}
+
+
+function confirmModalAction(button) {
+
+    const modal =
+        button.closest(
+            ".modal-bg"
+        );
+
+
+    if (
+        modal &&
+        typeof modal._confirmAction ===
+        "function"
+    ) {
+
+        modal._confirmAction();
+
+    }
+
+
+    if (modal) {
+
+        modal.remove();
+
+    }
+
+}
+
+
+/* =====================================================
+   DELETE
+   ===================================================== */
+
 function removeItem(
     collection,
     id
 ) {
 
-    const confirmed =
-        confirm(
-            "Vill du ta bort posten?"
+    let item =
+        db[collection].find(
+            x => x.id === id
         );
 
-    if (!confirmed) {
+
+    if (!item) {
+
         return;
+
     }
 
-    db[collection] =
-        db[collection].filter(
-            item =>
-                item.id !== id
-        );
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(db)
-    );
+    let name =
+        item.name ||
+        item.title ||
+        item.code ||
+        "den här posten";
 
-    renderAll();
 
-    toast(
-        "Posten har tagits bort."
-    );
+    showConfirmModal({
+
+        title:
+            "Ta bort post?",
+
+        message: `
+
+            <b>
+                Är du säker på att du vill ta bort
+                "${escapeHTML(name)}"?
+            </b>
+
+            <br><br>
+
+            Den här posten kommer att tas bort
+            från listan.
+
+        `,
+
+        danger: true,
+
+        confirmText:
+            "Ta bort",
+
+        onConfirm: function() {
+
+            db[collection] =
+                db[collection].filter(
+                    x =>
+                        x.id !== id
+                );
+
+
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(db)
+            );
+
+
+            renderAll();
+
+
+            toast(
+                "Posten har tagits bort."
+            );
+
+        }
+
+    });
 
 }
 
