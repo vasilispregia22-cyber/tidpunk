@@ -1123,71 +1123,26 @@ button{
 
 
 <!-- ================= ADMIN LOGIN ================= -->
-
-<div
-  id="adminLoginScreen"
-  class="login-screen"
-  style="display:none"
->
-
+<div id="adminLoginScreen" class="login-screen" style="display:none">
   <div class="login-card">
-
-    <div class="login-brand">
-      TIDPUNKT
-    </div>
-
-    <p style="color:#718078;font-size:12px">
-      Administratörsområde
-    </p>
+    <div class="login-brand">TIDPUNKT</div>
+    <p style="color:#718078;font-size:12px">Admin Control Center</p>
 
     <div class="field">
-      <label>Användare</label>
-      <input
-        id="adminUser"
-        value="demo"
-        autocomplete="username"
-      >
+      <label>Användarnamn</label>
+      <input id="adminUser" value="demo" autocomplete="username">
     </div>
 
     <div class="field">
       <label>Lösenord</label>
-      <input
-        id="adminPass"
-        type="password"
-        placeholder="Lösenord"
-        autocomplete="current-password"
-      >
+      <input id="adminPass" type="password" value="demo" autocomplete="current-password">
     </div>
 
-    <button
-      class="login-primary"
-      type="button"
-      onclick="adminLogin()"
-    >
-      Logga in som administratör
-    </button>
-
-    <button
-      class="login-register"
-      type="button"
-      onclick="closeAdminLogin()"
-    >
-      Tillbaka
-    </button>
-
-    <div
-      id="adminNotice"
-      class="login-note"
-    >
-      Admin demo:
-      användare <b>demo</b>,
-      lösenord <b>demo</b>.
-    </div>
-
+    <button class="login-primary" type="button" id="adminLoginButton">Logga in</button>
+    <button class="login-register" type="button" id="adminBackButton">Tillbaka</button>
+    <div id="adminNotice" class="login-note"></div>
   </div>
-
 </div>
-
 
 <!-- ================= ADMIN APP ================= -->
 
@@ -4869,6 +4824,77 @@ document.addEventListener("keydown",function(e){
   document.addEventListener("DOMContentLoaded",function(){
     window.loginCategory="company";
     window.selectLoginCategory("company");
+  });
+})();
+</script>
+
+<script>
+/* ================= STABLE LOGIN ROUTER v0.7 ================= */
+(function(){
+  function byId(id){ return document.getElementById(id); }
+
+  window.openAdminLogin=function(){
+    const pub=byId("loginScreen");
+    const adm=byId("adminLoginScreen");
+    if(pub) pub.style.display="none";
+    if(adm) adm.style.display="flex";
+    const u=byId("adminUser"), p=byId("adminPass");
+    if(u) u.value="demo";
+    if(p) p.value="";
+    const n=byId("adminNotice");
+    if(n) n.textContent="";
+  };
+
+  window.closeAdminLogin=function(){
+    const pub=byId("loginScreen");
+    const adm=byId("adminLoginScreen");
+    if(adm) adm.style.display="none";
+    if(pub) pub.style.display="flex";
+  };
+
+  window.adminLogin=function(){
+    const u=(byId("adminUser")?.value||"").trim().toLowerCase();
+    const p=byId("adminPass")?.value||"";
+    const n=byId("adminNotice");
+
+    if((u==="demo" || u==="admin") && p==="demo"){
+      if(typeof setAuth==="function"){
+        setAuth({role:"admin",username:u,name:"Admin Demo"});
+      } else {
+        localStorage.setItem("tidpunkt_auth",JSON.stringify({
+          role:"admin",username:u,name:"Admin Demo"
+        }));
+      }
+
+      const adm=byId("adminLoginScreen");
+      const pub=byId("loginScreen");
+      if(adm) adm.style.display="none";
+      if(pub) pub.style.display="none";
+
+      if(typeof enterApp==="function"){
+        enterApp();
+      } else {
+        location.hash="#dashboard";
+      }
+      return;
+    }
+
+    if(n) n.textContent="Fel Admin-inloggning. Demo: demo / demo.";
+  };
+
+  document.addEventListener("DOMContentLoaded",function(){
+    const btn=byId("adminLoginButton");
+    const back=byId("adminBackButton");
+    if(btn) btn.onclick=window.adminLogin;
+    if(back) back.onclick=window.closeAdminLogin;
+
+    // Owner-only DEMO shortcut: Ctrl+Shift+A.
+    document.addEventListener("keydown",function(e){
+      if(e.ctrlKey && e.shiftKey && e.key.toLowerCase()==="a"){
+        e.preventDefault();
+        window.openAdminLogin();
+      }
+    });
   });
 })();
 </script>
