@@ -3466,64 +3466,72 @@ function toggleCompanyAccess(id) {
 
     const company =
         db.companies.find(
-            x => x.id === id
+            x =>
+                String(x.id) ===
+                String(id)
         );
 
+
     if (!company) {
-        toast("Företaget kunde inte hittas.");
+
+        toast(
+            "Företaget kunde inte hittas."
+        );
+
         return;
     }
 
 
-    const isActive =
-        company.status !== "Avstängd";
+    const isBlocked =
+        company.status === "Avstängd";
 
 
-    if (isActive) {
+    /*
+     * ÖPPNA ÅTKOMST
+     */
+
+    if (isBlocked) {
 
         showConfirmModal({
 
             title:
-                "Stäng åtkomst?",
+                "Öppna åtkomst?",
 
             message: `
 
                 <b>
-                    Vill du stänga åtkomsten för
-                    "${escapeHTML(company.name)}"?
+                    Vill du öppna åtkomsten för
+                    "${escapeHTML(company.name)}" igen?
                 </b>
 
                 <br><br>
 
-                Företagets data kommer
-                <b>inte</b> att raderas.
-
-                <br><br>
-
-                Anställda, projekt, kunder och
-                tidrapporter finns kvar.
+                Företaget får tillbaka sin åtkomst.
 
             `,
 
             danger: false,
 
             confirmText:
-                "Stäng åtkomst",
+                "Öppna åtkomst",
 
             onConfirm: function () {
 
                 company.status =
-                    "Avstängd";
+                    "Aktiv";
 
 
-                save();
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(db)
+                );
 
 
                 renderAll();
 
 
                 toast(
-                    "Företagets åtkomst är stängd."
+                    "Företagets åtkomst är aktiv igen."
                 );
 
             }
@@ -3534,43 +3542,56 @@ function toggleCompanyAccess(id) {
     }
 
 
+    /*
+     * STÄNG ÅTKOMST
+     */
+
     showConfirmModal({
 
         title:
-            "Öppna åtkomst?",
+            "Stäng åtkomst?",
 
         message: `
 
             <b>
-                Vill du öppna åtkomsten för
-                "${escapeHTML(company.name)}" igen?
+                Vill du stänga åtkomsten för
+                "${escapeHTML(company.name)}"?
             </b>
 
             <br><br>
 
-            Företaget får tillbaka sin åtkomst.
+            Företagets data kommer
+            <b>inte</b> att raderas.
+
+            <br><br>
+
+            Anställda, projekt, kunder och
+            tidrapporter finns kvar.
 
         `,
 
         danger: false,
 
         confirmText:
-            "Öppna åtkomst",
+            "Stäng åtkomst",
 
         onConfirm: function () {
 
             company.status =
-                "Aktiv";
+                "Avstängd";
 
 
-            save();
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(db)
+            );
 
 
             renderAll();
 
 
             toast(
-                "Företagets åtkomst är aktiv igen."
+                "Företagets åtkomst är stängd."
             );
 
         }
