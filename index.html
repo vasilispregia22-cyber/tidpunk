@@ -1096,125 +1096,29 @@ button{
 <!-- ================= LOGIN ================= -->
 
 <div id="loginScreen" class="login-screen">
-
   <div class="login-card">
-
-    <div class="login-brand">
-      TIDPUNKT
-    </div>
-
-    <p style="color:#718078;font-size:12px">
-      Tid • Personal • Arbete
-    </p>
+    <div class="login-brand">TIDPUNKT</div>
+    <p style="color:#718078;font-size:12px">Välj inloggning</p>
 
     <div class="login-categories">
-
-      <button
-        id="catCompany"
-        class="login-category active"
-        type="button"
-        onclick="selectLoginCategory('company')"
-      >
-        Företag
-      </button>
-
-      <button
-        id="catPrivate"
-        class="login-category"
-        type="button"
-        onclick="selectLoginCategory('private')"
-      >
-        Privat
-      </button>
-
+      <button id="catCompany" class="login-category active" type="button" onclick="selectLoginCategory('company')">🏢 Företag</button>
+      <button id="catEmployee" class="login-category" type="button" onclick="selectLoginCategory('employee')">👤 Anställd</button>
     </div>
 
     <div id="companyLoginFields">
-
-      <div class="field">
-        <label>Användare</label>
-        <input
-          id="loginUser"
-          placeholder="t.ex. nordic"
-          autocomplete="username"
-        >
-      </div>
-
-      <div class="field">
-        <label>Lösenord</label>
-        <input
-          id="loginPass"
-          type="password"
-          placeholder="Lösenord"
-          autocomplete="current-password"
-        >
-      </div>
-
+      <div class="field"><label>Användare</label><input id="loginUser" placeholder="t.ex. nordic" autocomplete="username"></div>
+      <div class="field"><label>Lösenord</label><input id="loginPass" type="password" placeholder="Lösenord" autocomplete="current-password"></div>
     </div>
 
-    <div
-      id="privateLoginFields"
-      style="display:none"
-    >
-
-      <div class="field">
-        <label>Användare</label>
-        <input
-          id="privateUser"
-          placeholder="Användarnamn"
-          autocomplete="username"
-        >
-      </div>
-
-      <div class="field">
-        <label>Lösenord</label>
-        <input
-          id="privatePass"
-          type="password"
-          placeholder="Lösenord"
-          autocomplete="current-password"
-        >
-      </div>
-
+    <div id="employeeLoginFields" style="display:none">
+      <div class="field"><label>Användare</label><input id="employeeUser" placeholder="t.ex. anna" autocomplete="username"></div>
+      <div class="field"><label>Lösenord</label><input id="employeePass" type="password" placeholder="Lösenord" autocomplete="current-password"></div>
     </div>
 
-    <button
-      class="login-primary"
-      type="button"
-      onclick="login()"
-    >
-      Logga in
-    </button>
-
-    <button
-      id="companyRegisterButton"
-      class="login-register"
-      type="button"
-      onclick="openCompanyRegistration()"
-    >
-      Registrera företag
-    </button>
-
-    <div
-      id="loginNotice"
-      class="login-note"
-    >
-      Företag: demoanvändare
-      <b>nordic</b>,
-      lösenord
-      <b>123456</b>.
-    </div>
-
-    <button
-      class="admin-entry"
-      type="button"
-      onclick="openAdminLogin()"
-    >
-      Administratör
-    </button>
-
+    <button class="login-primary" type="button" onclick="login()">Logga in</button>
+    <button id="companyRegisterButton" class="login-register" type="button" onclick="openCompanyRegistration()">Registrera företag</button>
+    <div id="loginNotice" class="login-note">Företag: <b>nordic</b> / <b>123456</b>.</div>
   </div>
-
 </div>
 
 
@@ -2274,247 +2178,7 @@ button{
 
 
 <script>
-/* ================= ADMIN CONTROL CENTER v0.4 ================= */
-const ADMIN_ERRORS_KEY = "tidpunkt_admin_errors_v04";
-const ADMIN_LOGS_KEY = "tidpunkt_admin_logs_v04";
-const ADMIN_BACKUPS_KEY = "tidpunkt_admin_backups_v04";
-const ADMIN_VERSION = "v0.4.0";
 
-let ADMIN_ERRORS = JSON.parse(localStorage.getItem(ADMIN_ERRORS_KEY) || "null") || [
-  {id:1, companyId:1, code:"TIME-102", title:"Tidrapport kunde inte sparas", reason:"Systemet kunde inte slutföra sparningen.", status:"Pågående", severity:"Hög", created:"18/08/2026 14:32"},
-  {id:2, companyId:1, code:"PLAN-204", title:"Planering kunde inte laddas", reason:"Planeringsdata kunde inte laddas korrekt.", status:"Åtgärdad", severity:"Medel", created:"18/08/2026 15:10"},
-  {id:3, companyId:3, code:"AUTH-201", title:"Session kunde inte verifieras", reason:"En session behövde återställas.", status:"Pågående", severity:"Medel", created:"18/08/2026 16:05"}
-];
-
-let ADMIN_LOGS = JSON.parse(localStorage.getItem(ADMIN_LOGS_KEY) || "null") || [
-  {time:"19/08/2026 00:10", action:"Admin loggade in", result:"Success"}
-];
-
-let ADMIN_BACKUPS = JSON.parse(localStorage.getItem(ADMIN_BACKUPS_KEY) || "null") || [
-  {version:"v0.3.0", time:"18/08/2026 22:30", type:"Stabil"}
-];
-
-function adminSaveState(){
-  localStorage.setItem(ADMIN_ERRORS_KEY, JSON.stringify(ADMIN_ERRORS));
-  localStorage.setItem(ADMIN_LOGS_KEY, JSON.stringify(ADMIN_LOGS));
-  localStorage.setItem(ADMIN_BACKUPS_KEY, JSON.stringify(ADMIN_BACKUPS));
-}
-
-function companyById(id){ return C.find(c => c.id === id); }
-
-function addAdminLog(action, result="Success"){
-  ADMIN_LOGS.unshift({
-    time:new Date().toLocaleString("sv-SE"),
-    action,
-    result
-  });
-  adminSaveState();
-  renderAdminLogs();
-}
-
-function renderAdminDashboard(){
-  const total = C.length;
-  const active = C.filter(c => c.status === "Aktiv").length;
-  const suspended = C.filter(c => c.status === "Avstängd").length;
-  const activeSubs = C.filter(c => (c.subscription || "Unpaid") === "Active").length;
-  const unpaidSubs = C.filter(c => (c.subscription || "Unpaid") !== "Active").length;
-  const openErrors = ADMIN_ERRORS.filter(e => e.status !== "Åtgärdad");
-
-  const set = (id, value) => {
-    const el=document.getElementById(id);
-    if(el) el.textContent=value;
-  };
-  set("mCompanies", total);
-  set("mActiveSubs", activeSubs);
-  set("mUnpaidSubs", unpaidSubs);
-  set("mActiveCompanies", active);
-  set("mSuspendedCompanies", suspended);
-  set("errorSummary", openErrors.length ? `${openErrors.length} fel kräver uppmärksamhet.` : "Inga fel kräver uppmärksamhet.");
-
-  const box=document.getElementById("dashboardErrors");
-  if(box){
-    const rows=openErrors.slice(0,5).map(e=>{
-      const c=companyById(e.companyId);
-      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.08)">
-        <div><b>${escapeHtml(c?.name || "Okänt företag")}</b><div class="sub">${escapeHtml(e.title)}</div></div>
-        <button class="btn" onclick="openError(${e.id})">Visa</button>
-      </div>`;
-    }).join("");
-    box.innerHTML = rows || `<div class="sub">Inga öppna systemfel.</div>`;
-  }
-}
-
-function renderSubscriptions(){
-  const el=document.getElementById("subscriptionsTable");
-  if(!el)return;
-  el.innerHTML = `<div style="overflow:auto"><table><thead><tr>
-    <th>Företag</th><th>Paket</th><th>Anställda</th><th>Pris</th><th>Status</th><th>Betalning</th><th></th>
-  </tr></thead><tbody>${
-    C.map(c=>{
-      const count=parseInt(c.employees||0,10);
-      const limit=c.employeeLimit||30;
-      return `<tr>
-        <td><b>${escapeHtml(c.name)}</b></td>
-        <td>${limit} anställda</td>
-        <td>${count} / ${limit}</td>
-        <td>${c.price||600} kr/mån</td>
-        <td>${c.status}</td>
-        <td>${c.subscription==="Active"?"🟢 Betald":"⚠️ Obetald"}</td>
-        <td><button class="btn" onclick="openCompany(${c.id})">Öppna</button></td>
-      </tr>`;
-    }).join("")
-  }</tbody></table></div>`;
-}
-
-function renderErrors(){
-  const el=document.getElementById("errorsTable");
-  if(!el)return;
-  const open=ADMIN_ERRORS.filter(e=>e.status!=="Åtgärdad").length;
-  el.innerHTML=`<div style="margin-bottom:12px"><b>${open}</b> öppna fel</div>
-  <div style="overflow:auto"><table><thead><tr><th>Företag</th><th>Fel</th><th>Kod</th><th>Allvarlighet</th><th>Status</th><th></th></tr></thead>
-  <tbody>${ADMIN_ERRORS.map(e=>{
-    const c=companyById(e.companyId);
-    return `<tr>
-      <td>${escapeHtml(c?.name||"Okänt")}</td>
-      <td>${escapeHtml(e.title)}</td>
-      <td>${escapeHtml(e.code)}</td>
-      <td>${escapeHtml(e.severity)}</td>
-      <td>${escapeHtml(e.status)}</td>
-      <td><button class="btn" onclick="openError(${e.id})">Hantera</button></td>
-    </tr>`;
-  }).join("")}</tbody></table></div>`;
-}
-
-function openError(id){
-  const e=ADMIN_ERRORS.find(x=>x.id===id);
-  if(!e)return;
-  const c=companyById(e.companyId);
-  const modal=document.createElement("div");
-  modal.className="confirm-modal";
-  modal.innerHTML=`<div class="confirm-box" style="max-width:620px">
-    <h2>⚠️ ${escapeHtml(e.code)}</h2>
-    <h3>${escapeHtml(e.title)}</h3>
-    <p><b>Företag:</b> ${escapeHtml(c?.name||"Okänt")}</p>
-    <p><b>Orsak:</b> ${escapeHtml(e.reason)}</p>
-    <p><b>Status:</b> ${escapeHtml(e.status)}</p>
-    <p><b>Skapad:</b> ${escapeHtml(e.created)}</p>
-    <div style="margin-top:18px">
-      ${e.status!=="Åtgärdad" ? `<button class="btn primary" onclick="repairError(${e.id});this.closest('.confirm-modal').remove()">🔧 Åtgärda automatiskt</button>` : `<span class="badge">🟢 Redan åtgärdad</span>`}
-      <button class="btn" style="margin-left:6px" onclick="this.closest('.confirm-modal').remove()">Stäng</button>
-    </div>
-  </div>`;
-  document.body.appendChild(modal);
-}
-
-function repairError(id){
-  const e=ADMIN_ERRORS.find(x=>x.id===id);
-  if(!e)return;
-  e.status="Åtgärdad";
-  addAdminLog(`Reparerade ${e.code} för ${companyById(e.companyId)?.name||"okänt företag"}`);
-  renderAdminDashboard();
-  renderErrors();
-  toast("Problemet är åtgärdat.");
-}
-
-function createBackup(){
-  const now=new Date().toLocaleString("sv-SE");
-  ADMIN_BACKUPS.unshift({version:ADMIN_VERSION,time:now,type:"Manuell"});
-  adminSaveState();
-  const el=document.getElementById("lastBackup");
-  if(el)el.textContent=now;
-  addAdminLog(`Backup skapad (${ADMIN_VERSION})`);
-  toast("Backup skapad.");
-}
-
-function showBackups(){
-  const html=ADMIN_BACKUPS.map(b=>`<div style="padding:8px 0;border-bottom:1px solid rgba(0,0,0,.08)"><b>${b.version}</b> — ${b.time} — ${b.type}</div>`).join("");
-  const modal=document.createElement("div");
-  modal.className="confirm-modal";
-  modal.innerHTML=`<div class="confirm-box" style="max-width:650px"><h2>Backuphistorik</h2>${html}<button class="btn" style="margin-top:15px" onclick="this.closest('.confirm-modal').remove()">Stäng</button></div>`;
-  document.body.appendChild(modal);
-}
-
-function renderVersions(){
-  const el=document.getElementById("versions");
-  if(!el)return;
-  const versions=[
-    {v:ADMIN_VERSION,date:"19/08/2026",status:"Aktuell",desc:"Admin Control Center"},
-    {v:"v0.3.0",date:"18/08/2026",status:"Senaste stabila",desc:"Admin Dashboard"},
-    {v:"v0.2.0",date:"17/08/2026",status:"Stabil",desc:"Företagsöversikt"}
-  ];
-  el.innerHTML=versions.map(x=>`<div style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,.08)">
-    <b>${x.v}</b> <span class="badge">${x.status}</span><div class="sub">${x.date} · ${x.desc}</div>
-    ${x.v!==ADMIN_VERSION?`<button class="btn" style="margin-top:6px" onclick="rollbackVersion('${x.v}')">Återställ</button>`:""}
-  </div>`).join("");
-}
-
-function rollbackVersion(version){
-  if(!confirm(`Återställ till ${version}? Ett emergency-backup skapas först.`))return;
-  createBackup();
-  addAdminLog(`Rollback till ${version}`, "Simulerad i DEMO");
-  toast(`Rollback till ${version} är simulerad i DEMO.`);
-}
-
-function runDiagnostics(){
-  addAdminLog("Körde systemdiagnostik");
-  toast("Diagnostik klar: inga kritiska fel hittades.");
-}
-
-function runRepairCheck(){
-  addAdminLog("Körde reparationskontroll");
-  toast("Reparationskontroll klar.");
-}
-
-function renderAdminLogs(){
-  const el=document.getElementById("adminLogs");
-  if(!el)return;
-  el.innerHTML=`<div style="overflow:auto"><table><thead><tr><th>Tid</th><th>Åtgärd</th><th>Resultat</th></tr></thead><tbody>${
-    ADMIN_LOGS.map(x=>`<tr><td>${escapeHtml(x.time)}</td><td>${escapeHtml(x.action)}</td><td>${escapeHtml(x.result)}</td></tr>`).join("")
-  }</tbody></table></div>`;
-}
-
-function openCompany(id){
-  const c=companyById(id);
-  if(!c)return;
-  const count=parseInt(c.employees||0,10), limit=c.employeeLimit||30;
-  const modal=document.createElement("div");
-  modal.className="confirm-modal";
-  modal.innerHTML=`<div class="confirm-box" style="max-width:720px">
-    <h2>🏢 ${escapeHtml(c.name)}</h2>
-    <p>${escapeHtml(c.org)}</p>
-    <div class="grid two">
-      <div class="card"><b>Personal</b><div style="font-size:28px;margin-top:6px">${count} / ${limit}</div><div class="sub">${limit-count} platser kvar</div></div>
-      <div class="card"><b>Abonnemang</b><div style="font-size:20px;margin-top:6px">${c.price||600} kr/mån</div><div class="sub">${c.subscription==="Active"?"🟢 Betald":"⚠️ Obetald"}</div></div>
-    </div>
-    <p><b>Status:</b> ${c.status==="Aktiv"?"🟢 Aktiv":"🔴 Avstängd"}</p>
-    <p><b>Konto:</b> 🟢 Systemet fungerar normalt</p>
-    <button class="btn" onclick="this.closest('.confirm-modal').remove()">Stäng</button>
-  </div>`;
-  document.body.appendChild(modal);
-}
-
-document.addEventListener("click", e=>{
-  const b=e.target.closest(".nav button");
-  if(!b)return;
-  const p=b.dataset.p;
-  if(p==="dashboard") renderAdminDashboard();
-  if(p==="companies") renderCompanies();
-  if(p==="subscriptions") renderSubscriptions();
-  if(p==="systemErrors") renderErrors();
-  if(p==="logs") renderAdminLogs();
-  if(p==="system"){ renderVersions(); const lb=document.getElementById("lastBackup"); if(lb && ADMIN_BACKUPS[0]) lb.textContent=ADMIN_BACKUPS[0].time; }
-});
-
-document.addEventListener("DOMContentLoaded",()=>{
-  C.forEach(c=>{ c.employeeLimit=c.employeeLimit||30; c.price=c.price||600; });
-  adminSaveState();
-  renderAdminDashboard();
-  renderSubscriptions();
-  renderErrors();
-  renderAdminLogs();
-  renderVersions();
-});
-/* ================= END ADMIN CONTROL CENTER ================= */
 
 
 const crumbs={
@@ -3832,16 +3496,8 @@ const PERMISSIONS={
     "system"
   ],
 
-  company:[
-    "dashboard",
-    "employees",
-    "projects",
-    "customers",
-    "workplaces",
-    "time",
-    "planning",
-    "reports"
-  ],
+  \1
+  employee:["time","planning"],
 
   private:[
     "dashboard",
@@ -3856,62 +3512,15 @@ const PERMISSIONS={
 /* ================= LOGIN CATEGORY ================= */
 
 function selectLoginCategory(category){
-
   loginCategory=category;
-
-  document
-    .getElementById("catCompany")
-    .classList
-    .toggle(
-      "active",
-      category==="company"
-    );
-
-  document
-    .getElementById("catPrivate")
-    .classList
-    .toggle(
-      "active",
-      category==="private"
-    );
-
-  document
-    .getElementById("companyLoginFields")
-    .style
-    .display=
-      category==="company"
-      ? "block"
-      : "none";
-
-  document
-    .getElementById("privateLoginFields")
-    .style
-    .display=
-      category==="private"
-      ? "block"
-      : "none";
-
-  document
-    .getElementById("companyRegisterButton")
-    .style
-    .display=
-      category==="company"
-      ? "block"
-      : "none";
-
-  document
-    .getElementById("loginNotice")
-    .innerHTML=
-      category==="company"
-
-      ?
-
-      'Företag: demoanvändare <b>nordic</b>, lösenord <b>123456</b>.'
-
-      :
-
-      'Privat demo: användare <b>privat</b>, lösenord <b>demo</b>.';
-
+  const company=document.getElementById("companyLoginFields");
+  const employee=document.getElementById("employeeLoginFields");
+  const catCompany=document.getElementById("catCompany");
+  const catEmployee=document.getElementById("catEmployee");
+  if(company) company.style.display=category==="company"?"block":"none";
+  if(employee) employee.style.display=category==="employee"?"block":"none";
+  if(catCompany) catCompany.classList.toggle("active",category==="company");
+  if(catEmployee) catEmployee.classList.toggle("active",category==="employee");
 }
 
 
@@ -3961,200 +3570,52 @@ function closeAdminLogin(){
 /* ================= MAIN LOGIN ================= */
 
 function login(){
-
-  const note=
-    document.getElementById(
-      "loginNotice"
-    );
-
-
-  /* -------- COMPANY -------- */
+  const note=document.getElementById("loginNotice");
 
   if(loginCategory==="company"){
+    const username=(document.getElementById("loginUser")?.value||"").trim().toLowerCase();
+    const password=document.getElementById("loginPass")?.value||"";
+    const c=C.find(x=>String(x.username).toLowerCase()===username && x.password===password);
 
-    const username=
-      document
-        .getElementById("loginUser")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const password=
-      document
-        .getElementById("loginPass")
-        .value;
-
-
-    const c=
-      C.find(
-        x =>
-          String(x.username)
-            .toLowerCase()
-            === username
-          &&
-          x.password===password
-      );
-
-
-    if(!c){
-
-      note.textContent=
-        "Fel användarnamn eller lösenord.";
-
-      return;
-
-    }
-
-
-    if(c.status==="Avstängd"){
-
-      note.textContent=
-        "Företagets åtkomst är avstängd av administratören.";
-
-      return;
-
-    }
-
-
+    if(!c){ note.textContent="Fel användarnamn eller lösenord."; return; }
+    if(c.status==="Avstängd"){ note.textContent="Företagets åtkomst är avstängd av administratören."; return; }
     if(c.subscription!=="Active"){
-
-      note.innerHTML=
-
-        `Företaget är registrerat men abonnemanget är inte aktivt.
-        <br>
-        <button
-          class="btn primary"
-          style="margin-top:8px"
-          onclick="openSubscriptionPayment(${c.id})"
-        >
-          Aktivera demo
-        </button>`;
-
+      note.innerHTML=`Företaget är registrerat men abonnemanget är inte aktivt.<br><button class="btn primary" style="margin-top:8px" onclick="openSubscriptionPayment(${c.id})">Aktivera demo</button>`;
       return;
-
     }
-
-
-    setAuth({
-
-      role:"company",
-
-      companyId:c.id,
-
-      username:c.username,
-
-      name:c.name
-
-    });
-
-
+    setAuth({role:"company",companyId:c.id,username:c.username,name:c.name});
     enterApp();
-
     return;
-
   }
 
+  const username=(document.getElementById("employeeUser")?.value||"").trim().toLowerCase();
+  const password=document.getElementById("employeePass")?.value||"";
+  const employee={username:"anna",password:"demo",name:"Anna Andersson",companyId:1};
 
-  /* -------- PRIVATE -------- */
-
-  const username=
-    document
-      .getElementById("privateUser")
-      .value
-      .trim()
-      .toLowerCase();
-
-  const password=
-    document
-      .getElementById("privatePass")
-      .value;
-
-
-  const u=
-    PRIVATE_USERS.find(
-      x =>
-        x.username===username
-        &&
-        x.password===password
-    );
-
-
-  if(!u){
-
-    note.textContent=
-      "Fel användarnamn eller lösenord.";
-
+  if(username!==employee.username || password!==employee.password){
+    note.textContent="Fel användarnamn eller lösenord.";
     return;
-
   }
 
-
-  setAuth({
-
-    role:"private",
-
-    username:u.username,
-
-    name:u.name
-
-  });
-
-
+  setAuth({role:"employee",companyId:employee.companyId,username:employee.username,name:employee.name});
   enterApp();
-
 }
 
 
 /* ================= ADMIN LOGIN ================= */
 
 function adminLogin(){
-
-  const user=
-    document
-      .getElementById("adminUser")
-      .value
-      .trim()
-      .toLowerCase();
-
-  const pass=
-    document
-      .getElementById("adminPass")
-      .value;
-
-  const note=
-    document.getElementById(
-      "adminNotice"
-    );
-
-
-  if(
-    (user==="demo" || user==="admin")
-    &&
-    pass==="demo"
-  ){
-
-    setAuth({
-
-      role:"admin",
-
-      username:user,
-
-      name:"Admin Demo"
-
-    });
-
-    location.hash="#admin";
-
+  const user=(document.getElementById("adminUser")?.value||"").trim().toLowerCase();
+  const pass=document.getElementById("adminPass")?.value||"";
+  const note=document.getElementById("adminNotice");
+  if((user==="demo" || user==="admin") && pass==="demo"){
+    setAuth({role:"admin",username:user,name:"Admin Demo"});
+    if(note) note.textContent="";
+    location.hash="#dashboard";
     enterApp();
-
     return;
-
   }
-
-
-  note.textContent=
-    "Fel Admin-inloggning. Demo: demo / demo.";
-
+  if(note) note.textContent="Fel Admin-inloggning. Demo: demo / demo.";
 }
 
 
@@ -5331,5 +4792,14 @@ applyAuth();
 
 </script>
 
+
+<script>
+document.addEventListener("keydown",function(e){
+  if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="a"){
+    e.preventDefault();
+    if(typeof openAdminLogin==="function") openAdminLogin();
+  }
+});
+</script>
 </body>
 </html>
