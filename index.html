@@ -1295,56 +1295,20 @@ button{
   </div>
 
   <nav class="nav">
-
-    <button
-      class="active"
-      data-p="dashboard"
-    >
-      ⌂ Dashboard
-    </button>
-
-    <button data-p="companies">
-      ▣ Företag
-    </button>
-
-    <button data-p="employees">
-      ♙ Personal
-    </button>
-
-    <button data-p="projects">
-      ▦ Projekt
-    </button>
-
-    <button data-p="customers">
-      ◎ Kunder
-    </button>
-
-    <button data-p="workplaces">
-      ⌖ Arbetsplatser
-    </button>
-
-    <button data-p="time">
-      ◷ Tidrapport
-    </button>
-
-    <button data-p="planning">
-      □ Planering
-    </button>
-
-    <button data-p="reports">
-      ▥ Rapporter
-    </button>
-
-    <button data-p="system">
-      ⚙ App / System
-    </button>
-
-  </nav>
+  <button data-p="dashboard" class="active"><span>⌂</span><span>Dashboard</span></button>
+  <button data-p="companies"><span>🏢</span><span>Företag</span></button>
+  <button data-p="subscriptions"><span>💳</span><span>Abonnemang</span></button>
+  <button data-p="systemErrors"><span>⚠️</span><span>Systemfel</span></button>
+  <button data-p="tools"><span>🔧</span><span>Verktyg</span></button>
+  <button data-p="security"><span>🔐</span><span>Säkerhet</span></button>
+  <button data-p="logs"><span>📋</span><span>Loggar</span></button>
+  <button data-p="system"><span>⚙️</span><span>System</span></button>
+</nav>
 
   <div class="sidefoot">
     ADMIN DEMO
     <br>
-    Demo data • v0.1.0
+    Demo data • v0.3.0
   </div>
 
 </aside>
@@ -1402,36 +1366,28 @@ button{
       ▣ <span>Företag</span>
     </button>
 
-    <button data-p="employees">
-      ♙ <span>Personal</span>
+    <button data-p="subscriptions">
+      💳 <span>Abonnemang</span>
     </button>
 
-    <button data-p="projects">
-      ▦ <span>Projekt</span>
+    <button data-p="systemErrors">
+      ⚠ <span>Systemfel</span>
     </button>
 
-    <button data-p="customers">
-      ◎ <span>Kunder</span>
+    <button data-p="tools">
+      🔧 <span>Verktyg</span>
     </button>
 
-    <button data-p="workplaces">
-      ⌖ <span>Arbetsplatser</span>
+    <button data-p="security">
+      🔐 <span>Säkerhet</span>
     </button>
 
-    <button data-p="time">
-      ◷ <span>Tidrapport</span>
-    </button>
-
-    <button data-p="planning">
-      □ <span>Planering</span>
-    </button>
-
-    <button data-p="reports">
-      ▥ <span>Rapporter</span>
+    <button data-p="logs">
+      📋 <span>Loggar</span>
     </button>
 
     <button data-p="system">
-      ⚙ <span>App / System</span>
+      ⚙ <span>System</span>
     </button>
 
   </nav>
@@ -1496,7 +1452,7 @@ button{
       </h1>
 
       <p>
-        Kontrollpanel för TIDPUNKT Demo.
+        Kontrollpanel för TIDPUNKT Admin Control Center.
       </p>
 
     </div>
@@ -1524,105 +1480,31 @@ button{
 
   <div class="grid stats">
 
-    <div class="card metric">
-
-      <span class="label">
-        Företag
-      </span>
-
-      <div class="value">
-        3
-      </div>
-
-      <span class="trend">
-        +1 denna månad
-      </span>
-
-    </div>
-
-
-    <div class="card metric">
-
-      <span class="label">
-        Anställda
-      </span>
-
-      <div class="value">
-        27
-      </div>
-
-      <span class="trend">
-        24 aktiva
-      </span>
-
-    </div>
-
-
-    <div class="card metric">
-
-      <span class="label">
-        Projekt
-      </span>
-
-      <div class="value">
-        14
-      </div>
-
-      <span class="trend">
-        11 pågående
-      </span>
-
-    </div>
-
-
-    <div class="card metric">
-
-      <span class="label">
-        Rapporterade timmar
-      </span>
-
-      <div class="value">
-        1 248:35
-      </div>
-
-      <span class="trend">
-        +8,4%
-      </span>
-
-    </div>
+    <div class="card metric"><span class="label">Totalt företag</span><div class="value" id="adminTotalCompanies">0</div><span class="trend">Registrerade företag</span></div>
+    <div class="card metric"><span class="label">Aktiva abonnemang</span><div class="value" id="adminActiveSubscriptions">0</div><span class="trend">Abonnemang aktiva</span></div>
+    <div class="card metric"><span class="label">Obetalda abonnemang</span><div class="value" id="adminUnpaidSubscriptions">0</div><span class="trend">Kräver uppföljning</span></div>
+    <div class="card metric"><span class="label">Aktiva företag</span><div class="value" id="adminActiveCompanies">0</div><span class="trend">Åtkomst aktiv</span></div>
+    <div class="card metric"><span class="label">Avstängda företag</span><div class="value" id="adminSuspendedCompanies">0</div><span class="trend">Åtkomst avstängd</span></div>
+    <div class="card metric" onclick="show('systemErrors')" style="cursor:pointer"><span class="label">Systemfel</span><div class="value" id="adminSystemErrors">0</div><span class="trend">Öppna kontrollcenter</span></div>
 
   </div>
 
 
-  <div
-    class="grid two"
-    style="margin-top:15px"
-  >
-
+  <div class="grid two" style="margin-top:15px">
     <div class="card">
-
-      <h3>
-        Aktivitet denna vecka
-      </h3>
-
-      <div
-        class="chart"
-        id="chart"
-      ></div>
-
+      <div class="head" style="margin-bottom:12px">
+        <div><h3 style="margin:0">⚠ Systemfel</h3><p class="sub">Problem som kräver uppmärksamhet.</p></div>
+        <button class="btn" onclick="show('systemErrors')">Visa alla</button>
+      </div>
+      <div id="dashboardErrors"></div><div id="activity" style="display:none"></div><div id="chart" style="display:none"></div>
     </div>
-
-
     <div class="card">
-
-      <h3>
-        Senaste aktivitet
-      </h3>
-
-      <div id="activity"></div>
-
+      <div class="head" style="margin-bottom:12px">
+        <div><h3 style="margin:0">Senaste adminaktivitet</h3><p class="sub">Åtgärder från kontrollpanelen.</p></div>
+        <button class="btn" onclick="show('logs')">Visa loggar</button>
+      </div>
+      <div id="adminActivity"></div>
     </div>
-
   </div>
 
 </section>
@@ -1707,6 +1589,56 @@ button{
 
 </section>
 
+
+<!-- ================= COMPANY DETAIL ================= -->
+<section id="companyDetail" class="page">
+  <div id="companyDetailContent"></div>
+</section>
+
+
+<!-- ================= SUBSCRIPTIONS ================= -->
+<section id="subscriptions" class="page">
+  <div class="head"><div><h1>Abonnemang</h1><p>Översikt och hantering av företagens abonnemang.</p></div></div>
+  <div class="grid three" id="subscriptionStats"></div>
+  <div class="card tablewrap" style="margin-top:15px"><table class="table"><thead><tr><th>Företag</th><th>Paket</th><th>Anställda</th><th>Pris</th><th>Status</th><th>Åtgärd</th></tr></thead><tbody id="subscriptionsTable"></tbody></table></div>
+</section>
+
+<!-- ================= SYSTEM ERRORS ================= -->
+<section id="systemErrors" class="page">
+  <div class="head"><div><h1>Systemfel</h1><p>Diagnostik och reparationsåtgärder utan kodändring.</p></div><button class="btn" onclick="runGlobalDiagnostics()">🔍 Kör diagnostik</button></div>
+  <div class="grid three" id="errorStats"></div>
+  <div class="card tablewrap" style="margin-top:15px"><table class="table"><thead><tr><th>Företag</th><th>Problem</th><th>Felkod</th><th>Allvarlighet</th><th>Status</th><th>Åtgärd</th></tr></thead><tbody id="errorsTable"></tbody></table></div>
+</section>
+
+<!-- ================= TOOLS ================= -->
+<section id="tools" class="page">
+  <div class="head"><div><h1>Verktyg</h1><p>Administrativa verktyg för felsökning och säkra reparationer.</p></div></div>
+  <div class="grid three">
+    <div class="card"><h3>🔍 Systemdiagnostik</h3><p class="sub">Kontrollerar kända demo-funktioner.</p><button class="btn primary" onclick="runGlobalDiagnostics()">Kör diagnostik</button></div>
+    <div class="card"><h3>🔧 Reparationscenter</h3><p class="sub">Åtgärda registrerade fel med kontrollerade åtgärder.</p><button class="btn" onclick="show('systemErrors')">Öppna reparationscenter</button></div>
+    <div class="card"><h3>🧹 Rensa demo-cache</h3><p class="sub">Rensar endast temporär demo-cache.</p><button class="btn" onclick="clearDemoCache()">Rensa cache</button></div>
+    <div class="card"><h3>✓ Datavalidering</h3><p class="sub">Kontrollerar företagsdata och abonnemang.</p><button class="btn" onclick="validateCompanyData()">Validera data</button></div>
+    <div class="card"><h3>🔄 Synkronisera abonnemang</h3><p class="sub">Kontrollerar paketstatus för alla företag.</p><button class="btn" onclick="syncSubscriptions()">Synkronisera</button></div>
+    <div class="card"><h3>🛡 Återställ standardläge</h3><p class="sub">Återställer endast demo-inställningar.</p><button class="btn gold" onclick="resetDemoSettings()">Återställ</button></div>
+  </div>
+</section>
+
+<!-- ================= SECURITY ================= -->
+<section id="security" class="page">
+  <div class="head"><div><h1>Säkerhet</h1><p>Åtkomst, sessioner och säkerhetshändelser.</p></div></div>
+  <div class="grid three">
+    <div class="card metric"><span class="label">Misslyckade inloggningar</span><div class="value">0</div><span class="trend">Senaste 24 timmarna</span></div>
+    <div class="card metric"><span class="label">Aktiva sessioner</span><div class="value">3</div><span class="trend">Demo</span></div>
+    <div class="card metric"><span class="label">Säkerhetsstatus</span><div class="value" style="font-size:22px">🟢 OK</div><span class="trend">Inga kritiska händelser</span></div>
+  </div>
+  <div class="card" style="margin-top:15px"><h3>Åtgärder</h3><div class="actions"><button class="btn" onclick="toast('Demo: alla företagssessioner har återställts.')">Återställ sessioner</button><button class="btn" onclick="toast('Demo: säkerhetskontroll klar.')">Kör säkerhetskontroll</button></div></div>
+</section>
+
+<!-- ================= LOGS ================= -->
+<section id="logs" class="page">
+  <div class="head"><div><h1>Loggar</h1><p>Historik över system- och adminåtgärder.</p></div><button class="btn" onclick="clearAdminLogs()">Rensa demo-logg</button></div>
+  <div class="card tablewrap"><table class="table"><thead><tr><th>Tid</th><th>Admin</th><th>Företag</th><th>Åtgärd</th><th>Resultat</th></tr></thead><tbody id="logsTable"></tbody></table></div>
+</section>
 
 <!-- ================= EMPLOYEES ================= -->
 
@@ -2144,149 +2076,87 @@ button{
 
 <!-- ================= SYSTEM ================= -->
 
-<section
-  id="system"
-  class="page"
->
-
+<!-- ================= ADMIN SUBSCRIPTIONS ================= -->
+<section id="subscriptions" class="page">
   <div class="head">
-
-    <div>
-
-      <h1>
-        App / System
-      </h1>
-
-      <p>
-        Endast teknisk administration — inga företagsdata.
-      </p>
-
-    </div>
-
-    <button
-      class="btn gold"
-      onclick="toast('Demo: systemuppdatering startad')"
-    >
-      Uppdatera app
-    </button>
-
+    <div><h1>Abonnemang</h1><p>Översikt och hantering av företagspaket.</p></div>
   </div>
-
-
-  <div class="grid three">
-
-    <div class="card metric">
-
-      <span class="label">
-        Version
-      </span>
-
-      <div class="value">
-        v0.1.0
-      </div>
-
-      <span class="trend">
-        Demo build
-      </span>
-
-    </div>
-
-
-    <div class="card metric">
-
-      <span class="label">
-        Status
-      </span>
-
-      <div class="value">
-        Online
-      </div>
-
-      <span class="trend">
-        Alla tjänster OK
-      </span>
-
-    </div>
-
-
-    <div class="card metric">
-
-      <span class="label">
-        Senaste deploy
-      </span>
-
-      <div class="value">
-        12:42
-      </div>
-
-      <span class="trend">
-        Idag
-      </span>
-
-    </div>
-
+  <div class="card">
+    <div id="subscriptionsTable"></div>
   </div>
-
-
-  <div
-    class="card"
-    style="margin-top:15px"
-  >
-
-    <h3>
-      Systemfunktioner
-    </h3>
-
-    <div class="grid three">
-
-      <div>
-        <b>Code management</b>
-        <p class="sub">
-          Kod och appfunktioner.
-        </p>
-      </div>
-
-      <div>
-        <b>Version management</b>
-        <p class="sub">
-          Versioner och release.
-        </p>
-      </div>
-
-      <div>
-        <b>Deployment</b>
-        <p class="sub">
-          Deploy och status.
-        </p>
-      </div>
-
-      <div>
-        <b>Technical logs</b>
-        <p class="sub">
-          Errors och events.
-        </p>
-      </div>
-
-      <div>
-        <b>Backup / Restore</b>
-        <p class="sub">
-          Teknisk backup.
-        </p>
-      </div>
-
-      <div>
-        <b>Permissions engine</b>
-        <p class="sub">
-          Systemroller.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
 </section>
 
+<!-- ================= ADMIN SYSTEM ERRORS ================= -->
+<section id="systemErrors" class="page">
+  <div class="head">
+    <div><h1>Systemfel</h1><p>Diagnostik och åtgärder per företag.</p></div>
+  </div>
+  <div class="card">
+    <div id="errorsTable"></div>
+  </div>
+</section>
+
+<!-- ================= ADMIN TOOLS ================= -->
+<section id="tools" class="page">
+  <div class="head">
+    <div><h1>Verktyg</h1><p>Kontroller och säkra reparationsverktyg.</p></div>
+  </div>
+  <div class="grid two">
+    <div class="card"><h3>🔍 Diagnostik</h3><p class="sub">Kontrollera systemets funktioner.</p><button class="btn primary" onclick="runDiagnostics()">Kör diagnostik</button></div>
+    <div class="card"><h3>🔧 Reparation</h3><p class="sub">Kör tillgängliga automatiska reparationskontroller.</p><button class="btn primary" onclick="runRepairCheck()">Kontrollera reparationsmöjligheter</button></div>
+  </div>
+</section>
+
+<!-- ================= ADMIN SECURITY ================= -->
+<section id="security" class="page">
+  <div class="head">
+    <div><h1>Säkerhet</h1><p>Översikt av åtkomst och säkerhetshändelser.</p></div>
+  </div>
+  <div class="grid two">
+    <div class="card"><h3>🔐 Kontoåtkomst</h3><p class="sub">Admin- och företagsåtkomst hanteras från rätt nivå.</p><button class="btn" onclick="show('companies')">Öppna företag</button></div>
+    <div class="card"><h3>🛡️ Säkerhetsstatus</h3><p class="sub">Demo: inga kritiska säkerhetsproblem.</p></div>
+  </div>
+</section>
+
+<!-- ================= ADMIN LOGS ================= -->
+<section id="logs" class="page">
+  <div class="head">
+    <div><h1>Loggar</h1><p>Historik över adminåtgärder och systemhändelser.</p></div>
+  </div>
+  <div class="card">
+    <div id="adminLogs"></div>
+  </div>
+</section>
+<section id="system" class="page">
+  <div class="head">
+    <div><h1>⚙️ System</h1><p>Systemstatus, versioner, backup och underhåll.</p></div>
+  </div>
+
+  <div class="card">
+    <h3>🟢 Systemstatus</h3>
+    <p id="systemStatusText" class="sub">Alla system fungerar normalt.</p>
+  </div>
+
+  <div class="grid two" style="margin-top:15px">
+    <div class="card">
+      <h3>Versioner</h3>
+      <div id="versions"></div>
+    </div>
+    <div class="card">
+      <h3>🛟 Backup & Restore</h3>
+      <p class="sub">Senaste backup: <b id="lastBackup">Aldrig</b></p>
+      <p class="sub">Senaste stabila version: <b id="stableVersion">v0.3.0</b></p>
+      <button class="btn primary" onclick="createBackup()">Skapa backup</button>
+      <button class="btn" style="margin-left:6px" onclick="showBackups()">Visa backuphistorik</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:15px">
+    <h3>Underhåll</h3>
+    <button class="btn" onclick="runDiagnostics()">Systemkontroll</button>
+    <button class="btn" style="margin-left:6px" onclick="runRepairCheck()">Reparationskontroll</button>
+  </div>
+</section>
 
 </div>
 </main>
@@ -2301,19 +2171,19 @@ button{
     <span>Dashboard</span>
   </button>
 
-  <button data-p="time">
-    ◷
-    <span>Tid</span>
+  <button data-p="companies">
+    ▣
+    <span>Företag</span>
   </button>
 
-  <button data-p="planning">
-    □
-    <span>Planering</span>
+  <button data-p="systemErrors">
+    ⚠
+    <span>Systemfel</span>
   </button>
 
-  <button data-p="employees">
-    ♙
-    <span>Personal</span>
+  <button data-p="system">
+    ⚙
+    <span>System</span>
   </button>
 
 </nav>
@@ -2404,18 +2274,266 @@ button{
 
 
 <script>
+/* ================= ADMIN CONTROL CENTER v0.4 ================= */
+const ADMIN_ERRORS_KEY = "tidpunkt_admin_errors_v04";
+const ADMIN_LOGS_KEY = "tidpunkt_admin_logs_v04";
+const ADMIN_BACKUPS_KEY = "tidpunkt_admin_backups_v04";
+const ADMIN_VERSION = "v0.4.0";
+
+let ADMIN_ERRORS = JSON.parse(localStorage.getItem(ADMIN_ERRORS_KEY) || "null") || [
+  {id:1, companyId:1, code:"TIME-102", title:"Tidrapport kunde inte sparas", reason:"Systemet kunde inte slutföra sparningen.", status:"Pågående", severity:"Hög", created:"18/08/2026 14:32"},
+  {id:2, companyId:1, code:"PLAN-204", title:"Planering kunde inte laddas", reason:"Planeringsdata kunde inte laddas korrekt.", status:"Åtgärdad", severity:"Medel", created:"18/08/2026 15:10"},
+  {id:3, companyId:3, code:"AUTH-201", title:"Session kunde inte verifieras", reason:"En session behövde återställas.", status:"Pågående", severity:"Medel", created:"18/08/2026 16:05"}
+];
+
+let ADMIN_LOGS = JSON.parse(localStorage.getItem(ADMIN_LOGS_KEY) || "null") || [
+  {time:"19/08/2026 00:10", action:"Admin loggade in", result:"Success"}
+];
+
+let ADMIN_BACKUPS = JSON.parse(localStorage.getItem(ADMIN_BACKUPS_KEY) || "null") || [
+  {version:"v0.3.0", time:"18/08/2026 22:30", type:"Stabil"}
+];
+
+function adminSaveState(){
+  localStorage.setItem(ADMIN_ERRORS_KEY, JSON.stringify(ADMIN_ERRORS));
+  localStorage.setItem(ADMIN_LOGS_KEY, JSON.stringify(ADMIN_LOGS));
+  localStorage.setItem(ADMIN_BACKUPS_KEY, JSON.stringify(ADMIN_BACKUPS));
+}
+
+function companyById(id){ return C.find(c => c.id === id); }
+
+function addAdminLog(action, result="Success"){
+  ADMIN_LOGS.unshift({
+    time:new Date().toLocaleString("sv-SE"),
+    action,
+    result
+  });
+  adminSaveState();
+  renderAdminLogs();
+}
+
+function renderAdminDashboard(){
+  const total = C.length;
+  const active = C.filter(c => c.status === "Aktiv").length;
+  const suspended = C.filter(c => c.status === "Avstängd").length;
+  const activeSubs = C.filter(c => (c.subscription || "Unpaid") === "Active").length;
+  const unpaidSubs = C.filter(c => (c.subscription || "Unpaid") !== "Active").length;
+  const openErrors = ADMIN_ERRORS.filter(e => e.status !== "Åtgärdad");
+
+  const set = (id, value) => {
+    const el=document.getElementById(id);
+    if(el) el.textContent=value;
+  };
+  set("mCompanies", total);
+  set("mActiveSubs", activeSubs);
+  set("mUnpaidSubs", unpaidSubs);
+  set("mActiveCompanies", active);
+  set("mSuspendedCompanies", suspended);
+  set("errorSummary", openErrors.length ? `${openErrors.length} fel kräver uppmärksamhet.` : "Inga fel kräver uppmärksamhet.");
+
+  const box=document.getElementById("dashboardErrors");
+  if(box){
+    const rows=openErrors.slice(0,5).map(e=>{
+      const c=companyById(e.companyId);
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.08)">
+        <div><b>${escapeHtml(c?.name || "Okänt företag")}</b><div class="sub">${escapeHtml(e.title)}</div></div>
+        <button class="btn" onclick="openError(${e.id})">Visa</button>
+      </div>`;
+    }).join("");
+    box.innerHTML = rows || `<div class="sub">Inga öppna systemfel.</div>`;
+  }
+}
+
+function renderSubscriptions(){
+  const el=document.getElementById("subscriptionsTable");
+  if(!el)return;
+  el.innerHTML = `<div style="overflow:auto"><table><thead><tr>
+    <th>Företag</th><th>Paket</th><th>Anställda</th><th>Pris</th><th>Status</th><th>Betalning</th><th></th>
+  </tr></thead><tbody>${
+    C.map(c=>{
+      const count=parseInt(c.employees||0,10);
+      const limit=c.employeeLimit||30;
+      return `<tr>
+        <td><b>${escapeHtml(c.name)}</b></td>
+        <td>${limit} anställda</td>
+        <td>${count} / ${limit}</td>
+        <td>${c.price||600} kr/mån</td>
+        <td>${c.status}</td>
+        <td>${c.subscription==="Active"?"🟢 Betald":"⚠️ Obetald"}</td>
+        <td><button class="btn" onclick="openCompany(${c.id})">Öppna</button></td>
+      </tr>`;
+    }).join("")
+  }</tbody></table></div>`;
+}
+
+function renderErrors(){
+  const el=document.getElementById("errorsTable");
+  if(!el)return;
+  const open=ADMIN_ERRORS.filter(e=>e.status!=="Åtgärdad").length;
+  el.innerHTML=`<div style="margin-bottom:12px"><b>${open}</b> öppna fel</div>
+  <div style="overflow:auto"><table><thead><tr><th>Företag</th><th>Fel</th><th>Kod</th><th>Allvarlighet</th><th>Status</th><th></th></tr></thead>
+  <tbody>${ADMIN_ERRORS.map(e=>{
+    const c=companyById(e.companyId);
+    return `<tr>
+      <td>${escapeHtml(c?.name||"Okänt")}</td>
+      <td>${escapeHtml(e.title)}</td>
+      <td>${escapeHtml(e.code)}</td>
+      <td>${escapeHtml(e.severity)}</td>
+      <td>${escapeHtml(e.status)}</td>
+      <td><button class="btn" onclick="openError(${e.id})">Hantera</button></td>
+    </tr>`;
+  }).join("")}</tbody></table></div>`;
+}
+
+function openError(id){
+  const e=ADMIN_ERRORS.find(x=>x.id===id);
+  if(!e)return;
+  const c=companyById(e.companyId);
+  const modal=document.createElement("div");
+  modal.className="confirm-modal";
+  modal.innerHTML=`<div class="confirm-box" style="max-width:620px">
+    <h2>⚠️ ${escapeHtml(e.code)}</h2>
+    <h3>${escapeHtml(e.title)}</h3>
+    <p><b>Företag:</b> ${escapeHtml(c?.name||"Okänt")}</p>
+    <p><b>Orsak:</b> ${escapeHtml(e.reason)}</p>
+    <p><b>Status:</b> ${escapeHtml(e.status)}</p>
+    <p><b>Skapad:</b> ${escapeHtml(e.created)}</p>
+    <div style="margin-top:18px">
+      ${e.status!=="Åtgärdad" ? `<button class="btn primary" onclick="repairError(${e.id});this.closest('.confirm-modal').remove()">🔧 Åtgärda automatiskt</button>` : `<span class="badge">🟢 Redan åtgärdad</span>`}
+      <button class="btn" style="margin-left:6px" onclick="this.closest('.confirm-modal').remove()">Stäng</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function repairError(id){
+  const e=ADMIN_ERRORS.find(x=>x.id===id);
+  if(!e)return;
+  e.status="Åtgärdad";
+  addAdminLog(`Reparerade ${e.code} för ${companyById(e.companyId)?.name||"okänt företag"}`);
+  renderAdminDashboard();
+  renderErrors();
+  toast("Problemet är åtgärdat.");
+}
+
+function createBackup(){
+  const now=new Date().toLocaleString("sv-SE");
+  ADMIN_BACKUPS.unshift({version:ADMIN_VERSION,time:now,type:"Manuell"});
+  adminSaveState();
+  const el=document.getElementById("lastBackup");
+  if(el)el.textContent=now;
+  addAdminLog(`Backup skapad (${ADMIN_VERSION})`);
+  toast("Backup skapad.");
+}
+
+function showBackups(){
+  const html=ADMIN_BACKUPS.map(b=>`<div style="padding:8px 0;border-bottom:1px solid rgba(0,0,0,.08)"><b>${b.version}</b> — ${b.time} — ${b.type}</div>`).join("");
+  const modal=document.createElement("div");
+  modal.className="confirm-modal";
+  modal.innerHTML=`<div class="confirm-box" style="max-width:650px"><h2>Backuphistorik</h2>${html}<button class="btn" style="margin-top:15px" onclick="this.closest('.confirm-modal').remove()">Stäng</button></div>`;
+  document.body.appendChild(modal);
+}
+
+function renderVersions(){
+  const el=document.getElementById("versions");
+  if(!el)return;
+  const versions=[
+    {v:ADMIN_VERSION,date:"19/08/2026",status:"Aktuell",desc:"Admin Control Center"},
+    {v:"v0.3.0",date:"18/08/2026",status:"Senaste stabila",desc:"Admin Dashboard"},
+    {v:"v0.2.0",date:"17/08/2026",status:"Stabil",desc:"Företagsöversikt"}
+  ];
+  el.innerHTML=versions.map(x=>`<div style="padding:10px 0;border-bottom:1px solid rgba(0,0,0,.08)">
+    <b>${x.v}</b> <span class="badge">${x.status}</span><div class="sub">${x.date} · ${x.desc}</div>
+    ${x.v!==ADMIN_VERSION?`<button class="btn" style="margin-top:6px" onclick="rollbackVersion('${x.v}')">Återställ</button>`:""}
+  </div>`).join("");
+}
+
+function rollbackVersion(version){
+  if(!confirm(`Återställ till ${version}? Ett emergency-backup skapas först.`))return;
+  createBackup();
+  addAdminLog(`Rollback till ${version}`, "Simulerad i DEMO");
+  toast(`Rollback till ${version} är simulerad i DEMO.`);
+}
+
+function runDiagnostics(){
+  addAdminLog("Körde systemdiagnostik");
+  toast("Diagnostik klar: inga kritiska fel hittades.");
+}
+
+function runRepairCheck(){
+  addAdminLog("Körde reparationskontroll");
+  toast("Reparationskontroll klar.");
+}
+
+function renderAdminLogs(){
+  const el=document.getElementById("adminLogs");
+  if(!el)return;
+  el.innerHTML=`<div style="overflow:auto"><table><thead><tr><th>Tid</th><th>Åtgärd</th><th>Resultat</th></tr></thead><tbody>${
+    ADMIN_LOGS.map(x=>`<tr><td>${escapeHtml(x.time)}</td><td>${escapeHtml(x.action)}</td><td>${escapeHtml(x.result)}</td></tr>`).join("")
+  }</tbody></table></div>`;
+}
+
+function openCompany(id){
+  const c=companyById(id);
+  if(!c)return;
+  const count=parseInt(c.employees||0,10), limit=c.employeeLimit||30;
+  const modal=document.createElement("div");
+  modal.className="confirm-modal";
+  modal.innerHTML=`<div class="confirm-box" style="max-width:720px">
+    <h2>🏢 ${escapeHtml(c.name)}</h2>
+    <p>${escapeHtml(c.org)}</p>
+    <div class="grid two">
+      <div class="card"><b>Personal</b><div style="font-size:28px;margin-top:6px">${count} / ${limit}</div><div class="sub">${limit-count} platser kvar</div></div>
+      <div class="card"><b>Abonnemang</b><div style="font-size:20px;margin-top:6px">${c.price||600} kr/mån</div><div class="sub">${c.subscription==="Active"?"🟢 Betald":"⚠️ Obetald"}</div></div>
+    </div>
+    <p><b>Status:</b> ${c.status==="Aktiv"?"🟢 Aktiv":"🔴 Avstängd"}</p>
+    <p><b>Konto:</b> 🟢 Systemet fungerar normalt</p>
+    <button class="btn" onclick="this.closest('.confirm-modal').remove()">Stäng</button>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+document.addEventListener("click", e=>{
+  const b=e.target.closest(".nav button");
+  if(!b)return;
+  const p=b.dataset.p;
+  if(p==="dashboard") renderAdminDashboard();
+  if(p==="companies") renderCompanies();
+  if(p==="subscriptions") renderSubscriptions();
+  if(p==="systemErrors") renderErrors();
+  if(p==="logs") renderAdminLogs();
+  if(p==="system"){ renderVersions(); const lb=document.getElementById("lastBackup"); if(lb && ADMIN_BACKUPS[0]) lb.textContent=ADMIN_BACKUPS[0].time; }
+});
+
+document.addEventListener("DOMContentLoaded",()=>{
+  C.forEach(c=>{ c.employeeLimit=c.employeeLimit||30; c.price=c.price||600; });
+  adminSaveState();
+  renderAdminDashboard();
+  renderSubscriptions();
+  renderErrors();
+  renderAdminLogs();
+  renderVersions();
+});
+/* ================= END ADMIN CONTROL CENTER ================= */
+
 
 const crumbs={
   dashboard:"Admin / Dashboard",
   companies:"Admin / Företag",
-  employees:"Admin / Personal",
-  projects:"Admin / Projekt",
-  customers:"Admin / Kunder",
-  workplaces:"Admin / Arbetsplatser",
-  time:"Admin / Tidrapport",
-  planning:"Admin / Planering",
-  reports:"Admin / Rapporter",
-  system:"Admin / App / System"
+  companyDetail:"Admin / Företag / Detaljer",
+  subscriptions:"Admin / Abonnemang",
+  systemErrors:"Admin / Systemfel",
+  tools:"Admin / Verktyg",
+  security:"Admin / Säkerhet",
+  logs:"Admin / Loggar",
+  system:"Admin / System",
+  employees:"Företag / Personal",
+  projects:"Företag / Projekt",
+  customers:"Företag / Kunder",
+  workplaces:"Företag / Arbetsplatser",
+  time:"Företag / Tidrapport",
+  planning:"Företag / Planering",
+  reports:"Företag / Rapporter"
 };
 
 
@@ -2476,6 +2594,9 @@ let C =
       projects:"6",
       status:"Aktiv",
       subscription:"Active",
+      planName:"30 anställda",
+      employeeLimit:30,
+      price:600,
       username:"nordic",
       password:"123456"
     },
@@ -2488,6 +2609,9 @@ let C =
       projects:"4",
       status:"Aktiv",
       subscription:"Unpaid",
+      planName:"30 anställda",
+      employeeLimit:30,
+      price:600,
       username:"uppsala",
       password:"123456"
     },
@@ -2500,6 +2624,9 @@ let C =
       projects:"4",
       status:"Aktiv",
       subscription:"Active",
+      planName:"30 anställda",
+      employeeLimit:30,
+      price:600,
       username:"gavle",
       password:"123456"
     }
@@ -2606,86 +2733,94 @@ const P=[
 ];
 
 
+/* ================= ADMIN CONTROL CENTER ================= */
+const ERROR_KEY="tidpunkt_system_errors_v1";
+const LOG_KEY="tidpunkt_admin_logs_v1";
+const BACKUP_KEY="tidpunkt_backups_v1";
+let SYSTEM_ERRORS=JSON.parse(localStorage.getItem(ERROR_KEY)||"null")||[
+ {id:101,companyId:1,code:"TIME-102",title:"Tidrapport kunde inte sparas",severity:"Hög",status:"Pågående",reason:"En demo-sparning misslyckades och behöver köras om.",created:"18/08/2026 14:32"},
+ {id:102,companyId:1,code:"PLAN-204",title:"Planering kunde inte laddas",severity:"Medel",status:"Åtgärdad",reason:"Planeringsvyn svarade inte korrekt vid laddning.",created:"18/08/2026 15:10"},
+ {id:103,companyId:3,code:"SUB-104",title:"Abonnemangsstatus kunde inte synkroniseras",severity:"Medel",status:"Pågående",reason:"Paketstatusen behöver synkroniseras med företagets konto.",created:"18/08/2026 16:04"}
+];
+let ADMIN_LOGS=JSON.parse(localStorage.getItem(LOG_KEY)||"null")||[
+ {time:"18/08/2026 16:05",admin:"Admin Demo",company:"Gävle Projekt AB",action:"Systemfel registrerat: SUB-104",result:"Pågående"},
+ {time:"18/08/2026 15:12",admin:"Admin Demo",company:"Nordic Städ AB",action:"Planeringsfel åtgärdat",result:"Success"}
+];
+let BACKUPS=JSON.parse(localStorage.getItem(BACKUP_KEY)||"null")||[{id:"v0.2.0-stable",version:"v0.2.0",label:"Senaste stabila",time:"18/08/2026 22:30",status:"Stabil"}];
+function persistAdminData(){localStorage.setItem(ERROR_KEY,JSON.stringify(SYSTEM_ERRORS));localStorage.setItem(LOG_KEY,JSON.stringify(ADMIN_LOGS));localStorage.setItem(BACKUP_KEY,JSON.stringify(BACKUPS));}
+function companyName(id){const c=C.find(x=>x.id===id);return c?c.name:"Okänt företag";}
+function addAdminLog(company,action,result="Success"){ADMIN_LOGS.unshift({time:new Date().toLocaleString("sv-SE",{dateStyle:"short",timeStyle:"short"}),admin:"Admin Demo",company:company||"System",action,result});ADMIN_LOGS=ADMIN_LOGS.slice(0,50);persistAdminData();renderAdminLogs();}
+function renderSystemErrors(){
+ const active=SYSTEM_ERRORS.filter(e=>e.status!=="Åtgärdad"),openCount=active.length,critical=SYSTEM_ERRORS.filter(e=>e.severity==="Hög"&&e.status!=="Åtgärdad").length,fixed=SYSTEM_ERRORS.filter(e=>e.status==="Åtgärdad").length;
+ const el=document.getElementById("adminSystemErrors");if(el)el.textContent=openCount;
+ const stat=document.getElementById("errorStats");if(stat)stat.innerHTML=`<div class="card metric"><span class="label">Aktiva fel</span><div class="value">${openCount}</div><span class="trend">Kräver uppmärksamhet</span></div><div class="card metric"><span class="label">Hög allvarlighet</span><div class="value">${critical}</div><span class="trend">Prioriteras först</span></div><div class="card metric"><span class="label">Åtgärdade</span><div class="value">${fixed}</div><span class="trend">I historiken</span></div>`;
+ const table=document.getElementById("errorsTable");if(table)table.innerHTML=SYSTEM_ERRORS.map(e=>`<tr><td><b>${escapeHtml(companyName(e.companyId))}</b></td><td>${escapeHtml(e.title)}</td><td><span class="badge">${escapeHtml(e.code)}</span></td><td><span class="badge ${e.severity==="Hög"?"gold":""}">${escapeHtml(e.severity)}</span></td><td><span class="badge ${e.status==="Pågående"?"gold":""}">${escapeHtml(e.status)}</span></td><td><button class="btn" onclick="openError(${e.id})">Hantera</button></td></tr>`).join("");
+ const dash=document.getElementById("dashboardErrors");if(dash)dash.innerHTML=active.length?active.slice(0,5).map(e=>`<div class="row"><span><b>${escapeHtml(companyName(e.companyId))}</b><br><small>${escapeHtml(e.title)}</small></span><span><b>${escapeHtml(e.code)}</b><br><small>${escapeHtml(e.severity)}</small></span></div>`).join(""):'<div class="success-box">🟢 Inga aktiva systemfel.</div>';
+}
+function openError(id){const e=SYSTEM_ERRORS.find(x=>x.id===id);if(!e)return;const c=companyName(e.companyId);const action=e.code==="TIME-102"?"Försök spara igen":e.code==="PLAN-204"?"Återställ planeringsdata":"Synkronisera abonnemang";document.getElementById("companyDetailContent").innerHTML=`<div class="head"><div><h1>⚠ ${escapeHtml(e.title)}</h1><p>${escapeHtml(c)} · ${escapeHtml(e.code)}</p></div><button class="btn" onclick="show('systemErrors')">← Till systemfel</button></div><div class="grid three"><div class="card metric"><span class="label">Felkod</span><div class="value" style="font-size:22px">${escapeHtml(e.code)}</div><span class="trend">Identifierad</span></div><div class="card metric"><span class="label">Allvarlighet</span><div class="value" style="font-size:22px">${escapeHtml(e.severity)}</div><span class="trend">Prioritet</span></div><div class="card metric"><span class="label">Status</span><div class="value" style="font-size:22px">${escapeHtml(e.status)}</div><span class="trend">${escapeHtml(e.created)}</span></div></div><div class="grid two" style="margin-top:15px"><div class="card"><h3>Diagnos</h3><p>${escapeHtml(e.reason)}</p><div class="sub">Föreslagen åtgärd: <b>${escapeHtml(action)}</b></div></div><div class="card"><h3>Åtgärder</h3><div class="actions"><button class="btn primary" onclick="repairError(${e.id})">🔧 Åtgärda automatiskt</button><button class="btn" onclick="runErrorDiagnostic(${e.id})">🔍 Kör diagnostik</button></div></div></div>`;show("companyDetail");}
+function repairError(id){const e=SYSTEM_ERRORS.find(x=>x.id===id);if(!e)return;const c=companyName(e.companyId);createBackup("Emergency backup före felåtgärd");e.status="Åtgärdad";persistAdminData();addAdminLog(c,`Åtgärdade ${e.code}: ${e.title}`,"Success");renderSystemErrors();toast(`🟢 ${e.code} är åtgärdat.`);openError(id);}
+function runErrorDiagnostic(id){const e=SYSTEM_ERRORS.find(x=>x.id===id);if(!e)return;addAdminLog(companyName(e.companyId),`Diagnostik körd för ${e.code}`,"OK");toast(`🔍 Diagnostik klar: ${e.code}.`);}
+function runGlobalDiagnostics(){const active=SYSTEM_ERRORS.filter(e=>e.status!=="Åtgärdad").length;addAdminLog("System","Global systemdiagnostik körd",active?`${active} fel hittades`:"OK");renderSystemErrors();toast(active?`⚠ ${active} aktiva systemfel hittades.`:"🟢 Diagnostik klar. Inga aktiva fel.");}
+function renderSubscriptions(){const active=C.filter(c=>c.subscription==="Active").length,unpaid=C.length-active;const stat=document.getElementById("subscriptionStats");if(stat)stat.innerHTML=`<div class="card metric"><span class="label">Aktiva</span><div class="value">${active}</div><span class="trend">Abonnemang</span></div><div class="card metric"><span class="label">Obetalda</span><div class="value">${unpaid}</div><span class="trend">Kräver uppföljning</span></div><div class="card metric"><span class="label">Standardpaket</span><div class="value" style="font-size:22px">30 / 600 kr</div><span class="trend">anställda / månad</span></div>`;const table=document.getElementById("subscriptionsTable");if(table)table.innerHTML=C.map(c=>`<tr><td><b>${escapeHtml(c.name)}</b></td><td>${escapeHtml(c.planName||"30 anställda")}</td><td>${escapeHtml(c.employees||0)} / ${escapeHtml(c.employeeLimit||30)}</td><td>${escapeHtml(c.price||600)} kr/mån</td><td><span class="badge ${c.subscription==="Active"?"":"gold"}">${escapeHtml(c.subscription||"Unpaid")}</span></td><td><button class="btn" onclick="openCompanyDetail(${c.id})">Öppna</button> <button class="btn" onclick="toggleSubscription(${c.id})">${c.subscription==="Active"?"Markera obetald":"Markera betald"}</button></td></tr>`).join("");}
+function toggleSubscription(id){const c=C.find(x=>x.id===id);if(!c)return;c.subscription=c.subscription==="Active"?"Unpaid":"Active";saveCompanies();addAdminLog(c.name,`Abonnemang ändrat till ${c.subscription}`,"Success");renderCompanies();renderSubscriptions();toast(`🟢 ${c.name}: ${c.subscription}.`);}
+function renderAdminLogs(){const table=document.getElementById("logsTable");if(table)table.innerHTML=ADMIN_LOGS.map(l=>`<tr><td>${escapeHtml(l.time)}</td><td>${escapeHtml(l.admin)}</td><td>${escapeHtml(l.company)}</td><td>${escapeHtml(l.action)}</td><td><span class="badge">${escapeHtml(l.result)}</span></td></tr>`).join("");const act=document.getElementById("adminActivity");if(act)act.innerHTML=ADMIN_LOGS.slice(0,5).map(l=>`<div class="row"><span><b>${escapeHtml(l.action)}</b><br><small>${escapeHtml(l.company)}</small></span><span><small>${escapeHtml(l.time)}</small></span></div>`).join("");}
+function clearAdminLogs(){if(!confirm("Rensa endast demo-loggen?"))return;ADMIN_LOGS=[];persistAdminData();renderAdminLogs();toast("Demo-loggen är rensad.");}
+function createBackup(reason="Manuell backup"){const id=`backup-${Date.now()}`;BACKUPS.unshift({id,version:"v0.3.0",label:reason,time:new Date().toLocaleString("sv-SE",{dateStyle:"short",timeStyle:"short"}),status:"Klar"});BACKUPS=BACKUPS.slice(0,20);persistAdminData();renderSystem();addAdminLog("System",`Backup skapad: ${reason}`,"Success");toast("🟢 Backup skapad.");}
+function renderSystem(){const v=document.getElementById("versionsList");if(v)v.innerHTML=`<div class="row"><span><b>v0.3.0</b><br><small>Aktuell · Admin Control Center</small></span><span class="badge">Aktuell</span></div><div class="row"><span><b>v0.2.0</b><br><small>Senaste stabila</small></span><button class="btn" onclick="restoreVersion('v0.2.0')">Återställ</button></div><div class="row"><span><b>v0.1.0</b><br><small>Original demo</small></span><button class="btn" onclick="restoreVersion('v0.1.0')">Återställ</button></div>`;const b=document.getElementById("backupInfo");if(b){const latest=BACKUPS[0];b.innerHTML=latest?`<div class="row"><span>Senaste backup</span><b>${escapeHtml(latest.time)}</b></div><div class="row"><span>Typ</span><span>${escapeHtml(latest.label)}</span></div><div class="row"><span>Status</span><span class="badge">${escapeHtml(latest.status)}</span></div>`:'<div class="sub">Ingen backup ännu.</div>';}}
+function showBackupHistory(){const b=BACKUPS.map(x=>`<div class="row"><span><b>${escapeHtml(x.version)}</b><br><small>${escapeHtml(x.label)}</small></span><span>${escapeHtml(x.time)}</span></div>`).join("");document.getElementById("companyDetailContent").innerHTML=`<div class="head"><div><h1>Backuphistorik</h1><p>Senaste demo-backuper.</p></div><button class="btn" onclick="show('system')">← Till System</button></div><div class="card">${b||'<p class="sub">Ingen backup.</p>'}</div>`;show("companyDetail");}
+function restoreVersion(version){if(!confirm(`Återställ demo till ${version}? Ett emergency backup skapas först.`))return;createBackup(`Emergency backup före rollback till ${version}`);addAdminLog("System",`Rollback till ${version}`,"Success");toast(`🟢 Demo återställd till ${version}.`);}
+function clearDemoCache(){sessionStorage.clear();addAdminLog("System","Demo-cache rensad","Success");toast("🟢 Demo-cache rensad.");}
+function validateCompanyData(){const invalid=C.filter(c=>!c.name||Number(c.employees||0)>Number(c.employeeLimit||30));addAdminLog("System","Företagsdata validerad",invalid.length?`${invalid.length} fel hittades`:"OK");toast(invalid.length?`⚠ ${invalid.length} företag behöver kontroll.`:"🟢 Företagsdata är korrekt.");}
+function syncSubscriptions(){C.forEach(c=>{if(!c.employeeLimit)c.employeeLimit=30;if(!c.planName)c.planName="30 anställda";if(!c.price)c.price=600;});saveCompanies();renderCompanies();renderSubscriptions();addAdminLog("System","Abonnemang synkroniserade","Success");toast("🟢 Abonnemang synkroniserade.");}
+function resetDemoSettings(){if(!confirm("Återställ endast demo-inställningar? Företagsdata påverkas inte."))return;addAdminLog("System","Demo-inställningar återställda","Success");toast("🟢 Demo-inställningar återställda.");}
+
 function renderCompanies(){
+  document.getElementById("companiesTable").innerHTML = C.map(c => `
+    <tr>
+      <td><button class="btn" style="border:0;padding:0;background:transparent;text-align:left" onclick="openCompanyDetail(${c.id})"><b>${escapeHtml(c.name)}</b></button></td>
+      <td>${escapeHtml(c.org)}</td>
+      <td>${escapeHtml(c.employees||"0")} / ${escapeHtml(c.employeeLimit||30)}</td>
+      <td>${escapeHtml(c.projects||"0")}</td>
+      <td><span class="badge ${c.status==="Avstängd"?"gold":""}">${escapeHtml(c.status)}</span></td>
+      <td><span class="badge ${c.subscription==="Active"?"":"gold"}">${escapeHtml(c.subscription||"Unpaid")}</span></td>
+      <td><button class="btn" onclick="openCompanyDetail(${c.id})">Öppna</button> <button class="btn" onclick="toggleCompanyAccess(${c.id})">${c.status==="Avstängd" ? "Öppna åtkomst" : "Stäng åtkomst"}</button> <button class="btn" style="margin-left:5px;color:#a32d2d" onclick="permanentDeleteCompany(${c.id})">Permanent radera</button></td>
+    </tr>
+  `).join("");
+  updateAdminDashboard();
+}
 
-  document
-    .getElementById("companiesTable")
-    .innerHTML =
-      C.map(
-        c => `
+function updateAdminDashboard(){
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+  set("adminTotalCompanies",C.length);
+  set("adminActiveSubscriptions",C.filter(c=>c.subscription==="Active").length);
+  set("adminUnpaidSubscriptions",C.filter(c=>c.subscription!=="Active").length);
+  set("adminActiveCompanies",C.filter(c=>c.status!=="Avstängd").length);
+  set("adminSuspendedCompanies",C.filter(c=>c.status==="Avstängd").length);
+  if(typeof renderSystemErrors==="function") renderSystemErrors();
+  if(typeof renderAdminLogs==="function") renderAdminLogs();
+}
 
-          <tr>
-
-            <td>
-              <b>
-                ${escapeHtml(c.name)}
-              </b>
-            </td>
-
-            <td>
-              ${escapeHtml(c.org)}
-            </td>
-
-            <td>
-              ${escapeHtml(c.employees||"0")}
-            </td>
-
-            <td>
-              ${escapeHtml(c.projects||"0")}
-            </td>
-
-            <td>
-              <span
-                class="badge ${c.status==="Avstängd"?"gold":""}"
-              >
-                ${escapeHtml(c.status)}
-              </span>
-            </td>
-
-            <td>
-              <span
-                class="badge ${c.subscription==="Active"?"":"gold"}"
-              >
-                ${escapeHtml(c.subscription||"Unpaid")}
-              </span>
-            </td>
-
-            <td>
-
-              <button
-                class="btn"
-                onclick="
-                  toggleCompanyAccess(${c.id})
-                "
-              >
-                ${
-                  c.status==="Avstängd"
-                  ? "Öppna åtkomst"
-                  : "Stäng åtkomst"
-                }
-              </button>
-
-              <button
-                class="btn"
-                style="
-                  margin-left:5px;
-                  color:#a32d2d
-                "
-                onclick="
-                  permanentDeleteCompany(${c.id})
-                "
-              >
-                Permanent radera
-              </button>
-
-            </td>
-
-          </tr>
-
-        `
-      )
-      .join("");
-
+function openCompanyDetail(id){
+  const auth=getAuth();
+  if(!auth || auth.role!=="admin"){toast("Endast administratören kan öppna företagsdetaljer.");return;}
+  const c=C.find(x=>x.id===id); if(!c)return;
+  const limit=Number(c.employeeLimit||30), count=Number(c.employees||0);
+  const remaining=Math.max(limit-count,0), usage=Math.min(Math.round((count/limit)*100),100);
+  document.getElementById("companyDetailContent").innerHTML=`
+    <div class="head"><div><h1>${escapeHtml(c.name)}</h1><p>Företagsöversikt och abonnemang</p></div><div class="actions"><button class="btn" onclick="show('companies')">← Till företag</button><button class="btn primary" onclick="toast('Demo: företagsredigering kommer i nästa steg')">Redigera företag</button></div></div>
+    <div class="grid stats">
+      <div class="card metric"><span class="label">Status</span><div class="value" style="font-size:22px">${escapeHtml(c.status)}</div><span class="trend">${c.status==="Avstängd"?"Åtkomst avstängd":"Åtkomst aktiv"}</span></div>
+      <div class="card metric"><span class="label">Abonnemang</span><div class="value" style="font-size:22px">${escapeHtml(c.planName||"30 anställda")}</div><span class="trend">${escapeHtml(c.subscription||"Unpaid")}</span></div>
+      <div class="card metric"><span class="label">Pris</span><div class="value" style="font-size:22px">${escapeHtml(c.price||600)} kr</div><span class="trend">per månad</span></div>
+      <div class="card metric"><span class="label">Anställda</span><div class="value" style="font-size:22px">${count} / ${limit}</div><span class="trend">${remaining} platser kvar</span></div>
+    </div>
+    <div class="grid two" style="margin-top:15px">
+      <div class="card"><h3>Abonnemangsgräns</h3><div class="bar"><i style="width:${usage}%"></i></div><p class="sub" style="margin-top:10px">${count} av ${limit} anställda används (${usage}%).</p>${count>=limit?'<div class="danger-box">Företaget har nått gränsen för sitt abonnemang.</div>':''}</div>
+      <div class="card"><h3>Företagsinformation</h3><div class="row"><span class="name">Org.nr</span><span>${escapeHtml(c.org)}</span></div><div class="row"><span class="name">Användare</span><span>${escapeHtml(c.username)}</span></div><div class="row"><span class="name">Projekt</span><span>${escapeHtml(c.projects||0)}</span></div></div>
+    </div>
+    <div class="card" style="margin-top:15px"><h3>Företagsadministration</h3><div class="actions"><button class="btn" onclick="toast('Demo: personalöversikt')">Personal</button><button class="btn" onclick="toast('Demo: projektöversikt')">Projekt</button><button class="btn" onclick="toast('Demo: tidrapporter')">Tidrapporter</button><button class="btn" onclick="toast('Demo: kunder')">Kunder</button><button class="btn" onclick="toast('Demo: arbetsplatser')">Arbetsplatser</button><button class="btn" onclick="toast('Demo: abonnemang')">Abonnemang</button></div></div>
+  `;
+  show("companyDetail");
 }
 
 
@@ -2753,6 +2888,11 @@ function table(id,data){
 
 
 renderCompanies();
+updateAdminDashboard();
+renderSystemErrors();
+renderSubscriptions();
+renderAdminLogs();
+renderSystem();
 
 table(
   "employeesTable",
@@ -3683,13 +3823,12 @@ const PERMISSIONS={
   admin:[
     "dashboard",
     "companies",
-    "employees",
-    "projects",
-    "customers",
-    "workplaces",
-    "time",
-    "planning",
-    "reports",
+    "companyDetail",
+    "subscriptions",
+    "systemErrors",
+    "tools",
+    "security",
+    "logs",
     "system"
   ],
 
@@ -4251,6 +4390,9 @@ function show(id){
     .textContent=
       prefix+" / "+title;
 
+
+  if(id==="dashboard") updateAdminDashboard();
+  if(id==="companies") renderCompanies();
 
   closeMobileMenu();
 
