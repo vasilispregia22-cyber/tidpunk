@@ -1,2543 +1,5191 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>TIDPUNKT</title>
 
 <style>
-
 :root{
-    --green:#087f5b;
-    --green-light:#e4f4ee;
-    --dark:#183027;
-    --gray:#73827b;
-    --bg:#f4f7f5;
-    --white:#ffffff;
-    --line:#e5ebe8;
+  --bg:#f3f5f2;
+  --p:#fff;
+  --ink:#17231e;
+  --muted:#718078;
+  --line:#e3e9e5;
+  --brand:#155c4a;
+  --soft:#e8f2ee;
+  --gold:#c89235;
 }
 
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+  box-sizing:border-box;
 }
 
 body{
-    font-family:Arial,sans-serif;
-    background:var(--bg);
-    color:var(--dark);
+  margin:0;
+  font-family:system-ui,Arial;
+  background:var(--bg);
+  color:var(--ink);
 }
 
 button,
 input,
-select,
-textarea{
-    font:inherit;
+select{
+  font:inherit;
 }
 
 button{
-    cursor:pointer;
+  cursor:pointer;
 }
 
 .app{
-    max-width:520px;
-    min-height:100vh;
-    margin:auto;
-    padding-bottom:85px;
+  min-height:100vh;
 }
 
-/* HEADER */
-
-.header{
-    background:linear-gradient(
-        145deg,
-        #075c45,
-        #0ca678
-    );
-
-    color:white;
-
-    padding:20px;
-
-    border-radius:
-        0 0 28px 28px;
-}
-
-.header-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.side{
+  position:fixed;
+  width:245px;
+  inset:0 auto 0 0;
+  background:#102a22;
+  color:#dce9e4;
+  padding:22px 14px;
 }
 
 .logo{
-    font-size:21px;
-    font-weight:bold;
-    letter-spacing:2px;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:#fff;
+  padding:8px 12px 25px;
+}
+
+.demo{
+  font-size:10px;
+  background:var(--gold);
+  padding:4px 8px;
+  border-radius:20px;
+  letter-spacing:0;
+}
+
+.nav{
+  display:grid;
+  gap:5px;
+}
+
+.nav button{
+  border:0;
+  background:none;
+  color:#aebfb8;
+  text-align:left;
+  padding:12px;
+  border-radius:12px;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#1b4438;
+  color:#fff;
+}
+
+.sidefoot{
+  position:absolute;
+  bottom:18px;
+  font-size:12px;
+  color:#91a69e;
+  padding:14px;
+  border-top:1px solid #29463d;
+  left:14px;
+  right:14px;
+}
+
+.main{
+  margin-left:245px;
+}
+
+.top{
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+.status{
+  color:#147457;
+  background:var(--soft);
+  padding:7px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
 }
 
 .avatar{
-    width:40px;
-    height:40px;
-    border:0;
-    border-radius:50%;
-    background:rgba(255,255,255,.18);
-    color:white;
+  display:inline-grid;
+  place-items:center;
+  margin-left:10px;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:var(--brand);
+  color:#fff;
+  font-weight:800;
 }
-
-.header-title{
-    margin-top:25px;
-}
-
-.header-title small{
-    opacity:.8;
-}
-
-.header-title h1{
-    margin-top:5px;
-    font-size:26px;
-}
-
-/* CONTENT */
 
 .content{
-    padding:16px;
+  padding:28px;
+  max-width:1400px;
+  margin:auto;
 }
 
 .page{
-    display:none;
+  display:none;
 }
 
 .page.active{
-    display:block;
+  display:block;
+}
+
+.head{
+  display:flex;
+  justify-content:space-between;
+  align-items:start;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.head h1{
+  margin:0 0 5px;
+  font-size:28px;
+}
+
+.head p{
+  margin:0;
+  color:var(--muted);
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px 14px;
+  border-radius:11px;
+  font-weight:700;
+}
+
+.primary{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#fff;
+}
+
+.gold{
+  background:#f8f0df;
+  border-color:#ead7ad;
+  color:#815b19;
+}
+
+.grid{
+  display:grid;
+  gap:15px;
+}
+
+.stats{
+  grid-template-columns:repeat(4,1fr);
+}
+
+.two{
+  grid-template-columns:1.3fr .7fr;
+}
+
+.three{
+  grid-template-columns:repeat(3,1fr);
 }
 
 .card{
-    background:white;
-    border-radius:20px;
-    padding:18px;
-    margin-bottom:15px;
-    box-shadow:
-        0 8px 28px
-        rgba(25,55,45,.08);
+  background:var(--p);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 30px #123b2410;
 }
 
-.card-title{
-    font-size:19px;
-    font-weight:bold;
-    margin-bottom:15px;
+.card h3{
+  margin:0 0 14px;
 }
 
-/* HOME */
-
-.hero{
-    background:
-        linear-gradient(
-            145deg,
-            #087f5b,
-            #0ca678
-        );
-
-    color:white;
+.metric .label,
+.sub{
+  color:var(--muted);
+  font-size:12px;
 }
 
-.total{
-    font-size:48px;
-    font-weight:bold;
-    margin:8px 0;
+.metric .value{
+  font-size:29px;
+  font-weight:850;
+  margin:8px 0;
 }
 
-.quick{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:18px;
+.trend,
+.number,
+.hours{
+  color:#147457;
+  font-weight:800;
 }
 
-.quick button{
-    border:0;
-    border-radius:13px;
-    padding:13px;
-    background:white;
-    color:var(--green);
-    font-weight:bold;
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid var(--line);
 }
 
-/* STATS */
-
-.stats{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+.row:last-child{
+  border:0;
 }
 
-.stat{
-    background:white;
-    border-radius:16px;
-    padding:16px;
-    box-shadow:
-        0 8px 25px
-        rgba(25,55,45,.07);
+.name{
+  font-weight:800;
 }
 
-.stat strong{
-    display:block;
-    margin-top:8px;
-    font-size:24px;
-    color:var(--green);
+.badge{
+  display:inline-block;
+  background:var(--soft);
+  color:var(--brand);
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:800;
 }
 
-/* REPORT TABS */
-
-.report-tabs{
-    display:grid;
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:5px;
-
-    background:#e8efec;
-
-    padding:5px;
-
-    border-radius:14px;
-
-    margin-bottom:18px;
+.badge.gold{
+  background:#f8f0df;
+  color:#815b19;
 }
 
-.report-tabs button{
-    border:0;
-    background:transparent;
-    color:#587068;
-    border-radius:10px;
-    padding:12px 5px;
-    font-weight:bold;
+.tablewrap{
+  overflow:auto;
 }
 
-.report-tabs button.active{
-    background:white;
-    color:var(--green);
-
-    box-shadow:
-        0 2px 8px
-        rgba(0,0,0,.08);
+.table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
 }
 
-/* PERIOD */
+.table th,
+.table td{
+  text-align:left;
+  padding:13px 10px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+
+.table th{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.search{
+  border:1px solid var(--line);
+  padding:11px 13px;
+  border-radius:11px;
+  min-width:230px;
+  outline:0;
+}
+
+.filters{
+  display:flex;
+  gap:9px;
+  margin-bottom:15px;
+}
+
+.tabs{
+  display:flex;
+  gap:5px;
+  background:#eef2ef;
+  padding:4px;
+  border-radius:12px;
+  width:max-content;
+}
+
+.tabs button{
+  border:0;
+  background:transparent;
+  padding:9px 14px;
+  border-radius:9px;
+  color:var(--muted);
+  font-weight:800;
+}
+
+.tabs button.active{
+  background:#fff;
+  color:var(--brand);
+  box-shadow:0 2px 8px #0000000d;
+}
 
 .period{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:16px 0;
 }
 
 .arrow{
-    width:38px;
-    height:38px;
-    border:0;
-    border-radius:12px;
-    background:var(--green-light);
-    color:var(--green);
-    font-size:22px;
+  border:0;
+  background:var(--soft);
+  color:var(--brand);
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  font-size:20px;
 }
 
-.period-title{
-    text-align:center;
-    font-weight:bold;
+.day{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:13px;
+  margin-top:9px;
 }
 
-/* DAY */
-
-.time-entry{
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:14px;
-    margin-top:10px;
-}
-
-.entry-top{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-}
-
-.project-name{
-    font-weight:bold;
-}
-
-.entry-hours{
-    color:var(--green);
-    font-weight:bold;
-}
-
-.entry-info{
-    color:var(--gray);
-    font-size:13px;
-    margin-top:5px;
-}
-
-.total-row{
-    display:flex;
-    justify-content:space-between;
-
-    border-top:
-        1px solid var(--line);
-
-    margin-top:15px;
-    padding-top:15px;
-
-    font-weight:bold;
-}
-
-/* WEEK */
-
-.week-row{
-    display:grid;
-
-    grid-template-columns:
-        55px 1fr 60px;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:13px 0;
-
-    border-bottom:
-        1px solid var(--line);
-}
-
-.week-day{
-    font-weight:bold;
+.week{
+  display:grid;
+  grid-template-columns:90px 1fr 70px;
+  gap:12px;
+  align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid var(--line);
 }
 
 .bar{
-    height:10px;
-    background:#edf2ef;
-    border-radius:20px;
-    overflow:hidden;
+  height:9px;
+  background:#edf1ef;
+  border-radius:20px;
+  overflow:hidden;
 }
 
-.bar span{
-    display:block;
-    height:100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #087f5b,
-            #20c997
-        );
-
-    border-radius:20px;
+.bar i{
+  display:block;
+  height:100%;
+  background:var(--brand);
+  border-radius:20px;
 }
-
-.week-hours{
-    text-align:right;
-    color:var(--green);
-    font-weight:bold;
-}
-
-/* MONTH */
 
 .calendar{
-    display:grid;
-    grid-template-columns:
-        repeat(7,1fr);
-
-    border-top:
-        1px solid var(--line);
-
-    border-left:
-        1px solid var(--line);
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line);
 }
 
-.calendar-head{
-    text-align:center;
-    padding:8px 0;
-    font-size:10px;
-    color:var(--gray);
-    font-weight:bold;
+.calhead,
+.calday{
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
 
-.calendar-day{
-    min-height:65px;
-
-    padding:6px;
-
-    border-right:
-        1px solid var(--line);
-
-    border-bottom:
-        1px solid var(--line);
-
-    background:white;
+.calhead{
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+  padding:8px;
 }
 
-.calendar-number{
-    font-weight:bold;
-    font-size:12px;
+.calday{
+  min-height:75px;
+  padding:7px;
 }
 
-.calendar-hours{
-    display:inline-block;
-
-    margin-top:8px;
-
-    background:var(--green-light);
-
-    color:var(--green);
-
-    padding:4px 6px;
-
-    border-radius:8px;
-
-    font-size:10px;
-
-    font-weight:bold;
+.calhours{
+  display:block;
+  margin-top:9px;
+  color:var(--brand);
+  background:var(--soft);
+  font-size:10px;
+  font-weight:800;
+  border-radius:7px;
+  padding:5px;
 }
 
-.today{
-    outline:
-        2px solid
-        var(--green);
-
-    outline-offset:-2px;
+.chart{
+  height:190px;
+  display:flex;
+  align-items:end;
+  gap:10px;
 }
 
-/* PROJECTS */
-
-.search{
-    width:100%;
-
-    padding:13px;
-
-    border:
-        1px solid
-        var(--line);
-
-    border-radius:13px;
-
-    margin-bottom:10px;
-
-    outline:none;
+.barcol{
+  flex:1;
+  text-align:center;
 }
 
-.project{
-    display:flex;
-    justify-content:space-between;
-
-    padding:14px 0;
-
-    border-bottom:
-        1px solid
-        var(--line);
+.barcol i{
+  display:block;
+  background:#1d8068;
+  border-radius:7px 7px 2px 2px;
 }
 
-.project-client{
-    color:var(--gray);
-    font-size:12px;
-    margin-top:4px;
+.barcol span{
+  font-size:10px;
+  color:var(--muted);
 }
 
-.project-total{
-    color:var(--green);
-    font-weight:bold;
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0c191455;
+  z-index:20;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-/* FAB */
-
-.fab{
-    position:fixed;
-
-    right:
-        max(
-            20px,
-            calc(
-                (100vw - 520px)/2
-                + 20px
-            )
-        );
-
-    bottom:98px;
-
-    width:56px;
-    height:56px;
-
-    border:0;
-
-    border-radius:50%;
-
-    background:#0ca678;
-
-    color:white;
-
-    font-size:30px;
-
-    box-shadow:
-        0 8px 22px
-        rgba(8,127,91,.3);
+.modal.open{
+  display:flex;
 }
 
-/* NAVIGATION */
-
-.bottom-nav{
-    position:fixed;
-
-    bottom:0;
-    left:50%;
-
-    transform:
-        translateX(-50%);
-
-    width:100%;
-    max-width:520px;
-
-    height:80px;
-
-    background:white;
-
-    border-top:
-        1px solid
-        var(--line);
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(5,1fr);
+.modalbox{
+  background:#fff;
+  width:min(560px,100%);
+  padding:20px;
+  border-radius:20px;
 }
 
-.nav-button{
-    border:0;
-
-    background:white;
-
-    color:#87958f;
-
-    font-size:10px;
-
-    font-weight:bold;
+.form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
-.nav-button span{
-    display:block;
+.field label{
+  display:block;
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
 
+.field input,
+.field select{
+  width:100%;
+  border:1px solid var(--line);
+  padding:11px;
+  border-radius:10px;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#102a22;
+  color:#fff;
+  padding:12px 15px;
+  border-radius:12px;
+  display:none;
+}
+
+.toast.show{
+  display:block;
+}
+
+.mobile-menu-btn,
+.mobile-drawer,
+.mobile-overlay,
+.mobile-bottom{
+  display:none;
+}
+
+@media(max-width:850px){
+
+  .side{
+    width:70px;
+  }
+
+  .logo{
+    font-size:0;
+  }
+
+  .logo:before{
+    content:"T";
     font-size:22px;
+  }
 
-    margin-bottom:4px;
-}
-
-.nav-button.active{
-    color:var(--green);
-}
-
-/* FORM */
-
-.form-row{
-    padding:13px 0;
-
-    border-bottom:
-        1px solid
-        var(--line);
-}
-
-.form-row label{
-    display:block;
-
-    font-size:12px;
-
-    color:var(--gray);
-
-    margin-bottom:6px;
-}
-
-.form-row input,
-.form-row select,
-.form-row textarea{
-    width:100%;
-
-    border:0;
-
-    outline:none;
-
-    background:transparent;
-}
-
-.save{
-    width:100%;
-
-    border:0;
-
-    border-radius:14px;
-
-    padding:15px;
-
-    margin-top:18px;
-
-    background:var(--green);
-
-    color:white;
-
-    font-weight:bold;
-}
-
-.empty{
+  .nav button{
+    font-size:0;
     text-align:center;
+  }
 
-    color:var(--gray);
+  .nav button:first-letter{
+    font-size:20px;
+  }
 
-    padding:40px 10px;
+  .sidefoot{
+    display:none;
+  }
+
+  .main{
+    margin-left:70px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .two{
+    grid-template-columns:1fr;
+  }
 }
 
+@media(max-width:600px){
+
+  body{
+    background:#f5f7f6;
+    padding-bottom:72px;
+  }
+
+  .main{
+    margin:0;
+  }
+
+  .side{
+    display:none;
+  }
+
+  .top{
+    height:64px;
+    padding:0 14px;
+    gap:10px;
+    box-shadow:0 1px 10px #0000000a;
+    z-index:10;
+  }
+
+  .top #crumb{
+    font-size:13px;
+    font-weight:800;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .status{
+    font-size:0;
+    padding:7px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    display:inline-block;
+    vertical-align:middle;
+  }
+
+  .status::after{
+    content:"";
+    display:block;
+    width:6px;
+    height:6px;
+    margin:3px;
+    border-radius:50%;
+    background:#147457;
+  }
+
+  .avatar{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    margin-left:6px;
+  }
+
+  .mobile-menu-btn{
+    display:inline-grid;
+    place-items:center;
+    border:0;
+    background:#eef2ef;
+    color:#155c4a;
+    width:38px;
+    height:38px;
+    border-radius:11px;
+    font-size:20px;
+    flex:none;
+  }
+
+  .content{
+    padding:14px 12px;
+  }
+
+  .head{
+    margin-bottom:14px;
+  }
+
+  .head h1{
+    font-size:24px;
+  }
+
+  .head p{
+    font-size:12px;
+  }
+
+  .actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .actions .btn{
+    width:100%;
+    padding:10px 8px;
+    font-size:12px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+
+  .card{
+    border-radius:16px;
+    padding:14px;
+    box-shadow:0 5px 18px #123b2410;
+  }
+
+  .metric .value{
+    font-size:23px;
+  }
+
+  .metric .label{
+    font-size:11px;
+  }
+
+  .two,
+  .three{
+    grid-template-columns:1fr;
+  }
+
+  .chart{
+    height:150px;
+  }
+
+  .tablewrap{
+    margin:0 -4px;
+  }
+
+  .table{
+    font-size:12px;
+  }
+
+  .table th,
+  .table td{
+    padding:10px 8px;
+  }
+
+  .filters{
+    display:block;
+  }
+
+  .search{
+    width:100%;
+    min-width:0;
+  }
+
+  .tabs{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .tabs button{
+    padding:9px 4px;
+    font-size:12px;
+  }
+
+  .period{
+    margin:12px 0;
+  }
+
+  .period b{
+    font-size:13px;
+    text-align:center;
+  }
+
+  .day{
+    padding:12px;
+  }
+
+  .day-top{
+    display:block;
+  }
+
+  .day-top .hours{
+    display:block;
+    margin-top:5px;
+  }
+
+  .week{
+    grid-template-columns:52px 1fr 58px;
+    gap:7px;
+    font-size:12px;
+  }
+
+  .calendar{
+    font-size:11px;
+  }
+
+  .calday{
+    min-height:58px;
+    padding:5px;
+  }
+
+  .calhours{
+    font-size:9px;
+    margin-top:5px;
+    padding:3px;
+  }
+
+  .row{
+    padding:11px 0;
+  }
+
+  .number{
+    font-size:16px;
+  }
+
+  .modal{
+    padding:12px;
+  }
+
+  .modalbox{
+    border-radius:18px;
+    padding:16px;
+    max-height:90vh;
+    overflow:auto;
+  }
+
+  .form{
+    grid-template-columns:1fr;
+  }
+
+  .toast{
+    left:12px;
+    right:12px;
+    bottom:84px;
+    text-align:center;
+  }
+
+  .mobile-drawer{
+    display:block;
+    position:fixed;
+    z-index:30;
+    top:0;
+    bottom:0;
+    left:0;
+    width:min(320px,86vw);
+    background:#102a22;
+    color:#fff;
+    transform:translateX(-105%);
+    transition:.22s ease;
+    padding:18px 14px;
+    box-shadow:15px 0 35px #0005;
+    overflow:auto;
+  }
+
+  .mobile-drawer.open{
+    transform:translateX(0);
+  }
+
+  .mobile-overlay{
+    position:fixed;
+    inset:0;
+    background:#07130f88;
+    z-index:29;
+  }
+
+  .mobile-overlay.open{
+    display:block;
+  }
+
+  .mobile-logo{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:21px;
+    font-weight:900;
+    letter-spacing:2px;
+    padding:6px 4px 20px;
+  }
+
+  .mobile-logo span{
+    display:block;
+    font-size:9px;
+    letter-spacing:.5px;
+    color:#a9c4ba;
+    margin-top:3px;
+  }
+
+  .mobile-logo button{
+    border:0;
+    background:#1b4438;
+    color:#fff;
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    font-size:22px;
+  }
+
+  .mobile-user{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    background:#17382f;
+    border:1px solid #285146;
+    border-radius:14px;
+    padding:12px;
+    margin-bottom:14px;
+  }
+
+  .mobile-user>b{
+    display:grid;
+    place-items:center;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#2b6f5c;
+  }
+
+  .mobile-user strong,
+  .mobile-user small{
+    display:block;
+  }
+
+  .mobile-user small{
+    color:#9bb7ad;
+    font-size:11px;
+    margin-top:2px;
+  }
+
+  .mobile-nav{
+    display:grid;
+    gap:4px;
+  }
+
+  .mobile-nav button{
+    border:0;
+    background:transparent;
+    color:#c5d6d0;
+    text-align:left;
+    padding:13px 12px;
+    border-radius:11px;
+    font-weight:700;
+  }
+
+  .mobile-nav button:hover{
+    background:#1b4438;
+    color:#fff;
+  }
+
+  .mobile-nav button:first-letter{
+    font-size:18px;
+  }
+
+  .mobile-bottom{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    position:fixed;
+    z-index:15;
+    left:0;
+    right:0;
+    bottom:0;
+    height:68px;
+    background:#fff;
+    border-top:1px solid #e3e9e5;
+    box-shadow:0 -6px 20px #0000000a;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+
+  .mobile-bottom button{
+    border:0;
+    background:transparent;
+    color:#718078;
+    font-size:20px;
+    font-weight:700;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+  }
+
+  .mobile-bottom button span{
+    font-size:10px;
+    font-weight:700;
+  }
+
+  .mobile-bottom button.active{
+    color:#155c4a;
+  }
+
+  .mobile-bottom button.active::before{
+    content:"";
+    position:absolute;
+    margin-top:-50px;
+    width:34px;
+    height:3px;
+    background:#155c4a;
+    border-radius:10px;
+  }
+}
+
+/* LOGIN */
+
+.login-screen{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:linear-gradient(145deg,#0d2b22,#155c4a);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.login-card{
+  width:min(440px,100%);
+  background:#fff;
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 25px 80px #0005;
+}
+
+.login-brand{
+  font-size:30px;
+  font-weight:950;
+  letter-spacing:4px;
+  color:#155c4a;
+}
+
+.login-card .field{
+  margin:12px 0;
+}
+
+.login-card label{
+  display:block;
+  font-size:12px;
+  color:#718078;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.login-card input,
+.login-card select{
+  width:100%;
+  border:1px solid #e3e9e5;
+  padding:12px;
+  border-radius:10px;
+}
+
+.login-primary{
+  width:100%;
+  border:0;
+  background:#155c4a;
+  color:#fff;
+  padding:13px;
+  border-radius:11px;
+  font-weight:900;
+}
+
+.login-register{
+  width:100%;
+  margin-top:10px;
+  border:1px solid #e3e9e5;
+  background:#fff;
+  color:#155c4a;
+  padding:12px;
+  border-radius:11px;
+  font-weight:900;
+}
+
+.login-categories{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:16px 0 8px;
+}
+
+.login-category{
+  border:1px solid #dfe7e2;
+  background:#fff;
+  color:#5b6b64;
+  padding:12px;
+  border-radius:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.login-category.active{
+  background:#e8f2ee;
+  color:#155c4a;
+  border-color:#b8d5c9;
+}
+
+.admin-entry{
+  display:block;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#718078;
+  padding:12px 8px 0;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.admin-entry:hover{
+  color:#155c4a;
+}
+
+.login-note{
+  margin-top:12px;
+  background:#e8f2ee;
+  padding:10px;
+  border-radius:10px;
+  font-size:11px;
+  color:#52625b;
+}
+
+.confirm-modal{
+  position:fixed;
+  inset:0;
+  background:#07130f88;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.confirm-box{
+  background:#fff;
+  width:min(560px,100%);
+  border-radius:20px;
+  padding:20px;
+}
+
+.danger-box{
+  background:#fff0f0;
+  color:#a32d2d;
+  padding:14px;
+  border-radius:12px;
+  margin-top:14px;
+}
 </style>
 </head>
 
-
 <body>
 
-<div class="app">
+<!-- ================= LOGIN ================= -->
 
+<div id="loginScreen" class="login-screen">
 
-<!-- HEADER -->
+  <div class="login-card">
 
-<header class="header">
+    <div class="login-brand">
+      TIDPUNKT
+    </div>
 
-    <div class="header-top">
+    <p style="color:#718078;font-size:12px">
+      Tid • Personal • Arbete
+    </p>
 
-        <div class="logo">
-            TIDPUNKT
-        </div>
+    <div class="login-categories">
 
-        <button class="avatar"
-                onclick="openPage('profile')">
-            EL
-        </button>
+      <button
+        id="catCompany"
+        class="login-category active"
+        type="button"
+        onclick="selectLoginCategory('company')"
+      >
+        Företag
+      </button>
+
+      <button
+        id="catPrivate"
+        class="login-category"
+        type="button"
+        onclick="selectLoginCategory('private')"
+      >
+        Privat
+      </button>
 
     </div>
 
+    <div id="companyLoginFields">
 
-    <div class="header-title">
+      <div class="field">
+        <label>Användare</label>
+        <input
+          id="loginUser"
+          placeholder="t.ex. nordic"
+          autocomplete="username"
+        >
+      </div>
 
-        <small>
-            Välkommen tillbaka
-        </small>
-
-        <h1>
-            Min arbetsdag
-        </h1>
+      <div class="field">
+        <label>Lösenord</label>
+        <input
+          id="loginPass"
+          type="password"
+          placeholder="Lösenord"
+          autocomplete="current-password"
+        >
+      </div>
 
     </div>
+
+    <div
+      id="privateLoginFields"
+      style="display:none"
+    >
+
+      <div class="field">
+        <label>Användare</label>
+        <input
+          id="privateUser"
+          placeholder="Användarnamn"
+          autocomplete="username"
+        >
+      </div>
+
+      <div class="field">
+        <label>Lösenord</label>
+        <input
+          id="privatePass"
+          type="password"
+          placeholder="Lösenord"
+          autocomplete="current-password"
+        >
+      </div>
+
+    </div>
+
+    <button
+      class="login-primary"
+      type="button"
+      onclick="login()"
+    >
+      Logga in
+    </button>
+
+    <button
+      id="companyRegisterButton"
+      class="login-register"
+      type="button"
+      onclick="openCompanyRegistration()"
+    >
+      Registrera företag
+    </button>
+
+    <div
+      id="loginNotice"
+      class="login-note"
+    >
+      Företag: demoanvändare
+      <b>nordic</b>,
+      lösenord
+      <b>123456</b>.
+    </div>
+
+    <button
+      class="admin-entry"
+      type="button"
+      onclick="openAdminLogin()"
+    >
+      Administratör
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ================= ADMIN LOGIN ================= -->
+
+<div
+  id="adminLoginScreen"
+  class="login-screen"
+  style="display:none"
+>
+
+  <div class="login-card">
+
+    <div class="login-brand">
+      TIDPUNKT
+    </div>
+
+    <p style="color:#718078;font-size:12px">
+      Administratörsområde
+    </p>
+
+    <div class="field">
+      <label>Användare</label>
+      <input
+        id="adminUser"
+        value="demo"
+        autocomplete="username"
+      >
+    </div>
+
+    <div class="field">
+      <label>Lösenord</label>
+      <input
+        id="adminPass"
+        type="password"
+        placeholder="Lösenord"
+        autocomplete="current-password"
+      >
+    </div>
+
+    <button
+      class="login-primary"
+      type="button"
+      onclick="adminLogin()"
+    >
+      Logga in som administratör
+    </button>
+
+    <button
+      class="login-register"
+      type="button"
+      onclick="closeAdminLogin()"
+    >
+      Tillbaka
+    </button>
+
+    <div
+      id="adminNotice"
+      class="login-note"
+    >
+      Admin demo:
+      användare <b>demo</b>,
+      lösenord <b>demo</b>.
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= ADMIN APP ================= -->
+
+<aside class="side">
+
+  <div class="logo">
+    TIDPUNKT
+    <span class="demo">DEMO</span>
+  </div>
+
+  <nav class="nav">
+
+    <button
+      class="active"
+      data-p="dashboard"
+    >
+      ⌂ Dashboard
+    </button>
+
+    <button data-p="companies">
+      ▣ Företag
+    </button>
+
+    <button data-p="employees">
+      ♙ Personal
+    </button>
+
+    <button data-p="projects">
+      ▦ Projekt
+    </button>
+
+    <button data-p="customers">
+      ◎ Kunder
+    </button>
+
+    <button data-p="workplaces">
+      ⌖ Arbetsplatser
+    </button>
+
+    <button data-p="time">
+      ◷ Tidrapport
+    </button>
+
+    <button data-p="planning">
+      □ Planering
+    </button>
+
+    <button data-p="reports">
+      ▥ Rapporter
+    </button>
+
+    <button data-p="system">
+      ⚙ App / System
+    </button>
+
+  </nav>
+
+  <div class="sidefoot">
+    ADMIN DEMO
+    <br>
+    Demo data • v0.1.0
+  </div>
+
+</aside>
+
+
+<div
+  id="mobileOverlay"
+  class="mobile-overlay"
+  onclick="closeMobileMenu()"
+></div>
+
+
+<div
+  id="mobileDrawer"
+  class="mobile-drawer"
+>
+
+  <div class="mobile-logo">
+
+    TIDPUNKT
+
+    <span>
+      ADMIN DEMO
+    </span>
+
+    <button onclick="closeMobileMenu()">
+      ×
+    </button>
+
+  </div>
+
+  <div class="mobile-user">
+
+    <b>AD</b>
+
+    <div>
+      <strong>
+        Admin Demo
+      </strong>
+
+      <small>
+        Systemadministratör
+      </small>
+    </div>
+
+  </div>
+
+  <nav class="mobile-nav">
+
+    <button data-p="dashboard">
+      ⌂ <span>Dashboard</span>
+    </button>
+
+    <button data-p="companies">
+      ▣ <span>Företag</span>
+    </button>
+
+    <button data-p="employees">
+      ♙ <span>Personal</span>
+    </button>
+
+    <button data-p="projects">
+      ▦ <span>Projekt</span>
+    </button>
+
+    <button data-p="customers">
+      ◎ <span>Kunder</span>
+    </button>
+
+    <button data-p="workplaces">
+      ⌖ <span>Arbetsplatser</span>
+    </button>
+
+    <button data-p="time">
+      ◷ <span>Tidrapport</span>
+    </button>
+
+    <button data-p="planning">
+      □ <span>Planering</span>
+    </button>
+
+    <button data-p="reports">
+      ▥ <span>Rapporter</span>
+    </button>
+
+    <button data-p="system">
+      ⚙ <span>App / System</span>
+    </button>
+
+  </nav>
+
+</div>
+
+
+<main class="main">
+
+<header class="top">
+
+  <button
+    class="mobile-menu-btn"
+    onclick="openMobileMenu()"
+  >
+    ☰
+  </button>
+
+  <span id="crumb">
+    Admin / Dashboard
+  </span>
+
+  <span>
+
+    <b class="status">
+      ● System online
+    </b>
+
+    <b class="avatar">
+      AD
+    </b>
+
+    <button
+      class="btn"
+      style="margin-left:6px"
+      onclick="logout()"
+    >
+      Logga ut
+    </button>
+
+  </span>
 
 </header>
 
 
-<main class="content">
+<div class="content">
 
 
-<!-- ================= HOME ================= -->
+<!-- ================= DASHBOARD ================= -->
 
 <section
-    id="home"
-    class="page active"
+  id="dashboard"
+  class="page active"
 >
 
-    <div class="card hero">
+  <div class="head">
 
-        <small>
-            RAPPORTERAT IDAG
-        </small>
+    <div>
 
-        <div
-            id="homeTotal"
-            class="total"
-        >
-            00:00
-        </div>
+      <h1>
+        Översikt
+      </h1>
 
-        <small>
-            timmar
-        </small>
+      <p>
+        Kontrollpanel för TIDPUNKT Demo.
+      </p>
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="btn primary"
+        onclick="toast('Demo: ny funktion')"
+      >
+        + Ny funktion
+      </button>
+
+      <button
+        class="btn"
+        onclick="show('system')"
+      >
+        Systemstatus
+      </button>
+
+    </div>
+
+  </div>
 
 
-        <div class="quick">
+  <div class="grid stats">
 
-            <button
-                onclick="openAddTime()"
-            >
-                ＋ Lägg till tid
-            </button>
+    <div class="card metric">
 
-            <button
-                onclick="openPage('report')"
-            >
-                Rapport →
-            </button>
+      <span class="label">
+        Företag
+      </span>
 
-        </div>
+      <div class="value">
+        3
+      </div>
+
+      <span class="trend">
+        +1 denna månad
+      </span>
 
     </div>
 
 
-    <div class="stats">
+    <div class="card metric">
 
-        <div class="stat">
+      <span class="label">
+        Anställda
+      </span>
 
-            <span>
-                Denna vecka
-            </span>
+      <div class="value">
+        27
+      </div>
 
-            <strong
-                id="homeWeek"
-            >
-                00:00
-            </strong>
-
-        </div>
-
-
-        <div class="stat">
-
-            <span>
-                Denna månad
-            </span>
-
-            <strong
-                id="homeMonth"
-            >
-                00:00
-            </strong>
-
-        </div>
+      <span class="trend">
+        24 aktiva
+      </span>
 
     </div>
+
+
+    <div class="card metric">
+
+      <span class="label">
+        Projekt
+      </span>
+
+      <div class="value">
+        14
+      </div>
+
+      <span class="trend">
+        11 pågående
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="label">
+        Rapporterade timmar
+      </span>
+
+      <div class="value">
+        1 248:35
+      </div>
+
+      <span class="trend">
+        +8,4%
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="grid two"
+    style="margin-top:15px"
+  >
+
+    <div class="card">
+
+      <h3>
+        Aktivitet denna vecka
+      </h3>
+
+      <div
+        class="chart"
+        id="chart"
+      ></div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Senaste aktivitet
+      </h3>
+
+      <div id="activity"></div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ================= RAPPORT ================= -->
+<!-- ================= COMPANIES ================= -->
 
 <section
-    id="report"
-    class="page"
+  id="companies"
+  class="page"
 >
 
-    <div class="card">
+  <div class="head">
 
-        <div class="card-title">
-            ANMÄLAN / RAPPORTERING
-        </div>
+    <div>
 
+      <h1>
+        Företag
+      </h1>
 
-        <!-- ΜΙΑ ΚΑΡΤΕΛΑ -->
-        <div class="report-tabs">
-
-            <button
-                id="tabDay"
-                onclick="setReportMode('day')"
-            >
-                Dag
-            </button>
-
-            <button
-                id="tabWeek"
-                onclick="setReportMode('week')"
-            >
-                Vecka
-            </button>
-
-            <button
-                id="tabMonth"
-                onclick="setReportMode('month')"
-            >
-                Månad
-            </button>
-
-        </div>
-
-
-        <div id="dayReport"></div>
-
-        <div
-            id="weekReport"
-            style="display:none"
-        ></div>
-
-        <div
-            id="monthReport"
-            style="display:none"
-        ></div>
+      <p>
+        Demoöversikt över företag.
+      </p>
 
     </div>
 
-</section>
+    <button
+      class="btn primary"
+      onclick="modal('Företag')"
+    >
+      + Lägg till företag
+    </button>
+
+  </div>
 
 
-<!-- ================= PROJECT ================= -->
+  <div class="card tablewrap">
 
-<section
-    id="projects"
-    class="page"
->
+    <table class="table">
 
-    <div class="card">
+      <thead>
 
-        <div class="card-title">
+        <tr>
+
+          <th>
+            Företag
+          </th>
+
+          <th>
+            Org.nr
+          </th>
+
+          <th>
+            Anställda
+          </th>
+
+          <th>
             Projekt
-        </div>
+          </th>
 
+          <th>
+            Status
+          </th>
 
-        <input
-            id="projectSearch"
-            class="search"
-            placeholder="Sök projekt..."
-            oninput="renderProjects()"
-        >
+          <th>
+            Subscription
+          </th>
 
+          <th>
+            Åtgärd
+          </th>
 
-        <div
-            id="projectList"
-        ></div>
+        </tr>
 
-    </div>
+      </thead>
+
+      <tbody id="companiesTable"></tbody>
+
+    </table>
+
+  </div>
 
 </section>
 
 
-<!-- ================= PLANERING ================= -->
+<!-- ================= EMPLOYEES ================= -->
 
 <section
-    id="planning"
-    class="page"
+  id="employees"
+  class="page"
 >
 
-    <div class="card">
+  <div class="head">
 
-        <div class="card-title">
-            Planering
-        </div>
+    <div>
 
+      <h1>
+        Personal
+      </h1>
 
-        <div class="report-tabs">
-
-            <button
-                id="planDay"
-                onclick="setPlanningMode('day')"
-            >
-                Dag
-            </button>
-
-            <button
-                id="planWeek"
-                onclick="setPlanningMode('week')"
-            >
-                Vecka
-            </button>
-
-            <button
-                id="planMonth"
-                onclick="setPlanningMode('month')"
-            >
-                Månad
-            </button>
-
-        </div>
-
-
-        <div
-            id="planningContent"
-        ></div>
+      <p>
+        Demoanvändare och roller.
+      </p>
 
     </div>
+
+    <button
+      class="btn primary"
+      onclick="modal('Anställd')"
+    >
+      + Ny anställd
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="filters">
+
+      <input
+        class="search"
+        placeholder="Sök namn..."
+        oninput="filter('employeesTable',this.value)"
+      >
+
+    </div>
+
+    <div class="tablewrap">
+
+      <table class="table">
+
+        <thead>
+
+          <tr>
+            <th>Namn</th>
+            <th>Företag</th>
+            <th>Roll</th>
+            <th>Status</th>
+            <th>Vecka</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="employeesTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ================= PROFILE ================= -->
+<!-- ================= PROJECTS ================= -->
 
 <section
-    id="profile"
-    class="page"
+  id="projects"
+  class="page"
 >
 
-    <div class="card">
+  <div class="head">
 
-        <div class="card-title">
-            Min profil
-        </div>
+    <div>
 
+      <h1>
+        Projekt
+      </h1>
 
-        <div class="time-entry">
-
-            <div class="entry-top">
-
-                <span class="project-name">
-                    Elson
-                </span>
-
-                <span class="entry-hours">
-                    Personal
-                </span>
-
-            </div>
-
-            <div class="entry-info">
-                TIDPUNKT
-            </div>
-
-        </div>
-
-
-        <div class="time-entry">
-
-            <div class="entry-top">
-
-                <span class="project-name">
-                    Status
-                </span>
-
-                <span class="entry-hours">
-                    Aktiv
-                </span>
-
-            </div>
-
-        </div>
+      <p>
+        Projekt, kund och arbetstid.
+      </p>
 
     </div>
+
+    <button
+      class="btn primary"
+      onclick="modal('Projekt')"
+    >
+      + Nytt projekt
+    </button>
+
+  </div>
+
+
+  <div class="card tablewrap">
+
+    <table class="table">
+
+      <thead>
+
+        <tr>
+          <th>Projekt</th>
+          <th>Kund</th>
+          <th>Arbetsplats</th>
+          <th>Ansvarig</th>
+          <th>Timmar</th>
+          <th>Status</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="projectsTable"></tbody>
+
+    </table>
+
+  </div>
 
 </section>
 
 
+<!-- ================= CUSTOMERS ================= -->
+
+<section
+  id="customers"
+  class="page"
+>
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Kunder
+      </h1>
+
+      <p>
+        Kundregister för demo.
+      </p>
+
+    </div>
+
+    <button
+      class="btn primary"
+      onclick="modal('Kund')"
+    >
+      + Ny kund
+    </button>
+
+  </div>
+
+  <div
+    class="grid three"
+    id="customersGrid"
+  ></div>
+
+</section>
+
+
+<!-- ================= WORKPLACES ================= -->
+
+<section
+  id="workplaces"
+  class="page"
+>
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Arbetsplatser
+      </h1>
+
+      <p>
+        Arbetsplatser kopplade till projekt.
+      </p>
+
+    </div>
+
+    <button
+      class="btn primary"
+      onclick="modal('Arbetsplats')"
+    >
+      + Ny arbetsplats
+    </button>
+
+  </div>
+
+  <div
+    class="grid three"
+    id="workplacesGrid"
+  ></div>
+
+</section>
+
+
+<!-- ================= TIME ================= -->
+
+<section
+  id="time"
+  class="page"
+>
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Tidrapport
+      </h1>
+
+      <p>
+        Dag, vecka och månad i samma arbetsyta.
+      </p>
+
+    </div>
+
+    <button
+      class="btn primary"
+      onclick="modal('Tidsregistrering')"
+    >
+      + Registrera tid
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="tabs">
+
+      <button
+        id="td"
+        class="active"
+        onclick="timeMode('day')"
+      >
+        Dag
+      </button>
+
+      <button
+        id="tw"
+        onclick="timeMode('week')"
+      >
+        Vecka
+      </button>
+
+      <button
+        id="tm"
+        onclick="timeMode('month')"
+      >
+        Månad
+      </button>
+
+    </div>
+
+    <div id="timeview"></div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= PLANNING ================= -->
+
+<section
+  id="planning"
+  class="page"
+>
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Planering
+      </h1>
+
+      <p>
+        Schema och bemanning.
+      </p>
+
+    </div>
+
+    <button
+      class="btn primary"
+      onclick="modal('Planering')"
+    >
+      + Planera
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="tabs">
+
+      <button
+        id="pd"
+        onclick="planMode('day')"
+      >
+        Dag
+      </button>
+
+      <button
+        id="pw"
+        class="active"
+        onclick="planMode('week')"
+      >
+        Vecka
+      </button>
+
+      <button
+        id="pm"
+        onclick="planMode('month')"
+      >
+        Månad
+      </button>
+
+    </div>
+
+    <div id="planview"></div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= REPORTS ================= -->
+
+<section
+  id="reports"
+  class="page"
+>
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Rapporter
+      </h1>
+
+      <p>
+        Sammanställningar för demo.
+      </p>
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="btn"
+        onclick="toast('Demo: PDF export')"
+      >
+        Export PDF
+      </button>
+
+      <button
+        class="btn"
+        onclick="toast('Demo: Excel export')"
+      >
+        Export Excel
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="grid three">
+
+    <div class="card metric">
+
+      <span class="label">
+        Denna vecka
+      </span>
+
+      <div class="value">
+        318:45
+      </div>
+
+      <span class="trend">
+        27 anställda
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="label">
+        Projekt
+      </span>
+
+      <div class="value">
+        11
+      </div>
+
+      <span class="trend">
+        pågående
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="label">
+        Godkända
+      </span>
+
+      <div class="value">
+        92%
+      </div>
+
+      <span class="trend">
+        tidrapporter
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= SYSTEM ================= -->
+
+<section
+  id="system"
+  class="page"
+>
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        App / System
+      </h1>
+
+      <p>
+        Endast teknisk administration — inga företagsdata.
+      </p>
+
+    </div>
+
+    <button
+      class="btn gold"
+      onclick="toast('Demo: systemuppdatering startad')"
+    >
+      Uppdatera app
+    </button>
+
+  </div>
+
+
+  <div class="grid three">
+
+    <div class="card metric">
+
+      <span class="label">
+        Version
+      </span>
+
+      <div class="value">
+        v0.1.0
+      </div>
+
+      <span class="trend">
+        Demo build
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="label">
+        Status
+      </span>
+
+      <div class="value">
+        Online
+      </div>
+
+      <span class="trend">
+        Alla tjänster OK
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="label">
+        Senaste deploy
+      </span>
+
+      <div class="value">
+        12:42
+      </div>
+
+      <span class="trend">
+        Idag
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="card"
+    style="margin-top:15px"
+  >
+
+    <h3>
+      Systemfunktioner
+    </h3>
+
+    <div class="grid three">
+
+      <div>
+        <b>Code management</b>
+        <p class="sub">
+          Kod och appfunktioner.
+        </p>
+      </div>
+
+      <div>
+        <b>Version management</b>
+        <p class="sub">
+          Versioner och release.
+        </p>
+      </div>
+
+      <div>
+        <b>Deployment</b>
+        <p class="sub">
+          Deploy och status.
+        </p>
+      </div>
+
+      <div>
+        <b>Technical logs</b>
+        <p class="sub">
+          Errors och events.
+        </p>
+      </div>
+
+      <div>
+        <b>Backup / Restore</b>
+        <p class="sub">
+          Teknisk backup.
+        </p>
+      </div>
+
+      <div>
+        <b>Permissions engine</b>
+        <p class="sub">
+          Systemroller.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+</div>
 </main>
 
 
-<!-- + -->
+<!-- ================= MOBILE NAV ================= -->
 
-<button
-    class="fab"
-    onclick="openAddTime()"
->
-    +
-</button>
+<nav class="mobile-bottom">
 
+  <button data-p="dashboard">
+    ⌂
+    <span>Dashboard</span>
+  </button>
 
-<!-- NAVIGATION -->
+  <button data-p="time">
+    ◷
+    <span>Tid</span>
+  </button>
 
-<nav class="bottom-nav">
+  <button data-p="planning">
+    □
+    <span>Planering</span>
+  </button>
 
-    <button
-        class="nav-button active"
-        data-page="home"
-        onclick="openPage('home')"
-    >
-        <span>⌂</span>
-        Hem
-    </button>
-
-
-    <button
-        class="nav-button"
-        data-page="report"
-        onclick="openPage('report')"
-    >
-        <span>◷</span>
-        Tidrapport
-    </button>
-
-
-    <button
-        class="nav-button"
-        data-page="projects"
-        onclick="openPage('projects')"
-    >
-        <span>▦</span>
-        Projekt
-    </button>
-
-
-    <button
-        class="nav-button"
-        data-page="planning"
-        onclick="openPage('planning')"
-    >
-        <span>▣</span>
-        Planering
-    </button>
-
-
-    <button
-        class="nav-button"
-        data-page="profile"
-        onclick="openPage('profile')"
-    >
-        <span>♙</span>
-        Profil
-    </button>
+  <button data-p="employees">
+    ♙
+    <span>Personal</span>
+  </button>
 
 </nav>
 
-</div>
 
-
-<!-- ================= ADD TIME ================= -->
+<!-- ================= MODAL ================= -->
 
 <div
-    id="addModal"
-    style="
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    z-index:100;
-    align-items:flex-end;
-    "
+  id="modal"
+  class="modal"
 >
 
+  <div class="modalbox">
+
     <div
-        style="
-        background:white;
-        width:100%;
-        max-width:520px;
-        margin:auto;
-        border-radius:24px 24px 0 0;
-        padding:20px;
-        "
+      style="
+        display:flex;
+        justify-content:space-between
+      "
     >
 
-        <div
-            style="
-            display:flex;
-            justify-content:space-between;
-            "
-        >
+      <h2 id="mtitle">
+        Ny
+      </h2>
 
-            <h2>
-                Lägg till tid
-            </h2>
-
-            <button
-                onclick="closeAddTime()"
-                style="
-                border:0;
-                background:none;
-                font-size:28px;
-                "
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="form-row">
-
-            <label>
-                Projekt
-            </label>
-
-            <select
-                id="entryProject"
-            ></select>
-
-        </div>
-
-
-        <div class="form-row">
-
-            <label>
-                Aktivitet
-            </label>
-
-            <select
-                id="entryActivity"
-            >
-
-                <option>
-                    Städning
-                </option>
-
-                <option>
-                    Hemstädning
-                </option>
-
-                <option>
-                    Kontorsstädning
-                </option>
-
-                <option>
-                    Flyttstädning
-                </option>
-
-                <option>
-                    Övrigt
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="form-row">
-
-            <label>
-                Datum
-            </label>
-
-            <input
-                id="entryDate"
-                type="date"
-            >
-
-        </div>
-
-
-        <div class="form-row">
-
-            <label>
-                Start
-            </label>
-
-            <input
-                id="entryStart"
-                type="time"
-            >
-
-        </div>
-
-
-        <div class="form-row">
-
-            <label>
-                Slut
-            </label>
-
-            <input
-                id="entryEnd"
-                type="time"
-            >
-
-        </div>
-
-
-        <div class="form-row">
-
-            <label>
-                Paus i minuter
-            </label>
-
-            <input
-                id="entryPause"
-                type="number"
-                min="0"
-                value="0"
-            >
-
-        </div>
-
-
-        <div class="form-row">
-
-            <label>
-                Anteckning
-            </label>
-
-            <textarea
-                id="entryNote"
-                rows="3"
-            ></textarea>
-
-        </div>
-
-
-        <button
-            class="save"
-            onclick="saveEntry()"
-        >
-            Spara tid
-        </button>
+      <button
+        class="btn"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
 
     </div>
 
+    <p class="sub">
+      Demoformulär — inga riktiga produktionsdata.
+    </p>
+
+    <div class="form">
+
+      <div class="field">
+        <label>Namn</label>
+        <input placeholder="Exempel">
+      </div>
+
+      <div class="field">
+        <label>Status</label>
+
+        <select>
+          <option>Aktiv</option>
+          <option>Pågår</option>
+          <option>Inaktiv</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Datum</label>
+        <input type="date">
+      </div>
+
+      <div class="field">
+        <label>Anteckning</label>
+        <input placeholder="Valfritt">
+      </div>
+
+    </div>
+
+    <button
+      class="btn primary"
+      style="width:100%;margin-top:15px"
+      onclick="
+        closeModal();
+        toast('Demo: sparat')
+      "
+    >
+      Spara demo
+    </button>
+
+  </div>
+
 </div>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
 
 
 <script>
 
-/* ================= DATA ================= */
+const crumbs={
+  dashboard:"Admin / Dashboard",
+  companies:"Admin / Företag",
+  employees:"Admin / Personal",
+  projects:"Admin / Projekt",
+  customers:"Admin / Kunder",
+  workplaces:"Admin / Arbetsplatser",
+  time:"Admin / Tidrapport",
+  planning:"Admin / Planering",
+  reports:"Admin / Rapporter",
+  system:"Admin / App / System"
+};
 
-const projects = [
 
-    ["P8 Gullmarsvägen 50","Rivning"],
+document
+  .querySelectorAll(
+    ".nav button,.mobile-nav button,.mobile-bottom button"
+  )
+  .forEach(
+    b =>
+      b.onclick=() =>
+        show(b.dataset.p)
+  );
 
-    ["P7 Änghalsvägen 2B","Plattsättarna"],
 
-    ["P6 Hasselbacken 3","Plattsättarna"],
+function openMobileMenu(){
 
-    ["P5 Skolvägen 3, Torsvik","Mp Projekt AB"],
+  document
+    .getElementById("mobileDrawer")
+    .classList
+    .add("open");
 
-    ["P4 Mariatorget 6a","Lukas Kvisberg"],
+  document
+    .getElementById("mobileOverlay")
+    .classList
+    .add("open");
+}
 
-    ["P3 Torgstärket","Einar Mattsson"],
 
-    ["P2 Runiusgatan 9","Plattsättarna"],
+function closeMobileMenu(){
 
-    ["P1 Skogsslingan 11","Plattsättarna"]
+  document
+    .getElementById("mobileDrawer")
+    .classList
+    .remove("open");
+
+  document
+    .getElementById("mobileOverlay")
+    .classList
+    .remove("open");
+}
+
+
+/* ================= COMPANIES ================= */
+
+let C =
+  JSON.parse(
+    localStorage.getItem(
+      "tidpunkt_companies"
+    ) || "null"
+  )
+  ||
+  [
+    {
+      id:1,
+      name:"Nordic Städ AB",
+      org:"559001-1234",
+      employees:"12",
+      projects:"6",
+      status:"Aktiv",
+      subscription:"Active",
+      username:"nordic",
+      password:"123456"
+    },
+
+    {
+      id:2,
+      name:"Uppsala Service AB",
+      org:"559002-5678",
+      employees:"9",
+      projects:"4",
+      status:"Aktiv",
+      subscription:"Unpaid",
+      username:"uppsala",
+      password:"123456"
+    },
+
+    {
+      id:3,
+      name:"Gävle Projekt AB",
+      org:"559003-9012",
+      employees:"6",
+      projects:"4",
+      status:"Aktiv",
+      subscription:"Active",
+      username:"gavle",
+      password:"123456"
+    }
+  ];
+
+
+function saveCompanies(){
+
+  localStorage.setItem(
+    "tidpunkt_companies",
+    JSON.stringify(C)
+  );
+
+}
+
+
+/* ================= EMPLOYEES ================= */
+
+const E=[
+
+  [
+    "Anna Andersson",
+    "Nordic Städ AB",
+    "Arbetsledare",
+    "Aktiv",
+    "38:20"
+  ],
+
+  [
+    "Erik Johansson",
+    "Nordic Städ AB",
+    "Städare",
+    "Aktiv",
+    "36:45"
+  ],
+
+  [
+    "Sara Nilsson",
+    "Uppsala Service AB",
+    "Städare",
+    "Aktiv",
+    "32:10"
+  ],
+
+  [
+    "Johan Karlsson",
+    "Uppsala Service AB",
+    "Arbetsledare",
+    "Aktiv",
+    "40:05"
+  ],
+
+  [
+    "Maja Berg",
+    "Gävle Projekt AB",
+    "Städare",
+    "Aktiv",
+    "35:30"
+  ]
 
 ];
 
 
-let entries =
-    JSON.parse(
-        localStorage.getItem(
-            "tidpunkt_entries"
-        ) || "[]"
+/* ================= PROJECTS ================= */
+
+const P=[
+
+  [
+    "P8 Gullmarsvägen 50",
+    "Nordic Städ AB",
+    "Gullmarsvägen 50",
+    "Anna Andersson",
+    "84:20",
+    "Pågår"
+  ],
+
+  [
+    "P7 Änghalsvägen 2B",
+    "Nordic Städ AB",
+    "Änghalsvägen 2B",
+    "Erik Johansson",
+    "61:10",
+    "Pågår"
+  ],
+
+  [
+    "P5 Skolvägen 3",
+    "Uppsala Service AB",
+    "Skolvägen 3",
+    "Johan Karlsson",
+    "92:15",
+    "Pågår"
+  ],
+
+  [
+    "P4 Mariatorget 6A",
+    "Gävle Projekt AB",
+    "Mariatorget 6A",
+    "Maja Berg",
+    "44:50",
+    "Klar"
+  ]
+
+];
+
+
+function renderCompanies(){
+
+  document
+    .getElementById("companiesTable")
+    .innerHTML =
+      C.map(
+        c => `
+
+          <tr>
+
+            <td>
+              <b>
+                ${escapeHtml(c.name)}
+              </b>
+            </td>
+
+            <td>
+              ${escapeHtml(c.org)}
+            </td>
+
+            <td>
+              ${escapeHtml(c.employees||"0")}
+            </td>
+
+            <td>
+              ${escapeHtml(c.projects||"0")}
+            </td>
+
+            <td>
+              <span
+                class="badge ${c.status==="Avstängd"?"gold":""}"
+              >
+                ${escapeHtml(c.status)}
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="badge ${c.subscription==="Active"?"":"gold"}"
+              >
+                ${escapeHtml(c.subscription||"Unpaid")}
+              </span>
+            </td>
+
+            <td>
+
+              <button
+                class="btn"
+                onclick="
+                  toggleCompanyAccess(${c.id})
+                "
+              >
+                ${
+                  c.status==="Avstängd"
+                  ? "Öppna åtkomst"
+                  : "Stäng åtkomst"
+                }
+              </button>
+
+              <button
+                class="btn"
+                style="
+                  margin-left:5px;
+                  color:#a32d2d
+                "
+                onclick="
+                  permanentDeleteCompany(${c.id})
+                "
+              >
+                Permanent radera
+              </button>
+
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+function escapeHtml(v){
+
+  return String(v??"")
+    .replace(
+      /[&<>"']/g,
+      m =>
+        ({
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#039;"
+        }[m])
     );
 
-
-let reportMode =
-    "day";
-
-
-let reportDate =
-    new Date();
-
-
-let planningMode =
-    "month";
-
-
-let planningDate =
-    new Date();
-
-
-/* ================= HELPERS ================= */
-
-function pad(n){
-
-    return String(n)
-        .padStart(2,"0");
-
 }
 
 
-function dateISO(date){
-
-    return (
-
-        date.getFullYear()
-        + "-"
-        + pad(
-            date.getMonth()+1
-        )
-        + "-"
-        + pad(
-            date.getDate()
-        )
-
-    );
-
-}
-
-
-function formatMinutes(minutes){
-
-    const h =
-        Math.floor(
-            minutes / 60
-        );
-
-    const m =
-        Math.round(
-            minutes % 60
-        );
-
-    return (
-        pad(h)
-        + ":"
-        + pad(m)
-    );
-
-}
-
-
-function totalDay(date){
-
-    return entries
-        .filter(
-            e =>
-                e.date === date
-        )
-        .reduce(
-            (sum,e) =>
-                sum + e.minutes,
-            0
-        );
-
-}
-
-
-function getMonday(date){
-
-    const d =
-        new Date(date);
-
-    const day =
-        d.getDay();
-
-    d.setDate(
-        d.getDate()
-        -
-        (
-            day === 0
-            ? 6
-            : day - 1
-        )
-    );
-
-    d.setHours(
-        0,0,0,0
-    );
-
-    return d;
-
-}
-
-
-function totalWeek(date){
-
-    const monday =
-        getMonday(date);
-
-    let total = 0;
-
-    for(
-        let i = 0;
-        i < 7;
-        i++
-    ){
-
-        const d =
-            new Date(monday);
-
-        d.setDate(
-            monday.getDate()
-            + i
-        );
-
-        total +=
-            totalDay(
-                dateISO(d)
-            );
-
-    }
-
-    return total;
-
-}
-
-
-function totalMonth(date){
-
-    return entries
-        .filter(e => {
-
-            const d =
-                new Date(
-                    e.date
-                    + "T00:00:00"
-                );
-
-            return (
-
-                d.getFullYear()
-                === date.getFullYear()
-
-                &&
-
-                d.getMonth()
-                === date.getMonth()
-
-            );
-
-        })
-        .reduce(
-            (sum,e) =>
-                sum + e.minutes,
-            0
-        );
-
-}
-
-
-/* ================= NAVIGATION ================= */
-
-function openPage(page){
-
-    document
-        .querySelectorAll(
-            ".page"
-        )
-        .forEach(
-            p =>
-                p.classList.remove(
-                    "active"
-                )
-        );
-
-
-    document
-        .getElementById(page)
-        .classList.add(
-            "active"
-        );
-
-
-    document
-        .querySelectorAll(
-            ".nav-button"
-        )
-        .forEach(
-            button => {
-
-                button.classList.toggle(
-                    "active",
-                    button.dataset.page
-                    === page
-                );
-
-            }
-        );
-
-
-    if(
-        page === "home"
-    ){
-
-        renderHome();
-
-    }
-
-
-    if(
-        page === "report"
-    ){
-
-        renderReport();
-
-    }
-
-
-    if(
-        page === "projects"
-    ){
-
-        renderProjects();
-
-    }
-
-
-    if(
-        page === "planning"
-    ){
-
-        renderPlanning();
-
-    }
-
-}
-
-
-/* ================= REPORT ================= */
-
-function setReportMode(mode){
-
-    reportMode =
-        mode;
-
-    renderReport();
-
-}
-
-
-function renderReport(){
-
-    document
-        .getElementById(
-            "tabDay"
-        )
-        .classList.toggle(
-            "active",
-            reportMode === "day"
-        );
-
-
-    document
-        .getElementById(
-            "tabWeek"
-        )
-        .classList.toggle(
-            "active",
-            reportMode === "week"
-        );
-
-
-    document
-        .getElementById(
-            "tabMonth"
-        )
-        .classList.toggle(
-            "active",
-            reportMode === "month"
-        );
-
-
-    document
-        .getElementById(
-            "dayReport"
-        )
-        .style.display =
-            reportMode === "day"
-            ? "block"
-            : "none";
-
-
-    document
-        .getElementById(
-            "weekReport"
-        )
-        .style.display =
-            reportMode === "week"
-            ? "block"
-            : "none";
-
-
-    document
-        .getElementById(
-            "monthReport"
-        )
-        .style.display =
-            reportMode === "month"
-            ? "block"
-            : "none";
-
-
-    if(
-        reportMode === "day"
-    ){
-
-        renderDay();
-
-    }
-
-
-    if(
-        reportMode === "week"
-    ){
-
-        renderWeek();
-
-    }
-
-
-    if(
-        reportMode === "month"
-    ){
-
-        renderMonth();
-
-    }
-
-}
-
-
-/* ================= DAY ================= */
-
-function renderDay(){
-
-    const date =
-        dateISO(
-            reportDate
-        );
-
-
-    const list =
-        entries.filter(
-            e =>
-                e.date === date
-        );
-
-
-    let html = `
-
-        <div class="period">
-
-            <button
-                class="arrow"
-                onclick="moveDay(-1)"
-            >
-                ‹
-            </button>
-
-            <div class="period-title">
-
-                ${reportDate.toLocaleDateString(
-                    "sv-SE",
-                    {
-                        weekday:"long",
-                        day:"numeric",
-                        month:"long"
-                    }
-                )}
-
-            </div>
-
-            <button
-                class="arrow"
-                onclick="moveDay(1)"
-            >
-                ›
-            </button>
-
-        </div>
-
-    `;
-
-
-    if(
-        list.length === 0
-    ){
-
-        html += `
-
-            <div class="empty">
-
-                Ingen rapporterad tid
-
-            </div>
-
-        `;
-
-    }
-
-
-    list.forEach(
-        entry => {
-
-            html += `
-
-                <div
-                    class="time-entry"
+function table(id,data){
+
+  document
+    .getElementById(id)
+    .innerHTML =
+      data.map(
+        row =>
+          "<tr>"+
+          row.map(
+            v =>
+              (
+                v==="Aktiv"
+                ||
+                v==="Pågår"
+                ||
+                v==="Klar"
+              )
+
+              ?
+
+              `<td>
+                <span
+                  class="badge ${
+                    v==="Pågår"
+                    ? "gold"
+                    : ""
+                  }"
                 >
+                  ${v}
+                </span>
+              </td>`
 
-                    <div
-                        class="entry-top"
-                    >
+              :
 
-                        <span
-                            class="project-name"
-                        >
-                            ${entry.project}
-                        </span>
+              `<td>${v}</td>`
+          )
+          .join("")
+          +
+          "</tr>"
+      )
+      .join("");
 
-                        <span
-                            class="entry-hours"
-                        >
-                            ${formatMinutes(
-                                entry.minutes
-                            )}
-                        </span>
-
-                    </div>
+}
 
 
-                    <div
-                        class="entry-info"
-                    >
+renderCompanies();
 
-                        ${entry.activity}
+table(
+  "employeesTable",
+  E
+);
 
-                        ·
-
-                        ${entry.start}
-                        –
-                        ${entry.end}
-
-                    </div>
+table(
+  "projectsTable",
+  P
+);
 
 
-                    <div
-                        class="entry-info"
-                    >
+/* ================= CUSTOMERS ================= */
 
-                        Paus:
-                        ${entry.pause}
-                        min
+document
+  .getElementById("customersGrid")
+  .innerHTML=[
 
-                    </div>
+    [
+      "Nordic Fastigheter",
+      "Uppsala",
+      "8 projekt"
+    ],
 
-                </div>
+    [
+      "Mälardalen Bygg",
+      "Stockholm",
+      "3 projekt"
+    ],
 
-            `;
+    [
+      "Gävle Kommun",
+      "Gävle",
+      "3 projekt"
+    ]
 
-        }
-    );
+  ]
+  .map(
+    x => `
+
+      <div class="card">
+
+        <h3>
+          ${x[0]}
+        </h3>
+
+        <div class="sub">
+          ${x[1]}
+        </div>
+
+        <div
+          class="number"
+          style="margin-top:15px"
+        >
+          ${x[2]}
+        </div>
+
+      </div>
+
+    `
+  )
+  .join("");
 
 
-    html += `
+/* ================= WORKPLACES ================= */
 
-        <div class="total-row">
+document
+  .getElementById("workplacesGrid")
+  .innerHTML=[
 
-            <span>
-                SUMMA DAG
-            </span>
+    "Gullmarsvägen 50",
+    "Änghalsvägen 2B",
+    "Skolvägen 3",
+    "Mariatorget 6A"
 
-            <span>
-                ${formatMinutes(
-                    totalDay(date)
-                )}
-            </span>
+  ]
+  .map(
+    x => `
+
+      <div class="card">
+
+        <h3>
+          ${x}
+        </h3>
+
+        <div class="sub">
+          Demo arbetsplats
+        </div>
+
+        <span
+          class="badge"
+          style="margin-top:12px"
+        >
+          Aktiv
+        </span>
+
+      </div>
+
+    `
+  )
+  .join("");
+
+
+/* ================= ACTIVITY ================= */
+
+document
+  .getElementById("activity")
+  .innerHTML=[
+
+    [
+      "Ny tidrapport",
+      "Anna Andersson • 08:42"
+    ],
+
+    [
+      "Projekt uppdaterat",
+      "P8 Gullmarsvägen 50 • 08:15"
+    ],
+
+    [
+      "Ny anställd",
+      "Gävle Projekt AB • 07:55"
+    ],
+
+    [
+      "Backup",
+      "System • 06:00"
+    ]
+
+  ]
+  .map(
+    x => `
+
+      <div class="row">
+
+        <div>
+
+          <b>
+            ${x[0]}
+          </b>
+
+          <div class="sub">
+            ${x[1]}
+          </div>
 
         </div>
 
-    `;
+        <span class="badge">
+          OK
+        </span>
+
+      </div>
+
+    `
+  )
+  .join("");
 
 
-    document
-        .getElementById(
-            "dayReport"
-        )
-        .innerHTML =
-            html;
+/* ================= CHART ================= */
 
-}
+document
+  .getElementById("chart")
+  .innerHTML=
+  [58,72,61,88,77,46,66]
+  .map(
+    (v,i) => `
+
+      <div class="barcol">
+
+        <i
+          style="height:${v}%"
+        ></i>
+
+        <span>
+          ${
+            [
+              "M",
+              "T",
+              "O",
+              "T",
+              "F",
+              "L",
+              "S"
+            ][i]
+          }
+        </span>
+
+      </div>
+
+    `
+  )
+  .join("");
 
 
-function moveDay(amount){
+/* ================= TIME ================= */
 
-    reportDate.setDate(
-        reportDate.getDate()
-        + amount
+let tm="day";
+
+let selectedDate=
+  new Date(2026,7,17);
+
+
+function timeMode(mode){
+
+  tm=mode;
+
+  document
+    .getElementById("td")
+    .classList
+    .toggle(
+      "active",
+      mode==="day"
     );
 
-    renderReport();
+  document
+    .getElementById("tw")
+    .classList
+    .toggle(
+      "active",
+      mode==="week"
+    );
+
+  document
+    .getElementById("tm")
+    .classList
+    .toggle(
+      "active",
+      mode==="month"
+    );
+
+  renderTime();
 
 }
 
 
-/* ================= WEEK ================= */
+function moveTime(days){
 
-function renderWeek(){
+  selectedDate.setDate(
+    selectedDate.getDate()+days
+  );
 
-    const monday =
-        getMonday(
-            reportDate
-        );
+  renderTime();
+
+}
 
 
-    const names = [
-        "Mån",
-        "Tis",
-        "Ons",
-        "Tor",
-        "Fre",
-        "Lör",
-        "Sön"
+function renderTime(){
+
+  const e=
+    document.getElementById(
+      "timeview"
+    );
+
+
+  if(tm==="day"){
+
+    e.innerHTML=`
+
+      <div class="period">
+
+        <button
+          class="arrow"
+          onclick="moveTime(-1)"
+        >
+          ‹
+        </button>
+
+        <b>
+          17 augusti 2026
+        </b>
+
+        <button
+          class="arrow"
+          onclick="moveTime(1)"
+        >
+          ›
+        </button>
+
+      </div>
+
+
+      <div class="day">
+
+        <div class="day-top">
+
+          <b>
+            Anna Andersson ·
+            P8 Gullmarsvägen 50
+          </b>
+
+          <span class="hours">
+            08:00–16:30
+          </span>
+
+        </div>
+
+        <div class="sub">
+          Städning · paus 30 min
+        </div>
+
+      </div>
+
+
+      <div class="day">
+
+        <div class="day-top">
+
+          <b>
+            Erik Johansson ·
+            P7 Änghalsvägen 2B
+          </b>
+
+          <span class="hours">
+            07:30–15:45
+          </span>
+
+        </div>
+
+        <div class="sub">
+          Kontorsstädning · paus 30 min
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <b>
+          SUMMA DAG
+        </b>
+
+        <span class="number">
+          16:15
+        </span>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  if(tm==="week"){
+
+    const names=[
+      "Mån",
+      "Tis",
+      "Ons",
+      "Tor",
+      "Fre",
+      "Lör",
+      "Sön"
+    ];
+
+    const hours=[
+      38,
+      42,
+      46,
+      41,
+      39,
+      18,
+      0
     ];
 
 
-    let html = `
+    e.innerHTML=`
 
-        <div class="period">
+      <div class="period">
 
-            <button
-                class="arrow"
-                onclick="moveWeek(-1)"
-            >
-                ‹
-            </button>
+        <button
+          class="arrow"
+          onclick="moveTime(-7)"
+        >
+          ‹
+        </button>
 
-            <div class="period-title">
-                Vecka
-            </div>
+        <b>
+          Vecka 34 ·
+          17–23 augusti
+        </b>
 
-            <button
-                class="arrow"
-                onclick="moveWeek(1)"
-            >
-                ›
-            </button>
+        <button
+          class="arrow"
+          onclick="moveTime(7)"
+        >
+          ›
+        </button>
 
-        </div>
-
-    `;
-
-
-    for(
-        let i = 0;
-        i < 7;
-        i++
-    ){
-
-        const d =
-            new Date(monday);
-
-        d.setDate(
-            monday.getDate()
-            + i
-        );
+      </div>
 
 
-        const total =
-            totalDay(
-                dateISO(d)
-            );
+      ${
+        names.map(
+          (name,i) => `
 
+            <div class="week">
 
-        const width =
-            Math.min(
-                100,
-                total / 480 * 100
-            );
+              <b>
+                ${name}
+              </b>
 
+              <div class="bar">
 
-        html += `
+                <i
+                  style="
+                    width:${Math.min(
+                      100,
+                      hours[i]/48*100
+                    )}%
+                  "
+                ></i>
 
-            <div
-                class="week-row"
-            >
+              </div>
 
-                <div
-                    class="week-day"
-                >
-                    ${names[i]}
-                    ${d.getDate()}/
-                    ${d.getMonth()+1}
-                </div>
-
-
-                <div
-                    class="bar"
-                >
-
-                    <span
-                        style="
-                        width:${width}%
-                        "
-                    ></span>
-
-                </div>
-
-
-                <div
-                    class="week-hours"
-                >
-
-                    ${formatMinutes(
-                        total
-                    )}
-
-                </div>
+              <span class="hours">
+                ${hours[i]}:00
+              </span>
 
             </div>
 
-        `;
+          `
+        ).join("")
+      }
 
-    }
 
+      <div class="row">
 
-    html += `
+        <b>
+          SUMMA VECKA
+        </b>
 
-        <div class="total-row">
+        <span class="number">
+          224:00
+        </span>
 
-            <span>
-                SUMMA VECKA
-            </span>
-
-            <span>
-                ${formatMinutes(
-                    totalWeek(
-                        reportDate
-                    )
-                )}
-            </span>
-
-        </div>
+      </div>
 
     `;
 
-
-    document
-        .getElementById(
-            "weekReport"
-        )
-        .innerHTML =
-            html;
-
-}
+    return;
+  }
 
 
-function moveWeek(amount){
-
-    reportDate.setDate(
-        reportDate.getDate()
-        + amount * 7
-    );
-
-    renderReport();
-
-}
-
-
-/* ================= MONTH ================= */
-
-function renderMonth(){
-
-    const year =
-        reportDate.getFullYear();
-
-    const month =
-        reportDate.getMonth();
-
-
-    const first =
-        new Date(
-            year,
-            month,
-            1
-        );
-
-
-    const days =
-        new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-
-    let start =
-        first.getDay();
-
-
-    start =
-        start === 0
-        ? 6
-        : start - 1;
-
-
-    let html = `
-
-        <div class="period">
-
-            <button
-                class="arrow"
-                onclick="moveMonth(-1)"
-            >
-                ‹
-            </button>
-
-            <div class="period-title">
-
-                ${reportDate.toLocaleDateString(
-                    "sv-SE",
-                    {
-                        month:"long",
-                        year:"numeric"
-                    }
-                )}
-
-            </div>
-
-            <button
-                class="arrow"
-                onclick="moveMonth(1)"
-            >
-                ›
-            </button>
-
-        </div>
-
-
-        <div class="calendar">
-
-    `;
-
-
+  let cells=
     [
-        "M",
-        "T",
-        "O",
-        "T",
-        "F",
-        "L",
-        "S"
-    ].forEach(
-        day => {
+      "M",
+      "T",
+      "O",
+      "T",
+      "F",
+      "L",
+      "S"
+    ]
+    .map(
+      x =>
+        `<div class="calhead">${x}</div>`
+    )
+    .join("");
 
-            html += `
 
-                <div
-                    class="calendar-head"
-                >
-                    ${day}
-                </div>
+  for(
+    let i=1;
+    i<=31;
+    i++
+  ){
 
-            `;
+    cells+=`
 
+      <div class="calday">
+
+        <b>
+          ${i}
+        </b>
+
+        ${
+          i%2===0
+          ?
+          `
+            <span class="calhours">
+              ${6+i%4}:30
+            </span>
+          `
+          :
+          ""
         }
-    );
 
-
-    for(
-        let i = 0;
-        i < start;
-        i++
-    ){
-
-        html += `
-            <div></div>
-        `;
-
-    }
-
-
-    for(
-        let day = 1;
-        day <= days;
-        day++
-    ){
-
-        const d =
-            new Date(
-                year,
-                month,
-                day
-            );
-
-
-        const date =
-            dateISO(d);
-
-
-        const total =
-            totalDay(date);
-
-
-        const today =
-            date ===
-            dateISO(
-                new Date()
-            );
-
-
-        html += `
-
-            <div
-                class="
-                    calendar-day
-                    ${today ? "today" : ""}
-                "
-            >
-
-                <div
-                    class="calendar-number"
-                >
-                    ${day}
-                </div>
-
-
-                ${
-                    total > 0
-                    ?
-
-                    `
-                    <span
-                        class="calendar-hours"
-                    >
-                        ${formatMinutes(
-                            total
-                        )}
-                    </span>
-                    `
-
-                    :
-
-                    ""
-                }
-
-            </div>
-
-        `;
-
-    }
-
-
-    html += `
-        </div>
-    `;
-
-
-    html += `
-
-        <div class="total-row">
-
-            <span>
-                SUMMA MÅNAD
-            </span>
-
-            <span>
-                ${formatMinutes(
-                    totalMonth(
-                        reportDate
-                    )
-                )}
-            </span>
-
-        </div>
+      </div>
 
     `;
 
+  }
 
-    document
-        .getElementById(
-            "monthReport"
-        )
-        .innerHTML =
-            html;
+
+  e.innerHTML=`
+
+    <div class="period">
+
+      <button
+        class="arrow"
+        onclick="moveMonth(-1)"
+      >
+        ‹
+      </button>
+
+      <b>
+        Augusti 2026
+      </b>
+
+      <button
+        class="arrow"
+        onclick="moveMonth(1)"
+      >
+        ›
+      </button>
+
+    </div>
+
+    <div class="calendar">
+      ${cells}
+    </div>
+
+    <div class="row">
+
+      <b>
+        SUMMA MÅNAD
+      </b>
+
+      <span class="number">
+        812:40
+      </span>
+
+    </div>
+
+  `;
 
 }
 
 
 function moveMonth(amount){
 
-    reportDate.setMonth(
-        reportDate.getMonth()
-        + amount
-    );
+  selectedDate.setMonth(
+    selectedDate.getMonth()+amount
+  );
 
-    renderReport();
-
-}
-
-
-/* ================= HOME ================= */
-
-function renderHome(){
-
-    const today =
-        new Date();
-
-
-    document
-        .getElementById(
-            "homeTotal"
-        )
-        .textContent =
-            formatMinutes(
-                totalDay(
-                    dateISO(today)
-                )
-            );
-
-
-    document
-        .getElementById(
-            "homeWeek"
-        )
-        .textContent =
-            formatMinutes(
-                totalWeek(today)
-            );
-
-
-    document
-        .getElementById(
-            "homeMonth"
-        )
-        .textContent =
-            formatMinutes(
-                totalMonth(today)
-            );
-
-}
-
-
-/* ================= PROJECTS ================= */
-
-function renderProjects(){
-
-    const search =
-        document
-            .getElementById(
-                "projectSearch"
-            )
-            .value
-            .toLowerCase();
-
-
-    let html = "";
-
-
-    projects
-        .filter(
-            project =>
-                project[0]
-                    .toLowerCase()
-                    .includes(search)
-                ||
-                project[1]
-                    .toLowerCase()
-                    .includes(search)
-        )
-        .forEach(
-            project => {
-
-                const total =
-                    entries
-                        .filter(
-                            e =>
-                                e.project
-                                === project[0]
-                        )
-                        .reduce(
-                            (sum,e) =>
-                                sum + e.minutes,
-                            0
-                        );
-
-
-                html += `
-
-                    <div
-                        class="project"
-                    >
-
-                        <div>
-
-                            <div
-                                class="project-name"
-                            >
-                                ${project[0]}
-                            </div>
-
-                            <div
-                                class="entry-info"
-                            >
-                                ${project[1]}
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="project-total"
-                        >
-                            ${formatMinutes(
-                                total
-                            )}
-                        </div>
-
-                    </div>
-
-                `;
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "projectList"
-        )
-        .innerHTML =
-            html;
+  renderTime();
 
 }
 
 
 /* ================= PLANNING ================= */
 
-function setPlanningMode(mode){
+let pmode="week";
 
-    planningMode =
-        mode;
 
-    renderPlanning();
+function planMode(mode){
+
+  pmode=mode;
+
+  document
+    .getElementById("pd")
+    .classList
+    .toggle(
+      "active",
+      mode==="day"
+    );
+
+  document
+    .getElementById("pw")
+    .classList
+    .toggle(
+      "active",
+      mode==="week"
+    );
+
+  document
+    .getElementById("pm")
+    .classList
+    .toggle(
+      "active",
+      mode==="month"
+    );
+
+  renderPlan();
 
 }
 
 
-function renderPlanning(){
+function renderPlan(){
 
-    document
-        .getElementById(
-            "planDay"
-        )
-        .classList.toggle(
-            "active",
-            planningMode === "day"
-        );
+  const e=
+    document.getElementById(
+      "planview"
+    );
 
 
-    document
-        .getElementById(
-            "planWeek"
-        )
-        .classList.toggle(
-            "active",
-            planningMode === "week"
-        );
+  if(pmode==="day"){
+
+    e.innerHTML=`
+
+      <div class="period">
+
+        <button class="arrow">
+          ‹
+        </button>
+
+        <b>
+          Måndag 17 augusti
+        </b>
+
+        <button class="arrow">
+          ›
+        </button>
+
+      </div>
 
 
-    document
-        .getElementById(
-            "planMonth"
-        )
-        .classList.toggle(
-            "active",
-            planningMode === "month"
-        );
+      <div class="day">
+
+        <b>
+          08:00 — Anna Andersson
+        </b>
+
+        <div class="sub">
+          P8 Gullmarsvägen 50 · Städning
+        </div>
+
+      </div>
 
 
-    document
-        .getElementById(
-            "planningContent"
-        )
-        .innerHTML = `
+      <div class="day">
 
-            <div class="empty">
+        <b>
+          09:00 — Erik Johansson
+        </b>
 
-                Planering:
-                ${planningMode}
+        <div class="sub">
+          P7 Änghalsvägen 2B · Kontorsstädning
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  if(pmode==="week"){
+
+    e.innerHTML=`
+
+      <div class="period">
+
+        <button class="arrow">
+          ‹
+        </button>
+
+        <b>
+          Vecka 34
+        </b>
+
+        <button class="arrow">
+          ›
+        </button>
+
+      </div>
+
+
+      ${
+        [
+          "Måndag",
+          "Tisdag",
+          "Onsdag",
+          "Torsdag",
+          "Fredag"
+        ]
+        .map(
+          (x,i) => `
+
+            <div class="row">
+
+              <div>
+
+                <b>
+                  ${x}
+                </b>
+
+                <div class="sub">
+                  ${i+2}
+                  arbetspass planerade
+                </div>
+
+              </div>
+
+              <span class="badge">
+                ${8+i} personer
+              </span>
 
             </div>
 
-        `;
+          `
+        )
+        .join("")
+      }
+
+    `;
+
+    return;
+  }
+
+
+  let cells=
+    [
+      "M",
+      "T",
+      "O",
+      "T",
+      "F",
+      "L",
+      "S"
+    ]
+    .map(
+      x =>
+        `<div class="calhead">${x}</div>`
+    )
+    .join("");
+
+
+  for(
+    let i=1;
+    i<=31;
+    i++
+  ){
+
+    cells+=`
+
+      <div class="calday">
+
+        <b>
+          ${i}
+        </b>
+
+        <span class="calhours">
+          ${i%3+1} pass
+        </span>
+
+      </div>
+
+    `;
+
+  }
+
+
+  e.innerHTML=`
+
+    <div class="period">
+
+      <button class="arrow">
+        ‹
+      </button>
+
+      <b>
+        Augusti 2026
+      </b>
+
+      <button class="arrow">
+        ›
+      </button>
+
+    </div>
+
+    <div class="calendar">
+      ${cells}
+    </div>
+
+  `;
 
 }
 
 
-/* ================= ADD TIME ================= */
+renderTime();
 
-function openAddTime(){
-
-    const modal =
-        document
-            .getElementById(
-                "addModal"
-            );
+renderPlan();
 
 
-    modal.style.display =
-        "flex";
+/* ================= FILTER ================= */
 
+function filter(id,q){
 
-    document
-        .getElementById(
-            "entryDate"
-        )
-        .value =
-            dateISO(
-                new Date()
-            );
+  document
+    .querySelectorAll("#"+id+" tr")
+    .forEach(
+      (r,i)=>{
 
+        if(i){
 
-    document
-        .getElementById(
-            "entryProject"
-        )
-        .innerHTML =
-            projects
-                .map(
-                    p =>
-                        `
-                        <option>
-                            ${p[0]}
-                        </option>
-                        `
-                )
-                .join("");
+          r.style.display=
+            r.textContent
+              .toLowerCase()
+              .includes(
+                q.toLowerCase()
+              )
+              ? ""
+              : "none";
+
+        }
+
+      }
+    );
 
 }
 
 
-function closeAddTime(){
+/* ================= MODAL ================= */
 
-    document
-        .getElementById(
-            "addModal"
-        )
-        .style.display =
-            "none";
+function modal(title){
+
+  document
+    .getElementById("mtitle")
+    .textContent=
+      "Ny "+title;
+
+  document
+    .getElementById("modal")
+    .classList
+    .add("open");
 
 }
 
 
-function saveEntry(){
+function closeModal(){
 
-    const project =
-        document
-            .getElementById(
-                "entryProject"
-            )
-            .value;
+  document
+    .getElementById("modal")
+    .classList
+    .remove("open");
 
-
-    const activity =
-        document
-            .getElementById(
-                "entryActivity"
-            )
-            .value;
+}
 
 
-    const date =
-        document
-            .getElementById(
-                "entryDate"
-            )
-            .value;
+/* ================= TOAST ================= */
+
+function toast(message){
+
+  const t=
+    document.getElementById(
+      "toast"
+    );
+
+  t.textContent=message;
+
+  t.classList.add("show");
+
+  setTimeout(
+    () =>
+      t.classList.remove("show"),
+    2000
+  );
+
+}
 
 
-    const start =
-        document
-            .getElementById(
-                "entryStart"
-            )
-            .value;
+/* ================= AUTH ================= */
+
+function getAuth(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        "tidpunkt_auth_v2"
+      ) || "null"
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
 
 
-    const end =
-        document
-            .getElementById(
-                "entryEnd"
-            )
-            .value;
+function setAuth(auth){
+
+  localStorage.setItem(
+    "tidpunkt_auth_v2",
+    JSON.stringify(auth)
+  );
+
+  localStorage.removeItem(
+    "tidpunkt_auth"
+  );
+
+}
 
 
-    const pause =
-        Number(
-            document
-                .getElementById(
-                    "entryPause"
-                )
-                .value
-            || 0
-        );
+function clearAuth(){
+
+  localStorage.removeItem(
+    "tidpunkt_auth_v2"
+  );
+
+  localStorage.removeItem(
+    "tidpunkt_auth"
+  );
+
+}
 
 
-    if(
-        !date
-        ||
-        !start
-        ||
-        !end
-    ){
+let loginCategory="company";
 
-        alert(
-            "Συμπλήρωσε ημερομηνία, αρχή και τέλος."
-        );
 
-        return;
+const PRIVATE_USERS=[
+
+  {
+    username:"privat",
+    password:"demo",
+    name:"Privat användare"
+  }
+
+];
+
+
+const PERMISSIONS={
+
+  admin:[
+    "dashboard",
+    "companies",
+    "employees",
+    "projects",
+    "customers",
+    "workplaces",
+    "time",
+    "planning",
+    "reports",
+    "system"
+  ],
+
+  company:[
+    "dashboard",
+    "employees",
+    "projects",
+    "customers",
+    "workplaces",
+    "time",
+    "planning",
+    "reports"
+  ],
+
+  private:[
+    "dashboard",
+    "time",
+    "planning",
+    "reports"
+  ]
+
+};
+
+
+/* ================= LOGIN CATEGORY ================= */
+
+function selectLoginCategory(category){
+
+  loginCategory=category;
+
+  document
+    .getElementById("catCompany")
+    .classList
+    .toggle(
+      "active",
+      category==="company"
+    );
+
+  document
+    .getElementById("catPrivate")
+    .classList
+    .toggle(
+      "active",
+      category==="private"
+    );
+
+  document
+    .getElementById("companyLoginFields")
+    .style
+    .display=
+      category==="company"
+      ? "block"
+      : "none";
+
+  document
+    .getElementById("privateLoginFields")
+    .style
+    .display=
+      category==="private"
+      ? "block"
+      : "none";
+
+  document
+    .getElementById("companyRegisterButton")
+    .style
+    .display=
+      category==="company"
+      ? "block"
+      : "none";
+
+  document
+    .getElementById("loginNotice")
+    .innerHTML=
+      category==="company"
+
+      ?
+
+      'Företag: demoanvändare <b>nordic</b>, lösenord <b>123456</b>.'
+
+      :
+
+      'Privat demo: användare <b>privat</b>, lösenord <b>demo</b>.';
+
+}
+
+
+/* ================= LOGIN SCREEN ================= */
+
+function showLogin(){
+
+  document
+    .getElementById("loginScreen")
+    .style
+    .display="flex";
+
+  document
+    .getElementById("adminLoginScreen")
+    .style
+    .display="none";
+
+}
+
+
+function openAdminLogin(){
+
+  document
+    .getElementById("loginScreen")
+    .style
+    .display="none";
+
+  document
+    .getElementById("adminLoginScreen")
+    .style
+    .display="flex";
+
+  document
+    .getElementById("adminUser")
+    .focus();
+
+}
+
+
+function closeAdminLogin(){
+
+  showLogin();
+
+}
+
+
+/* ================= MAIN LOGIN ================= */
+
+function login(){
+
+  const note=
+    document.getElementById(
+      "loginNotice"
+    );
+
+
+  /* -------- COMPANY -------- */
+
+  if(loginCategory==="company"){
+
+    const username=
+      document
+        .getElementById("loginUser")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password=
+      document
+        .getElementById("loginPass")
+        .value;
+
+
+    const c=
+      C.find(
+        x =>
+          String(x.username)
+            .toLowerCase()
+            === username
+          &&
+          x.password===password
+      );
+
+
+    if(!c){
+
+      note.textContent=
+        "Fel användarnamn eller lösenord.";
+
+      return;
 
     }
 
 
-    const startDate =
-        new Date(
-            `${date}T${start}`
-        );
+    if(c.status==="Avstängd"){
 
+      note.textContent=
+        "Företagets åtkomst är avstängd av administratören.";
 
-    const endDate =
-        new Date(
-            `${date}T${end}`
-        );
-
-
-    let minutes =
-        (
-            endDate
-            -
-            startDate
-        ) / 60000;
-
-
-    minutes -= pause;
-
-
-    if(
-        minutes <= 0
-    ){
-
-        alert(
-            "Η ώρα δεν είναι σωστή."
-        );
-
-        return;
+      return;
 
     }
 
 
-    entries.push({
+    if(c.subscription!=="Active"){
 
-        id:
-            Date.now(),
+      note.innerHTML=
 
-        project,
+        `Företaget är registrerat men abonnemanget är inte aktivt.
+        <br>
+        <button
+          class="btn primary"
+          style="margin-top:8px"
+          onclick="openSubscriptionPayment(${c.id})"
+        >
+          Aktivera demo
+        </button>`;
 
-        activity,
+      return;
 
-        date,
+    }
 
-        start,
 
-        end,
+    setAuth({
 
-        pause,
+      role:"company",
 
-        minutes,
+      companyId:c.id,
 
-        note:
-            document
-                .getElementById(
-                    "entryNote"
-                )
-                .value
+      username:c.username,
+
+      name:c.name
 
     });
 
 
-    localStorage.setItem(
-        "tidpunkt_entries",
-        JSON.stringify(
-            entries
-        )
+    enterApp();
+
+    return;
+
+  }
+
+
+  /* -------- PRIVATE -------- */
+
+  const username=
+    document
+      .getElementById("privateUser")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const password=
+    document
+      .getElementById("privatePass")
+      .value;
+
+
+  const u=
+    PRIVATE_USERS.find(
+      x =>
+        x.username===username
+        &&
+        x.password===password
     );
 
 
-    closeAddTime();
+  if(!u){
 
-    renderHome();
+    note.textContent=
+      "Fel användarnamn eller lösenord.";
 
-    renderReport();
+    return;
 
-    renderProjects();
+  }
+
+
+  setAuth({
+
+    role:"private",
+
+    username:u.username,
+
+    name:u.name
+
+  });
+
+
+  enterApp();
 
 }
 
 
-/* ================= START ================= */
+/* ================= ADMIN LOGIN ================= */
 
-renderHome();
+function adminLogin(){
 
-renderReport();
+  const user=
+    document
+      .getElementById("adminUser")
+      .value
+      .trim()
+      .toLowerCase();
 
-renderProjects();
+  const pass=
+    document
+      .getElementById("adminPass")
+      .value;
 
-renderPlanning();
+  const note=
+    document.getElementById(
+      "adminNotice"
+    );
+
+
+  if(
+    (user==="demo" || user==="admin")
+    &&
+    pass==="demo"
+  ){
+
+    setAuth({
+
+      role:"admin",
+
+      username:user,
+
+      name:"Admin Demo"
+
+    });
+
+    location.hash="#admin";
+
+    enterApp();
+
+    return;
+
+  }
+
+
+  note.textContent=
+    "Fel Admin-inloggning. Demo: demo / demo.";
+
+}
+
+
+/* ================= ENTER APP ================= */
+
+function enterApp(){
+
+  const auth=getAuth();
+
+
+  if(
+    !auth
+    ||
+    !PERMISSIONS[auth.role]
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("loginScreen")
+    .style
+    .display="none";
+
+  document
+    .getElementById("adminLoginScreen")
+    .style
+    .display="none";
+
+
+  applyRoleUI();
+
+
+  const first=
+    auth.role==="admin"
+    ?
+    "dashboard"
+    :
+    auth.role==="company"
+    ?
+    "dashboard"
+    :
+    "time";
+
+
+  show(first);
+
+
+  toast(
+    auth.role==="admin"
+    ?
+    "Inloggad som Administratör"
+    :
+    auth.role==="company"
+    ?
+    "Inloggad som Företag"
+    :
+    "Inloggad som Privat"
+  );
+
+}
+
+
+/* ================= ROLE UI ================= */
+
+function applyRoleUI(){
+
+  const auth=getAuth();
+
+  if(!auth)return;
+
+
+  const allowed=
+    PERMISSIONS[auth.role] || [];
+
+
+  document
+    .querySelectorAll("[data-p]")
+    .forEach(
+      button=>{
+
+        button.style.display=
+          allowed.includes(
+            button.dataset.p
+          )
+          ?
+          ""
+          :
+          "none";
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      page=>{
+
+        page.style.display=
+          allowed.includes(
+            page.id
+          )
+          ?
+          ""
+          :
+          "none";
+
+      }
+    );
+
+
+  document
+    .getElementById("crumb")
+    .textContent=
+      (
+        auth.role==="admin"
+        ?
+        "Admin"
+        :
+        auth.role==="company"
+        ?
+        "Företag"
+        :
+        "Privat"
+      )
+      +
+      " / "
+      +
+      (
+        crumbs.dashboard
+        ||
+        "Dashboard"
+      )
+      .split(" / ")
+      .pop();
+
+}
+
+
+/* ================= SHOW PAGE ================= */
+
+function show(id){
+
+  const auth=getAuth();
+
+  const allowed=
+    auth
+    ?
+    PERMISSIONS[auth.role] || []
+    :
+    [];
+
+
+  if(
+    !auth
+    ||
+    !allowed.includes(id)
+  ){
+
+    toast(
+      "Du saknar behörighet."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      p =>
+        p.classList.remove(
+          "active"
+        )
+    );
+
+
+  const target=
+    document.getElementById(id);
+
+
+  if(!target)return;
+
+
+  target
+    .classList
+    .add("active");
+
+
+  document
+    .querySelectorAll(
+      ".nav button,.mobile-bottom button,.mobile-nav button"
+    )
+    .forEach(
+      b =>
+        b.classList.toggle(
+          "active",
+          b.dataset.p===id
+        )
+    );
+
+
+  const prefix=
+    auth.role==="admin"
+    ?
+    "Admin"
+    :
+    auth.role==="company"
+    ?
+    "Företag"
+    :
+    "Privat";
+
+
+  const title=
+    (
+      crumbs[id] || id
+    )
+    .split(" / ")
+    .pop();
+
+
+  document
+    .getElementById("crumb")
+    .textContent=
+      prefix+" / "+title;
+
+
+  closeMobileMenu();
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+  clearAuth();
+
+  location.hash="";
+
+  location.reload();
+
+}
+
+
+/* ================= COMPANY REGISTRATION ================= */
+
+function openCompanyRegistration(){
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center
+        "
+      >
+
+        <h2 style="margin:0">
+          Registrera företag
+        </h2>
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <p class="sub">
+        Skapa företagskonto.
+        Ingen administratör behöver godkänna registreringen.
+      </p>
+
+
+      <div class="form">
+
+        <div class="field">
+
+          <label>
+            Företagsnamn
+          </label>
+
+          <input
+            id="rName"
+            placeholder="Företag AB"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Org.nr
+          </label>
+
+          <input
+            id="rOrg"
+            placeholder="559001-1234"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Kontaktperson
+          </label>
+
+          <input
+            id="rContact"
+            placeholder="Förnamn Efternamn"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            E-post
+          </label>
+
+          <input
+            id="rEmail"
+            type="email"
+            placeholder="namn@foretag.se"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Användarnamn
+          </label>
+
+          <input
+            id="rUser"
+            placeholder="foretag123"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Lösenord
+          </label>
+
+          <input
+            id="rPass"
+            type="password"
+            placeholder="Minst 6 tecken"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="modal-actions"
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn primary"
+          onclick="registerCompany(this)"
+        >
+          Registrera
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+/* ================= REGISTER COMPANY ================= */
+
+function registerCompany(btn){
+
+  const g=
+    id =>
+      document
+        .getElementById(id)
+        .value
+        .trim();
+
+
+  const name=
+    g("rName");
+
+  const org=
+    g("rOrg");
+
+  const contact=
+    g("rContact");
+
+  const email=
+    g("rEmail");
+
+  const username=
+    g("rUser");
+
+  const password=
+    g("rPass");
+
+
+  if(
+    !name
+    ||
+    !org
+    ||
+    !contact
+    ||
+    !email
+    ||
+    !username
+    ||
+    password.length<6
+  ){
+
+    toast(
+      "Fyll i alla fält. Lösenord minst 6 tecken."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    C.some(
+      c =>
+        String(c.username)
+          .toLowerCase()
+          ===
+        username.toLowerCase()
+    )
+  ){
+
+    toast(
+      "Användarnamnet används redan."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    C.some(
+      c =>
+        String(c.org)
+          .toLowerCase()
+          ===
+        org.toLowerCase()
+    )
+  ){
+
+    toast(
+      "Org.nr finns redan."
+    );
+
+    return;
+
+  }
+
+
+  const c={
+
+    id:Date.now(),
+
+    name,
+
+    org,
+
+    contact,
+
+    email,
+
+    username,
+
+    password,
+
+    employees:"0",
+
+    projects:"0",
+
+    status:"Aktiv",
+
+    subscription:"Unpaid"
+
+  };
+
+
+  C.push(c);
+
+  saveCompanies();
+
+  btn
+    .closest(".confirm-modal")
+    .remove();
+
+  renderCompanies();
+
+  openSubscriptionPayment(c.id);
+
+}
+
+
+/* ================= SUBSCRIPTION ================= */
+
+function openSubscriptionPayment(id){
+
+  const c=
+    C.find(
+      x=>x.id===id
+    );
+
+
+  if(!c)return;
+
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <h2>
+        Aktivera abonnemang
+      </h2>
+
+      <p>
+        <b>
+          ${escapeHtml(c.name)}
+        </b>
+      </p>
+
+      <div
+        class="danger-box"
+        style="
+          background:#fff7df;
+          color:#765b00
+        "
+      >
+        Detta är en demo-betalning.
+        Ingen riktig betalning genomförs.
+      </div>
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Senare
+        </button>
+
+        <button
+          class="btn primary"
+          onclick="
+            activateSubscription(${c.id})
+          "
+        >
+          Betala & aktivera
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+function activateSubscription(id){
+
+  const c=
+    C.find(
+      x=>x.id===id
+    );
+
+
+  if(!c)return;
+
+
+  c.subscription=
+    "Active";
+
+  c.subscriptionStarted=
+    new Date()
+      .toISOString();
+
+  c.subscriptionExpires=
+    new Date(
+      Date.now()
+      +
+      30*86400000
+    )
+    .toISOString();
+
+
+  saveCompanies();
+
+
+  document
+    .querySelectorAll(
+      ".confirm-modal"
+    )
+    .forEach(
+      x=>x.remove()
+    );
+
+
+  renderCompanies();
+
+
+  setAuth({
+
+    role:"company",
+
+    companyId:c.id,
+
+    username:c.username,
+
+    name:c.name
+
+  });
+
+
+  enterApp();
+
+}
+
+
+/* ================= COMPANY ACCESS ================= */
+
+function toggleCompanyAccess(id){
+
+  const auth=getAuth();
+
+
+  if(
+    !auth
+    ||
+    auth.role!=="admin"
+  ){
+
+    toast(
+      "Endast administratören kan ändra åtkomst."
+    );
+
+    return;
+
+  }
+
+
+  const c=
+    C.find(
+      x=>x.id===id
+    );
+
+
+  if(!c)return;
+
+
+  const action=
+    c.status==="Avstängd"
+    ?
+    "Öppna åtkomst"
+    :
+    "Stäng åtkomst";
+
+
+  confirmAction(
+
+    action,
+
+    `
+      Vill du
+      ${
+        c.status==="Avstängd"
+        ? "öppna"
+        : "stänga"
+      }
+      åtkomsten för
+      <b>
+        ${escapeHtml(c.name)}
+      </b>?
+
+      <br><br>
+
+      Företagets data raderas inte.
+    `,
+
+    ()=>{
+
+      c.status=
+        c.status==="Avstängd"
+        ?
+        "Aktiv"
+        :
+        "Avstängd";
+
+
+      saveCompanies();
+
+      renderCompanies();
+
+
+      toast(
+        c.status==="Avstängd"
+        ?
+        "Åtkomsten är stängd."
+        :
+        "Åtkomsten är öppen igen."
+      );
+
+    }
+
+  );
+
+}
+
+
+/* ================= PERMANENT DELETE ================= */
+
+function permanentDeleteCompany(id){
+
+  const auth=getAuth();
+
+
+  if(
+    !auth
+    ||
+    auth.role!=="admin"
+  ){
+
+    toast(
+      "Endast administratören kan radera företag."
+    );
+
+    return;
+
+  }
+
+
+  const c=
+    C.find(
+      x=>x.id===id
+    );
+
+
+  if(!c)return;
+
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <h2>
+        Permanent radera?
+      </h2>
+
+      <p>
+        Du är på väg att radera
+        <b>
+          ${escapeHtml(c.name)}
+        </b>.
+      </p>
+
+      <div class="danger-box">
+
+        Företagets data tas bort permanent
+        och kan inte ångras.
+
+      </div>
+
+
+      <label
+        style="
+          display:block;
+          margin-top:14px;
+          font-size:12px;
+          font-weight:800
+        "
+      >
+        Skriv RADERA
+      </label>
+
+
+      <input
+        id="deleteWord"
+        style="
+          width:100%;
+          padding:11px;
+          border:1px solid var(--line);
+          border-radius:10px;
+          margin-top:6px
+        "
+      >
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn"
+          style="
+            background:#b33b3b;
+            color:#fff
+          "
+          onclick="
+            confirmPermanentDelete(
+              ${id},
+              this
+            )
+          "
+        >
+          RADERA
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+function confirmPermanentDelete(
+  id,
+  btn
+){
+
+  if(
+    document
+      .getElementById("deleteWord")
+      .value
+      .trim()
+      .toUpperCase()
+      !==
+    "RADERA"
+  ){
+
+    toast(
+      "Skriv RADERA för att fortsätta."
+    );
+
+    return;
+
+  }
+
+
+  C=
+    C.filter(
+      x=>x.id!==id
+    );
+
+
+  saveCompanies();
+
+
+  btn
+    .closest(".confirm-modal")
+    .remove();
+
+
+  renderCompanies();
+
+
+  toast(
+    "Företaget har raderats permanent."
+  );
+
+}
+
+
+/* ================= CONFIRM ================= */
+
+function confirmAction(
+  title,
+  message,
+  action
+){
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <h2>
+        ${title}
+      </h2>
+
+      <p>
+        ${message}
+      </p>
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+        <button
+          class="btn primary"
+          id="confirmActionBtn"
+        >
+          Bekräfta
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+
+  m
+    .querySelector(
+      "#confirmActionBtn"
+    )
+    .onclick=()=>{
+
+      action();
+
+      m.remove();
+
+    };
+
+}
+
+
+/* ================= AUTH ROUTING ================= */
+
+function applyAuth(){
+
+  const auth=
+    getAuth();
+
+  const adminRoute=
+    location.hash==="#admin";
+
+
+  if(!auth){
+
+    if(adminRoute){
+
+      openAdminLogin();
+
+    }else{
+
+      showLogin();
+
+    }
+
+    return;
+
+  }
+
+
+  if(
+    !PERMISSIONS[auth.role]
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  if(
+    auth.role==="admin"
+    &&
+    !adminRoute
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  if(
+    auth.role!=="admin"
+    &&
+    adminRoute
+  ){
+
+    clearAuth();
+
+    openAdminLogin();
+
+    return;
+
+  }
+
+
+  enterApp();
+
+}
+
+
+/*
+  Admin is deliberately
+  not part of the normal
+  login categories.
+*/
+
+applyAuth();
 
 </script>
 
