@@ -4035,3 +4035,1319 @@ function openAdminLogin(){
       "flex";
 
 }
+function enterApp(){
+
+  const auth =
+    getAuth();
+
+
+  if(
+    !auth ||
+    !PERMISSIONS[auth.role]
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "adminLoginScreen"
+    )
+    .style.display =
+      "none";
+
+
+  applyRoleUI();
+
+
+  const first =
+    auth.role==="admin"
+      ? "dashboard"
+      : auth.role==="company"
+        ? "dashboard"
+        : "time";
+
+
+  show(first);
+
+
+  toast(
+    auth.role==="admin"
+      ? "Inloggad som Administratör"
+      : auth.role==="company"
+        ? "Inloggad som Företag"
+        : "Inloggad som Privat"
+  );
+
+}
+
+
+function applyRoleUI(){
+
+  const auth =
+    getAuth();
+
+
+  if(!auth){
+
+    return;
+
+  }
+
+
+  const allowed =
+    PERMISSIONS[
+      auth.role
+    ]
+    ||
+    [];
+
+
+  document
+    .querySelectorAll(
+      "[data-p]"
+    )
+    .forEach(
+      button => {
+
+        button.style.display =
+          allowed.includes(
+            button.dataset.p
+          )
+          ? ""
+          : "none";
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".page"
+    )
+    .forEach(
+      page => {
+
+        page.style.display =
+          allowed.includes(
+            page.id
+          )
+          ? ""
+          : "none";
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "crumb"
+    )
+    .textContent =
+      (
+        auth.role==="admin"
+          ? "Admin"
+          : auth.role==="company"
+            ? "Företag"
+            : "Privat"
+      )
+      +
+      " / "
+      +
+      (
+        crumbs.dashboard
+        ||
+        "Dashboard"
+      )
+      .split(
+        " / "
+      )
+      .pop();
+
+}
+
+
+function show(
+  id
+){
+
+  const auth =
+    getAuth();
+
+
+  const allowed =
+    auth
+      ? (
+          PERMISSIONS[
+            auth.role
+          ]
+          ||
+          []
+        )
+      : [];
+
+
+  if(
+    !auth ||
+    !allowed.includes(id)
+  ){
+
+    toast(
+      "Du saknar behörighet."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .querySelectorAll(
+      ".page"
+    )
+    .forEach(
+      p =>
+        p.classList.remove(
+          "active"
+        )
+    );
+
+
+  const target =
+    document.getElementById(
+      id
+    );
+
+
+  if(!target){
+
+    return;
+
+  }
+
+
+  target.classList.add(
+    "active"
+  );
+
+
+  document
+    .querySelectorAll(
+      ".nav button,"
+      + ".mobile-bottom button,"
+      + ".mobile-nav button"
+    )
+    .forEach(
+      b =>
+        b.classList.toggle(
+          "active",
+          b.dataset.p===id
+        )
+    );
+
+
+  const prefix =
+    auth.role==="admin"
+      ? "Admin"
+      : auth.role==="company"
+        ? "Företag"
+        : "Privat";
+
+
+  const title =
+    (
+      crumbs[id]
+      ||
+      id
+    )
+    .split(
+      " / "
+    )
+    .pop();
+
+
+  document
+    .getElementById(
+      "crumb"
+    )
+    .textContent =
+      prefix
+      +
+      " / "
+      +
+      title;
+
+
+  closeMobileMenu();
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+function logout(){
+
+  clearAuth();
+
+  location.hash =
+    "";
+
+  location.reload();
+
+}
+
+
+/* =====================================================
+   REGISTRERA FÖRETAG
+===================================================== */
+
+function openCompanyRegistration(){
+
+  const m =
+    document.createElement(
+      "div"
+    );
+
+
+  m.className =
+    "confirm-modal";
+
+
+  m.innerHTML = `
+
+    <div class="confirm-box">
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center
+        "
+      >
+
+        <h2
+          style="margin:0"
+        >
+          Registrera företag
+        </h2>
+
+
+        <button
+          class="btn"
+          onclick="
+            this
+            .closest(
+              '.confirm-modal'
+            )
+            .remove()
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <p class="sub">
+
+        Skapa företagskonto.
+        Ingen administratör behöver
+        godkänna registreringen.
+
+      </p>
+
+
+      <div class="form">
+
+        <div class="field">
+
+          <label>
+            Företagsnamn
+          </label>
+
+          <input
+            id="rName"
+            placeholder="Företag AB"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Org.nr
+          </label>
+
+          <input
+            id="rOrg"
+            placeholder="559001-1234"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Kontaktperson
+          </label>
+
+          <input
+            id="rContact"
+            placeholder="Förnamn Efternamn"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            E-post
+          </label>
+
+          <input
+            id="rEmail"
+            type="email"
+            placeholder="namn@foretag.se"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Användarnamn
+          </label>
+
+          <input
+            id="rUser"
+            placeholder="foretag123"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Lösenord
+          </label>
+
+          <input
+            id="rPass"
+            type="password"
+            placeholder="Minst 6 tecken"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="modal-actions"
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+            .closest(
+              '.confirm-modal'
+            )
+            .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn primary"
+          onclick="
+            registerCompany(this)
+          "
+        >
+          Registrera
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    m
+  );
+
+}
+
+
+function registerCompany(
+  btn
+){
+
+  const g =
+    id =>
+      document
+        .getElementById(
+          id
+        )
+        .value
+        .trim();
+
+
+  const name =
+    g("rName");
+
+
+  const org =
+    g("rOrg");
+
+
+  const contact =
+    g("rContact");
+
+
+  const email =
+    g("rEmail");
+
+
+  const username =
+    g("rUser");
+
+
+  const password =
+    g("rPass");
+
+
+  if(
+    !name ||
+    !org ||
+    !contact ||
+    !email ||
+    !username ||
+    password.length < 6
+  ){
+
+    toast(
+      "Fyll i alla fält. Lösenord minst 6 tecken."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    C.some(
+      c =>
+        String(
+          c.username
+        )
+        .toLowerCase()
+        ===
+        username.toLowerCase()
+    )
+  ){
+
+    toast(
+      "Användarnamnet används redan."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    C.some(
+      c =>
+        String(
+          c.org
+        )
+        .toLowerCase()
+        ===
+        org.toLowerCase()
+    )
+  ){
+
+    toast(
+      "Org.nr finns redan."
+    );
+
+    return;
+
+  }
+
+
+  const c = {
+
+    id:
+      Date.now(),
+
+    name,
+
+    org,
+
+    contact,
+
+    email,
+
+    username,
+
+    password,
+
+    employees:
+      "0",
+
+    projects:
+      "0",
+
+    status:
+      "Aktiv",
+
+    subscription:
+      "Unpaid"
+
+  };
+
+
+  C.push(
+    c
+  );
+
+
+  saveCompanies();
+
+
+  btn
+    .closest(
+      ".confirm-modal"
+    )
+    .remove();
+
+
+  renderCompanies();
+
+
+  openSubscriptionPayment(
+    c.id
+  );
+
+}
+
+
+/* =====================================================
+   SUBSCRIPTION
+===================================================== */
+
+function openSubscriptionPayment(
+  id
+){
+
+  const c =
+    C.find(
+      x =>
+        x.id===id
+    );
+
+
+  if(!c){
+
+    return;
+
+  }
+
+
+  const m =
+    document.createElement(
+      "div"
+    );
+
+
+  m.className =
+    "confirm-modal";
+
+
+  m.innerHTML = `
+
+    <div class="confirm-box">
+
+      <h2>
+        Aktivera abonnemang
+      </h2>
+
+
+      <p>
+
+        <b>
+          ${escapeHtml(
+            c.name
+          )}
+        </b>
+
+      </p>
+
+
+      <div
+        class="danger-box"
+        style="
+          background:#fff7df;
+          color:#765b00
+        "
+      >
+
+        Detta är en
+        demo-betalning.
+        Ingen riktig betalning
+        genomförs.
+
+      </div>
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+            .closest(
+              '.confirm-modal'
+            )
+            .remove()
+          "
+        >
+          Senare
+        </button>
+
+
+        <button
+          class="btn primary"
+          onclick="
+            activateSubscription(
+              ${c.id}
+            )
+          "
+        >
+          Betala & aktivera
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    m
+  );
+
+}
+
+
+function activateSubscription(
+  id
+){
+
+  const c =
+    C.find(
+      x =>
+        x.id===id
+    );
+
+
+  if(!c){
+
+    return;
+
+  }
+
+
+  c.subscription =
+    "Active";
+
+
+  c.subscriptionStarted =
+    new Date()
+      .toISOString();
+
+
+  c.subscriptionExpires =
+    new Date(
+      Date.now()
+      +
+      30*86400000
+    )
+    .toISOString();
+
+
+  saveCompanies();
+
+
+  document
+    .querySelectorAll(
+      ".confirm-modal"
+    )
+    .forEach(
+      x =>
+        x.remove()
+    );
+
+
+  renderCompanies();
+
+
+  setAuth({
+
+    role:
+      "company",
+
+    companyId:
+      c.id,
+
+    username:
+      c.username,
+
+    name:
+      c.name
+
+  });
+
+
+  enterApp();
+
+}
+
+
+/* =====================================================
+   STÄNG / ÖPPNA ÅTKOMST
+===================================================== */
+
+function toggleCompanyAccess(
+  id
+){
+
+  const auth =
+    getAuth();
+
+
+  if(
+    !auth ||
+    auth.role!=="admin"
+  ){
+
+    toast(
+      "Endast administratören kan ändra åtkomst."
+    );
+
+    return;
+
+  }
+
+
+  const c =
+    C.find(
+      x =>
+        x.id===id
+    );
+
+
+  if(!c){
+
+    return;
+
+  }
+
+
+  const action =
+    c.status==="Avstängd"
+      ? "Öppna åtkomst"
+      : "Stäng åtkomst";
+
+
+  confirmAction(
+
+    action,
+
+    `
+      Vill du
+      ${
+        c.status==="Avstängd"
+          ? "öppna"
+          : "stänga"
+      }
+      åtkomsten för
+      <b>
+        ${escapeHtml(
+          c.name
+        )}
+      </b>?
+
+      <br><br>
+
+      Företagets data raderas inte.
+    `,
+
+    () => {
+
+      c.status =
+        c.status==="Avstängd"
+          ? "Aktiv"
+          : "Avstängd";
+
+
+      saveCompanies();
+
+
+      renderCompanies();
+
+
+      toast(
+        c.status==="Avstängd"
+          ? "Åtkomsten är stängd."
+          : "Åtkomsten är öppen igen."
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   PERMANENT RADERA
+===================================================== */
+
+function permanentDeleteCompany(
+  id
+){
+
+  const auth =
+    getAuth();
+
+
+  if(
+    !auth ||
+    auth.role!=="admin"
+  ){
+
+    toast(
+      "Endast administratören kan radera företag."
+    );
+
+    return;
+
+  }
+
+
+  const c =
+    C.find(
+      x =>
+        x.id===id
+    );
+
+
+  if(!c){
+
+    return;
+
+  }
+
+
+  const m =
+    document.createElement(
+      "div"
+    );
+
+
+  m.className =
+    "confirm-modal";
+
+
+  m.innerHTML = `
+
+    <div class="confirm-box">
+
+      <h2>
+        Permanent radera?
+      </h2>
+
+
+      <p>
+
+        Du är på väg att radera
+
+        <b>
+          ${escapeHtml(
+            c.name
+          )}
+        </b>.
+
+      </p>
+
+
+      <div class="danger-box">
+
+        Företagets data tas bort
+        permanent och kan inte ångras.
+
+      </div>
+
+
+      <label
+        style="
+          display:block;
+          margin-top:14px;
+          font-size:12px;
+          font-weight:800
+        "
+      >
+        Skriv RADERA
+      </label>
+
+
+      <input
+        id="deleteWord"
+        style="
+          width:100%;
+          padding:11px;
+          border:1px solid var(--line);
+          border-radius:10px;
+          margin-top:6px
+        "
+      >
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+            .closest(
+              '.confirm-modal'
+            )
+            .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn"
+          style="
+            background:#b33b3b;
+            color:#fff
+          "
+          onclick="
+            confirmPermanentDelete(
+              ${id},
+              this
+            )
+          "
+        >
+          RADERA
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    m
+  );
+
+}
+
+
+function confirmPermanentDelete(
+  id,
+  btn
+){
+
+  if(
+    document
+      .getElementById(
+        "deleteWord"
+      )
+      .value
+      .trim()
+      .toUpperCase()
+    !==
+    "RADERA"
+  ){
+
+    toast(
+      "Skriv RADERA för att fortsätta."
+    );
+
+    return;
+
+  }
+
+
+  C =
+    C.filter(
+      x =>
+        x.id!==id
+    );
+
+
+  saveCompanies();
+
+
+  btn
+    .closest(
+      ".confirm-modal"
+    )
+    .remove();
+
+
+  renderCompanies();
+
+
+  toast(
+    "Företaget har raderats permanent."
+  );
+
+}
+
+
+/* =====================================================
+   CONFIRM
+===================================================== */
+
+function confirmAction(
+  title,
+  message,
+  action
+){
+
+  const m =
+    document.createElement(
+      "div"
+    );
+
+
+  m.className =
+    "confirm-modal";
+
+
+  m.innerHTML = `
+
+    <div class="confirm-box">
+
+      <h2>
+        ${title}
+      </h2>
+
+
+      <p>
+        ${message}
+      </p>
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+            .closest(
+              '.confirm-modal'
+            )
+            .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn primary"
+          id="confirmActionBtn"
+        >
+          Bekräfta
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    m
+  );
+
+
+  m
+    .querySelector(
+      "#confirmActionBtn"
+    )
+    .onclick =
+      () => {
+
+        action();
+
+        m.remove();
+
+      };
+
+}
+
+
+/* =====================================================
+   AUTH
+===================================================== */
+
+function applyAuth(){
+
+  const auth =
+    getAuth();
+
+
+  const adminRoute =
+    location.hash ===
+    "#admin";
+
+
+  if(!auth){
+
+    if(adminRoute){
+
+      openAdminLogin();
+
+    }
+
+    else{
+
+      showLogin();
+
+    }
+
+    return;
+
+  }
+
+
+  if(
+    !PERMISSIONS[
+      auth.role
+    ]
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  if(
+    auth.role==="admin"
+    &&
+    !adminRoute
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  if(
+    auth.role!=="admin"
+    &&
+    adminRoute
+  ){
+
+    clearAuth();
+
+    openAdminLogin();
+
+    return;
+
+  }
+
+
+  enterApp();
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+// Admin is deliberately not part
+// of the normal login categories.
+
+applyAuth();
+
+</script>
+</body>
+</html>
