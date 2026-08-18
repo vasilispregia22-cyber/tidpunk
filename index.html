@@ -4550,13 +4550,9 @@ function removeItem(
             "Vill du ta bort posten?"
         );
 
-
     if (!confirmed) {
-
         return;
-
     }
-
 
     db[collection] =
         db[collection].filter(
@@ -4564,15 +4560,12 @@ function removeItem(
                 item.id !== id
         );
 
-
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(db)
     );
 
-
     renderAll();
-
 
     toast(
         "Posten har tagits bort."
