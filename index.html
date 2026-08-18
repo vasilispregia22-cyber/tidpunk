@@ -4801,5 +4801,76 @@ document.addEventListener("keydown",function(e){
   }
 });
 </script>
+
+<script>
+/* ================= LOGIN FIX v0.6 ================= */
+(function(){
+  const COMPANY = {username:"nordic", password:"123456", id:1, name:"Nordic Städ AB"};
+  const EMPLOYEE = {username:"anna", password:"demo", companyId:1, name:"Anna Andersson"};
+
+  window.selectLoginCategory = function(category){
+    window.loginCategory = category;
+    const cf=document.getElementById("companyLoginFields");
+    const ef=document.getElementById("employeeLoginFields");
+    const cc=document.getElementById("catCompany");
+    const ce=document.getElementById("catEmployee");
+    if(cf) cf.style.display=category==="company"?"block":"none";
+    if(ef) ef.style.display=category==="employee"?"block":"none";
+    if(cc) cc.classList.toggle("active",category==="company");
+    if(ce) ce.classList.toggle("active",category==="employee");
+    const note=document.getElementById("loginNotice");
+    if(note) note.textContent=category==="company"
+      ?"Företag: nordic / 123456."
+      :"Anställd: anna / demo.";
+  };
+
+  window.login = function(){
+    const cat=window.loginCategory || "company";
+    const note=document.getElementById("loginNotice");
+
+    if(cat==="company"){
+      const u=(document.getElementById("loginUser")?.value||"").trim().toLowerCase();
+      const p=document.getElementById("loginPass")?.value||"";
+      if(u!==COMPANY.username || p!==COMPANY.password){
+        if(note) note.textContent="Fel användarnamn eller lösenord.";
+        return false;
+      }
+      if(typeof setAuth==="function"){
+        setAuth({role:"company",companyId:COMPANY.id,username:COMPANY.username,name:COMPANY.name});
+      }else{
+        localStorage.setItem("tidpunkt_auth",JSON.stringify({
+          role:"company",companyId:COMPANY.id,username:COMPANY.username,name:COMPANY.name
+        }));
+      }
+      if(typeof enterApp==="function") enterApp();
+      else location.hash="#dashboard";
+      return false;
+    }
+
+    const u=(document.getElementById("employeeUser")?.value||"").trim().toLowerCase();
+    const p=document.getElementById("employeePass")?.value||"";
+    if(u!==EMPLOYEE.username || p!==EMPLOYEE.password){
+      if(note) note.textContent="Fel användarnamn eller lösenord.";
+      return false;
+    }
+    if(typeof setAuth==="function"){
+      setAuth({role:"employee",companyId:EMPLOYEE.companyId,username:EMPLOYEE.username,name:EMPLOYEE.name});
+    }else{
+      localStorage.setItem("tidpunkt_auth",JSON.stringify({
+        role:"employee",companyId:EMPLOYEE.companyId,username:EMPLOYEE.username,name:EMPLOYEE.name
+      }));
+    }
+    if(typeof enterApp==="function") enterApp();
+    else location.hash="#dashboard";
+    return false;
+  };
+
+  // Prevent old initialization from leaving the user on an obsolete category.
+  document.addEventListener("DOMContentLoaded",function(){
+    window.loginCategory="company";
+    window.selectLoginCategory("company");
+  });
+})();
+</script>
 </body>
 </html>
