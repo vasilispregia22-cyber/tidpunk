@@ -3537,3 +3537,501 @@ function planMode(
   renderPlan();
 
 }
+function renderPlan(){
+
+  const e =
+    document.getElementById(
+      "planview"
+    );
+
+
+  if(
+    pmode==="day"
+  ){
+
+    e.innerHTML=`
+
+      <div class="period">
+
+        <button class="arrow">
+          ‹
+        </button>
+
+        <b>
+          Måndag 17 augusti
+        </b>
+
+        <button class="arrow">
+          ›
+        </button>
+
+      </div>
+
+
+      <div class="day">
+
+        <b>
+          08:00 — Anna Andersson
+        </b>
+
+        <div class="sub">
+          P8 Gullmarsvägen 50 · Städning
+        </div>
+
+      </div>
+
+
+      <div class="day">
+
+        <b>
+          09:00 — Erik Johansson
+        </b>
+
+        <div class="sub">
+          P7 Änghalsvägen 2B · Kontorsstädning
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  if(
+    pmode==="week"
+  ){
+
+    e.innerHTML=`
+
+      <div class="period">
+
+        <button class="arrow">
+          ‹
+        </button>
+
+        <b>
+          Vecka 34
+        </b>
+
+        <button class="arrow">
+          ›
+        </button>
+
+      </div>
+
+
+      ${
+        [
+          "Måndag",
+          "Tisdag",
+          "Onsdag",
+          "Torsdag",
+          "Fredag"
+        ]
+        .map(
+          (x,i)=>`
+
+            <div class="row">
+
+              <div>
+
+                <b>
+                  ${x}
+                </b>
+
+                <div class="sub">
+                  ${i+2}
+                  arbetspass planerade
+                </div>
+
+              </div>
+
+              <span class="badge">
+                ${8+i} personer
+              </span>
+
+            </div>
+
+          `
+        )
+        .join("")
+      }
+
+    `;
+
+    return;
+
+  }
+
+
+  let cells =
+    [
+      "M",
+      "T",
+      "O",
+      "T",
+      "F",
+      "L",
+      "S"
+    ]
+    .map(
+      x => `
+        <div class="calhead">
+          ${x}
+        </div>
+      `
+    )
+    .join("");
+
+
+  for(
+    let i=1;
+    i<=31;
+    i++
+  ){
+
+    cells += `
+
+      <div class="calday">
+
+        <b>
+          ${i}
+        </b>
+
+        <span class="calhours">
+          ${i%3+1} pass
+        </span>
+
+      </div>
+
+    `;
+
+  }
+
+
+  e.innerHTML=`
+
+    <div class="period">
+
+      <button class="arrow">
+        ‹
+      </button>
+
+      <b>
+        Augusti 2026
+      </b>
+
+      <button class="arrow">
+        ›
+      </button>
+
+    </div>
+
+
+    <div class="calendar">
+      ${cells}
+    </div>
+
+  `;
+
+}
+
+
+renderTime();
+
+renderPlan();
+
+
+function filter(
+  id,
+  q
+){
+
+  document
+    .querySelectorAll(
+      "#"+id+" tr"
+    )
+    .forEach(
+      (r,i)=>{
+
+        if(i){
+
+          r.style.display =
+            r.textContent
+              .toLowerCase()
+              .includes(
+                q.toLowerCase()
+              )
+              ? ""
+              : "none";
+
+        }
+
+      }
+    );
+
+}
+
+
+function modal(
+  title
+){
+
+  document
+    .getElementById(
+      "mtitle"
+    )
+    .textContent =
+      "Ny "+title;
+
+  document
+    .getElementById(
+      "modal"
+    )
+    .classList.add(
+      "open"
+    );
+
+}
+
+
+function closeModal(){
+
+  document
+    .getElementById(
+      "modal"
+    )
+    .classList.remove(
+      "open"
+    );
+
+}
+
+
+function toast(
+  message
+){
+
+  const t =
+    document.getElementById(
+      "toast"
+    );
+
+  t.textContent =
+    message;
+
+  t.classList.add(
+    "show"
+  );
+
+  setTimeout(
+    () =>
+      t.classList.remove(
+        "show"
+      ),
+    2000
+  );
+
+}
+
+
+function getAuth(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        "tidpunkt_auth_v2"
+      )
+      ||
+      "null"
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function setAuth(
+  auth
+){
+
+  localStorage.setItem(
+    "tidpunkt_auth_v2",
+    JSON.stringify(auth)
+  );
+
+  localStorage.removeItem(
+    "tidpunkt_auth"
+  );
+
+}
+
+
+function clearAuth(){
+
+  localStorage.removeItem(
+    "tidpunkt_auth_v2"
+  );
+
+  localStorage.removeItem(
+    "tidpunkt_auth"
+  );
+
+}
+
+
+let loginCategory =
+  "company";
+
+
+const PRIVATE_USERS=[
+
+  {
+    username:"privat",
+    password:"demo",
+    name:"Privat användare"
+  }
+
+];
+
+
+const PERMISSIONS={
+
+  admin:[
+    "dashboard",
+    "companies",
+    "employees",
+    "projects",
+    "customers",
+    "workplaces",
+    "time",
+    "planning",
+    "reports",
+    "system"
+  ],
+
+  company:[
+    "dashboard",
+    "employees",
+    "projects",
+    "customers",
+    "workplaces",
+    "time",
+    "planning",
+    "reports"
+  ],
+
+  private:[
+    "dashboard",
+    "time",
+    "planning",
+    "reports"
+  ]
+
+};
+
+
+function loginType(
+  type
+){
+
+  loginCategory =
+    type;
+
+
+  document
+    .getElementById(
+      "companyTab"
+    )
+    .classList.toggle(
+      "active",
+      type==="company"
+    );
+
+
+  document
+    .getElementById(
+      "privateTab"
+    )
+    .classList.toggle(
+      "active",
+      type==="private"
+    );
+
+
+  document
+    .getElementById(
+      "companyLogin"
+    )
+    .style.display =
+      type==="company"
+      ? "block"
+      : "none";
+
+
+  document
+    .getElementById(
+      "privateLogin"
+    )
+    .style.display =
+      type==="private"
+      ? "block"
+      : "none";
+
+
+  document
+    .getElementById(
+      "loginNotice"
+    )
+    .textContent =
+      "";
+
+}
+
+
+function showLogin(){
+
+  document
+    .getElementById(
+      "adminLoginScreen"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .style.display =
+      "flex";
+
+}
+
+
+function openAdminLogin(){
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "adminLoginScreen"
+    )
+    .style.display =
+      "flex";
+
+}
