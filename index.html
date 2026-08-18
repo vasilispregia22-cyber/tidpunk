@@ -3267,18 +3267,39 @@ function renderTables() {
 
               <td>
 
-                <button
-                  class="btn"
-                  onclick="
-                    removeItem(
-                      'companies',
-                      ${company.id}
-                    )
-                  ">
+<div
+    style="
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+    "
+>
 
-                  Ta bort
+    <button
+        class="btn"
+        onclick="
+            toggleCompanyAccess(${company.id})
+        "
+    >
+        🔒 Stäng åtkomst
+    </button>
 
-                </button>
+
+    <button
+        class="btn"
+        style="
+            background:#fff0f0;
+            color:#b33b3b;
+            border-color:#f0caca;
+        "
+        onclick="
+            permanentDeleteCompany(${company.id})
+        "
+    >
+        🗑 Permanent radera
+    </button>
+
+</div>
 
               </td>
 
@@ -3437,7 +3458,413 @@ function renderTables() {
         .join("");
 
 }
+/* =====================================================
+   COMPANY ACCESS
+   ===================================================== */
 
+function toggleCompanyAccess(id) {
+
+    const company =
+        db.companies.find(
+            x => x.id === id
+        );
+
+    if (!company) {
+        toast("Företaget kunde inte hittas.");
+        return;
+    }
+
+
+    const isActive =
+        company.status !== "Avstängd";
+
+
+    if (isActive) {
+
+        showConfirmModal({
+
+            title:
+                "Stäng åtkomst?",
+
+            message: `
+
+                <b>
+                    Vill du stänga åtkomsten för
+                    "${esc(company.name)}"?
+                </b>
+
+                <br><br>
+
+                Företagets data kommer
+                <b>inte</b> att raderas.
+
+                <br><br>
+
+                Anställda, projekt, kunder och
+                tidrapporter finns kvar.
+
+            `,
+
+            danger: false,
+
+            confirmText:
+                "Stäng åtkomst",
+
+            onConfirm: function () {
+
+                company.status =
+                    "Avstängd";
+
+
+                save();
+
+
+                renderAll();
+
+
+                toast(
+                    "Företagets åtkomst är stängd."
+                );
+
+            }
+
+        });
+
+        return;
+    }
+
+
+    showConfirmModal({
+
+        title:
+            "Öppna åtkomst?",
+
+        message: `
+
+            <b>
+                Vill du öppna åtkomsten för
+                "${esc(company.name)}" igen?
+            </b>
+
+            <br><br>
+
+            Företaget får tillbaka sin åtkomst.
+
+        `,
+
+        danger: false,
+
+        confirmText:
+            "Öppna åtkomst",
+
+        onConfirm: function () {
+
+            company.status =
+                "Aktiv";
+
+
+            save();
+
+
+            renderAll();
+
+
+            toast(
+                "Företagets åtkomst är aktiv igen."
+            );
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   PERMANENT COMPANY DELETE
+   ===================================================== */
+
+function permanentDeleteCompany(id) {
+
+    const company =
+        db.companies.find(
+            x => x.id === id
+        );
+
+
+    if (!company) {
+
+        toast(
+            "Företaget kunde inte hittas."
+        );
+
+        return;
+    }
+
+
+    const modal =
+        document.createElement("div");
+
+    modal.className =
+        "modal-bg";
+
+
+    modal.innerHTML = `
+
+        <div
+            class="modal"
+            style="
+                max-width:520px;
+            "
+        >
+
+            <div class="modal-head">
+
+                <h2>
+                    Permanent radera
+                </h2>
+
+                <button
+                    class="close"
+                    onclick="
+                        this.closest('.modal-bg').remove()
+                    "
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                style="
+                    margin-top:15px;
+                    line-height:1.6;
+                "
+            >
+
+                <div
+                    style="
+                        font-weight:700;
+                        color:#b33b3b;
+                        margin-bottom:10px;
+                    "
+                >
+                    ⚠ Permanent radering
+                </div>
+
+
+                <div>
+
+                    Du är på väg att permanent
+                    radera företaget:
+
+                    <br><br>
+
+                    <strong>
+                        ${esc(company.name)}
+                    </strong>
+
+                    <br>
+
+                    ${esc(company.org)}
+
+                </div>
+
+
+                <div
+                    style="
+                        margin-top:15px;
+                        padding:12px;
+                        border-radius:10px;
+                        background:#fff3f3;
+                        color:#8f2929;
+                    "
+                >
+
+                    Detta kan inte ångras.
+
+                    Företagets data kommer att
+                    tas bort permanent.
+
+                </div>
+
+
+                <div
+                    style="
+                        margin-top:18px;
+                    "
+                >
+
+                    <label
+                        style="
+                            display:block;
+                            font-size:12px;
+                            margin-bottom:7px;
+                            font-weight:600;
+                        "
+                    >
+                        Skriv RADERA för att fortsätta
+                    </label>
+
+
+                    <input
+                        id="permanentDeleteConfirm"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="RADERA"
+                        style="
+                            width:100%;
+                            box-sizing:border-box;
+                            border:1px solid #d7dfdc;
+                            padding:12px;
+                            border-radius:10px;
+                            font-size:15px;
+                        "
+                    >
+
+                </div>
+
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:flex-end;
+                        gap:10px;
+                        margin-top:22px;
+                    "
+                >
+
+                    <button
+                        class="btn"
+                        onclick="
+                            this.closest('.modal-bg').remove()
+                        "
+                    >
+                        Avbryt
+                    </button>
+
+
+                    <button
+                        id="permanentDeleteButton"
+                        class="btn"
+                        disabled
+                        style="
+                            background:#b33b3b;
+                            color:#fff;
+                            border-color:#b33b3b;
+                            opacity:.45;
+                            cursor:not-allowed;
+                        "
+                    >
+                        Radera permanent
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    const input =
+        modal.querySelector(
+            "#permanentDeleteConfirm"
+        );
+
+
+    const deleteButton =
+        modal.querySelector(
+            "#permanentDeleteButton"
+        );
+
+
+    input.addEventListener(
+        "input",
+        function () {
+
+            const confirmed =
+                input.value.trim() === "RADERA";
+
+
+            deleteButton.disabled =
+                !confirmed;
+
+
+            deleteButton.style.opacity =
+                confirmed
+                    ? "1"
+                    : ".45";
+
+
+            deleteButton.style.cursor =
+                confirmed
+                    ? "pointer"
+                    : "not-allowed";
+
+        }
+    );
+
+
+    deleteButton.addEventListener(
+        "click",
+        function () {
+
+            if (
+                input.value.trim() !==
+                "RADERA"
+            ) {
+                return;
+            }
+
+
+            db.companies =
+                db.companies.filter(
+                    x =>
+                        x.id !== id
+                );
+
+
+            db.employees =
+                db.employees.filter(
+                    x =>
+                        x.company !==
+                        company.name
+                );
+
+
+            db.projects =
+                db.projects.filter(
+                    x =>
+                        x.company !==
+                        company.name
+                );
+
+
+            save();
+
+
+            modal.remove();
+
+
+            renderAll();
+
+
+            toast(
+                "Företaget har raderats permanent."
+            );
+
+        }
+    );
+
+}
 
 /* =====================================================
    CARDS
