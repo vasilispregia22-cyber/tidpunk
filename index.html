@@ -1,3 +1,3736 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>TIDPUNKT v1.1</title>
+
+<style>
+
+/* =====================================================
+   TIDPUNKT v1.1
+   ===================================================== */
+
+:root {
+  --bg: #f4f6f4;
+  --card: #ffffff;
+  --ink: #17231e;
+  --muted: #718078;
+  --line: #e1e8e4;
+
+  --brand: #155c4a;
+  --brand2: #1e8068;
+  --dark: #102a22;
+
+  --soft: #e8f2ee;
+
+  --danger: #b33b3b;
+}
+
+
+/* =====================================================
+   RESET
+   ===================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+
+  background: var(--bg);
+  color: var(--ink);
+
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   LOGIN
+   ===================================================== */
+
+.login {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #0d2b22,
+      #155c4a
+    );
+}
+
+.login-card {
+  width: min(430px, 100%);
+
+  background: #fff;
+
+  border-radius: 24px;
+
+  padding: 28px;
+
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.30);
+}
+
+.brand {
+  font-size: 31px;
+
+  font-weight: 950;
+
+  letter-spacing: 4px;
+
+  color: var(--brand);
+}
+
+.login-subtitle {
+  color: var(--muted);
+
+  font-size: 13px;
+
+  margin:
+    5px 0 25px;
+}
+
+.field {
+  margin: 12px 0;
+}
+
+.field label {
+  display: block;
+
+  color: #52625b;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 10px;
+
+  background: #fafcfb;
+
+  outline: none;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--brand);
+}
+
+.primary {
+  width: 100%;
+
+  border: 0;
+
+  padding: 13px;
+
+  border-radius: 11px;
+
+  background: var(--brand);
+
+  color: #fff;
+
+  font-weight: 900;
+}
+
+.notice {
+  margin-top: 12px;
+
+  background: var(--soft);
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  font-size: 11px;
+
+  color: #52625b;
+}
+
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+
+.sidebar {
+  position: fixed;
+
+  inset: 0 auto 0 0;
+
+  width: 245px;
+
+  background: var(--dark);
+
+  padding: 22px 14px;
+
+  color: #dce9e4;
+
+  z-index: 20;
+}
+
+.logo {
+  font-size: 22px;
+
+  font-weight: 950;
+
+  letter-spacing: 3px;
+
+  padding:
+    8px 12px 25px;
+}
+
+.logo small {
+  display: block;
+
+  font-size: 10px;
+
+  color: #91aaa0;
+
+  margin-top: 4px;
+
+  letter-spacing: .5px;
+}
+
+.nav {
+  display: grid;
+
+  gap: 4px;
+}
+
+.nav button {
+  border: 0;
+
+  background: none;
+
+  color: #aebfb8;
+
+  text-align: left;
+
+  padding: 12px;
+
+  border-radius: 11px;
+
+  font-weight: 700;
+}
+
+.nav button:hover,
+.nav button.active {
+  background: #1b4438;
+
+  color: #fff;
+}
+
+
+/* =====================================================
+   MAIN
+   ===================================================== */
+
+.main {
+  margin-left: 245px;
+
+  min-height: 100vh;
+}
+
+.top {
+  height: 70px;
+
+  background: #fff;
+
+  border-bottom:
+    1px solid var(--line);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 26px;
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 10;
+}
+
+.top-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.online,
+.role {
+  padding: 6px 9px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.online {
+  background: var(--soft);
+
+  color: #147457;
+}
+
+.role {
+  background: #eef2ef;
+
+  color: var(--brand);
+}
+
+.avatar {
+  display: grid;
+
+  place-items: center;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 11px;
+
+  background: var(--brand);
+
+  color: #fff;
+
+  font-weight: 900;
+}
+
+.logout,
+.menu {
+  border: 1px solid var(--line);
+
+  background: #fff;
+
+  color: var(--brand);
+
+  padding: 8px 10px;
+
+  border-radius: 10px;
+
+  font-weight: 800;
+}
+
+.menu {
+  display: none;
+}
+
+
+/* =====================================================
+   CONTENT
+   ===================================================== */
+
+.content {
+  padding: 28px;
+
+  max-width: 1450px;
+
+  margin: auto;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.head {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  align-items: flex-start;
+
+  margin-bottom: 18px;
+}
+
+.head h1 {
+  margin:
+    0 0 5px;
+
+  font-size: 28px;
+}
+
+.actions {
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: 1px solid var(--line);
+
+  background: #fff;
+
+  padding: 10px 14px;
+
+  border-radius: 10px;
+
+  font-weight: 800;
+}
+
+.btn.primary2 {
+  background: var(--brand);
+
+  color: #fff;
+
+  border-color: var(--brand);
+}
+
+
+/* =====================================================
+   GRID
+   ===================================================== */
+
+.grid {
+  display: grid;
+
+  gap: 15px;
+}
+
+.g2 {
+  grid-template-columns:
+    1.3fr .7fr;
+}
+
+.g3 {
+  grid-template-columns:
+    repeat(3, 1fr);
+}
+
+.stats {
+  grid-template-columns:
+    repeat(4, 1fr);
+}
+
+
+/* =====================================================
+   CARD
+   ===================================================== */
+
+.card {
+  background: var(--card);
+
+  border:
+    1px solid var(--line);
+
+  border-radius: 17px;
+
+  padding: 18px;
+
+  box-shadow:
+    0 8px 25px rgba(18,59,36,.06);
+}
+
+.metric .value {
+  font-size: 28px;
+
+  font-weight: 900;
+
+  margin: 6px 0;
+}
+
+.muted {
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.trend {
+  color: #147457;
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   TABLE
+   ===================================================== */
+
+.table-wrap {
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  font-size: 13px;
+}
+
+.table th,
+.table td {
+  padding: 12px 9px;
+
+  text-align: left;
+
+  border-bottom:
+    1px solid var(--line);
+
+  white-space: nowrap;
+}
+
+.table th {
+  font-size: 11px;
+
+  color: var(--muted);
+
+  text-transform: uppercase;
+}
+
+.badge {
+  display: inline-block;
+
+  padding: 5px 8px;
+
+  border-radius: 20px;
+
+  background: var(--soft);
+
+  color: var(--brand);
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   ROW
+   ===================================================== */
+
+.row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px 0;
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.row:last-child {
+  border: 0;
+}
+
+
+/* =====================================================
+   TABS
+   ===================================================== */
+
+.tabs {
+  display: flex;
+
+  gap: 4px;
+
+  background: #eef2ef;
+
+  padding: 4px;
+
+  border-radius: 11px;
+
+  width: max-content;
+}
+
+.tab {
+  border: 0;
+
+  background: none;
+
+  padding: 9px 15px;
+
+  border-radius: 8px;
+
+  color: var(--muted);
+
+  font-weight: 800;
+}
+
+.tab.active {
+  background: #fff;
+
+  color: var(--brand);
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.05);
+}
+
+
+/* =====================================================
+   TIME
+   ===================================================== */
+
+.period {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin: 15px 0;
+}
+
+.arrow {
+  border: 0;
+
+  background: var(--soft);
+
+  color: var(--brand);
+
+  width: 36px;
+
+  height: 36px;
+
+  border-radius: 9px;
+
+  font-size: 20px;
+}
+
+.entry {
+  border:
+    1px solid var(--line);
+
+  border-radius: 13px;
+
+  padding: 13px;
+
+  margin: 8px 0;
+}
+
+.hours {
+  color: var(--brand);
+
+  font-weight: 900;
+}
+
+.week {
+  display: grid;
+
+  grid-template-columns:
+    60px 1fr 60px;
+
+  gap: 10px;
+
+  align-items: center;
+
+  padding: 12px 0;
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.bar {
+  height: 9px;
+
+  background: #edf1ef;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+
+  height: 100%;
+
+  background: var(--brand);
+
+  border-radius: 20px;
+}
+
+
+/* =====================================================
+   CALENDAR
+   ===================================================== */
+
+.calendar {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, 1fr);
+
+  border-top:
+    1px solid var(--line);
+
+  border-left:
+    1px solid var(--line);
+}
+
+.calhead,
+.calday {
+  border-right:
+    1px solid var(--line);
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.calhead {
+  text-align: center;
+
+  padding: 7px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.calday {
+  min-height: 70px;
+
+  padding: 7px;
+}
+
+.calhours {
+  display: block;
+
+  margin-top: 7px;
+
+  padding: 4px;
+
+  background: var(--soft);
+
+  color: var(--brand);
+
+  border-radius: 6px;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   CHART
+   ===================================================== */
+
+.chart {
+  height: 190px;
+
+  display: flex;
+
+  align-items: end;
+
+  gap: 9px;
+}
+
+.chartcol {
+  flex: 1;
+
+  text-align: center;
+}
+
+.chartcol i {
+  display: block;
+
+  background: var(--brand2);
+
+  border-radius:
+    7px 7px 2px 2px;
+}
+
+.chartcol span {
+  font-size: 10px;
+
+  color: var(--muted);
+}
+
+
+/* =====================================================
+   MODAL
+   ===================================================== */
+
+.modal-bg {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(7,19,15,.55);
+
+  z-index: 100;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 15px;
+}
+
+.modal {
+  background: #fff;
+
+  border-radius: 18px;
+
+  padding: 20px;
+
+  width: min(600px,100%);
+
+  max-height: 90vh;
+
+  overflow: auto;
+}
+
+.modal-head {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.modal-head h2 {
+  margin: 0;
+}
+
+.close {
+  border: 0;
+
+  background: #eef2ef;
+
+  border-radius: 9px;
+
+  width: 35px;
+
+  height: 35px;
+
+  font-size: 20px;
+}
+
+.formgrid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 12px;
+}
+
+.save {
+  width: 100%;
+
+  margin-top: 15px;
+}
+
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+
+.toast {
+  position: fixed;
+
+  right: 20px;
+
+  bottom: 20px;
+
+  background: var(--dark);
+
+  color: #fff;
+
+  padding: 12px 15px;
+
+  border-radius: 11px;
+
+  display: none;
+
+  z-index: 200;
+}
+
+.toast.show {
+  display: block;
+}
+
+
+/* =====================================================
+   MOBILE DRAWER
+   ===================================================== */
+
+.drawer,
+.overlay,
+.bottom {
+  display: none;
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media(max-width:850px) {
+
+  .sidebar {
+    width: 70px;
+  }
+
+  .logo {
+    font-size: 0;
+
+    text-align: center;
+  }
+
+  .logo:before {
+    content: "T";
+
+    font-size: 23px;
+  }
+
+  .nav button {
+    font-size: 0;
+
+    text-align: center;
+  }
+
+  .main {
+    margin-left: 70px;
+  }
+
+  .stats {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .g2 {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media(max-width:600px) {
+
+  body {
+    padding-bottom: 68px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    margin: 0;
+  }
+
+  .top {
+    height: 62px;
+
+    padding: 0 12px;
+  }
+
+  .menu {
+    display: block;
+  }
+
+  .online {
+    font-size: 0;
+
+    width: 12px;
+
+    height: 12px;
+
+    padding: 0;
+  }
+
+  .role {
+    font-size: 10px;
+  }
+
+  .logout {
+    font-size: 10px;
+  }
+
+  .content {
+    padding: 14px 12px;
+  }
+
+  .head {
+    display: block;
+  }
+
+  .head h1 {
+    font-size: 24px;
+  }
+
+  .actions {
+    margin-top: 12px;
+  }
+
+  .stats,
+  .g3 {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .tabs {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(3,1fr);
+  }
+
+  .tab {
+    padding: 9px 3px;
+
+    font-size: 12px;
+  }
+
+  .formgrid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .drawer {
+    display: block;
+
+    position: fixed;
+
+    z-index: 150;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: min(320px,86vw);
+
+    background: var(--dark);
+
+    color: #fff;
+
+    padding: 18px 14px;
+
+    transform:
+      translateX(-105%);
+
+    transition: .2s;
+  }
+
+  .drawer.open {
+    transform:
+      translateX(0);
+  }
+
+  .drawer-head {
+    display: flex;
+
+    justify-content:
+      space-between;
+
+    font-size: 20px;
+
+    padding-bottom: 18px;
+  }
+
+  .drawer-head button {
+    border: 0;
+
+    background: #1b4438;
+
+    color: #fff;
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 9px;
+
+    font-size: 20px;
+  }
+
+  .drawer-user {
+    background: #17382f;
+
+    border:
+      1px solid #285146;
+
+    border-radius: 13px;
+
+    padding: 12px;
+
+    margin-bottom: 13px;
+  }
+
+  .drawer .nav button {
+    font-size: 14px;
+
+    text-align: left;
+  }
+
+  .overlay.open {
+    display: block;
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+      rgba(7,19,15,.55);
+
+    z-index: 140;
+  }
+
+  .bottom {
+    display: grid;
+
+    grid-template-columns:
+      repeat(4,1fr);
+
+    position: fixed;
+
+    bottom: 0;
+
+    left: 0;
+
+    right: 0;
+
+    height: 68px;
+
+    background: #fff;
+
+    border-top:
+      1px solid var(--line);
+
+    z-index: 120;
+  }
+
+  .bottom button {
+    border: 0;
+
+    background: none;
+
+    color: var(--muted);
+
+    font-weight: 800;
+  }
+
+  .bottom button.active {
+    color: var(--brand);
+  }
+
+  .bottom small {
+    display: block;
+
+    font-size: 9px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     LOGIN
+     ===================================================== -->
+
+<div
+  id="login"
+  class="login">
+
+  <div class="login-card">
+
+    <div class="brand">
+      TIDPUNKT
+    </div>
+
+    <p class="login-subtitle">
+      Tid • Personal • Arbete
+    </p>
+
+
+    <div class="field">
+
+      <label>
+        Användare
+      </label>
+
+      <input
+        id="user"
+        placeholder="demo"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Lösenord
+      </label>
+
+      <input
+        id="pass"
+        type="password"
+        placeholder="demo"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Roll
+      </label>
+
+      <select id="role">
+
+        <option value="admin">
+          Administratör
+        </option>
+
+        <option value="company">
+          Företag
+        </option>
+
+        <option value="employee">
+          Anställd
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <button
+      class="primary"
+      onclick="login()">
+
+      Logga in
+
+    </button>
+
+
+    <div class="notice">
+
+      Demo:
+      valfritt användarnamn och lösenord.
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MOBILE DRAWER
+     ===================================================== -->
+
+<div
+  id="overlay"
+  class="overlay"
+  onclick="closeDrawer()">
+</div>
+
+
+<aside
+  id="drawer"
+  class="drawer">
+
+  <div class="drawer-head">
+
+    <b>
+      TIDPUNKT
+    </b>
+
+    <button
+      onclick="closeDrawer()">
+
+      ×
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="drawerUser"
+    class="drawer-user">
+
+  </div>
+
+
+  <div
+    id="drawerNav">
+
+  </div>
+
+</aside>
+
+
+<!-- =====================================================
+     SIDEBAR
+     ===================================================== -->
+
+<aside class="sidebar">
+
+  <div class="logo">
+
+    TIDPUNKT
+
+    <small>
+      v1.1 • DEMO
+    </small>
+
+  </div>
+
+
+  <nav
+    id="nav"
+    class="nav">
+
+  </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="main">
+
+
+<header class="top">
+
+  <button
+    class="menu"
+    onclick="openDrawer()">
+
+    ☰
+
+  </button>
+
+
+  <b id="crumb">
+    Admin / Dashboard
+  </b>
+
+
+  <div class="top-right">
+
+    <span class="online">
+      ● Online
+    </span>
+
+
+    <span
+      id="rolePill"
+      class="role">
+
+      Administratör
+
+    </span>
+
+
+    <span
+      id="avatar"
+      class="avatar">
+
+      AD
+
+    </span>
+
+
+    <button
+      class="logout"
+      onclick="logout()">
+
+      Logga ut
+
+    </button>
+
+  </div>
+
+</header>
+
+
+<div
+  id="content"
+  class="content">
+
+
+<!-- =====================================================
+     DASHBOARD
+     ===================================================== -->
+
+<section
+  id="dashboard"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Översikt
+      </h1>
+
+      <p class="muted">
+        Kontrollpanel för TIDPUNKT.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="grid stats">
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Företag
+      </span>
+
+      <div
+        id="countCompanies"
+        class="value">
+
+        0
+
+      </div>
+
+      <span class="trend">
+        registrerade
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Anställda
+      </span>
+
+      <div
+        id="countEmployees"
+        class="value">
+
+        0
+
+      </div>
+
+      <span class="trend">
+        registrerade
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Projekt
+      </span>
+
+      <div
+        id="countProjects"
+        class="value">
+
+        0
+
+      </div>
+
+      <span class="trend">
+        registrerade
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Kunder
+      </span>
+
+      <div
+        id="countCustomers"
+        class="value">
+
+        0
+
+      </div>
+
+      <span class="trend">
+        registrerade
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="grid g2"
+    style="margin-top:15px">
+
+
+    <div class="card">
+
+      <h3>
+        Aktivitet denna vecka
+      </h3>
+
+      <div
+        id="chart"
+        class="chart">
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        Senaste aktivitet
+      </h3>
+
+      <div
+        id="activity">
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     COMPANY
+     ===================================================== -->
+
+<section
+  id="companies"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Företag
+      </h1>
+
+      <p class="muted">
+        Företag som finns i systemet.
+      </p>
+
+    </div>
+
+
+    <button
+      class="btn primary2"
+      onclick="openForm('company')">
+
+      + Lägg till företag
+
+    </button>
+
+  </div>
+
+
+  <div class="card table-wrap">
+
+    <table class="table">
+
+      <thead>
+
+        <tr>
+
+          <th>
+            Företag
+          </th>
+
+          <th>
+            Org.nr
+          </th>
+
+          <th>
+            Anställda
+          </th>
+
+          <th>
+            Projekt
+          </th>
+
+          <th>
+            Status
+          </th>
+
+          <th>
+            Åtgärd
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody
+        id="companiesTable">
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     EMPLOYEES
+     ===================================================== -->
+
+<section
+  id="employees"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Personal
+      </h1>
+
+      <p class="muted">
+        Anställda och roller.
+      </p>
+
+    </div>
+
+
+    <button
+      class="btn primary2"
+      onclick="openForm('employee')">
+
+      + Ny anställd
+
+    </button>
+
+  </div>
+
+
+  <div class="card table-wrap">
+
+    <table class="table">
+
+      <thead>
+
+        <tr>
+
+          <th>
+            Namn
+          </th>
+
+          <th>
+            Företag
+          </th>
+
+          <th>
+            Roll
+          </th>
+
+          <th>
+            Status
+          </th>
+
+          <th>
+            Vecka
+          </th>
+
+          <th>
+            Åtgärd
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody
+        id="employeesTable">
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROJECTS
+     ===================================================== -->
+
+<section
+  id="projects"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Projekt
+      </h1>
+
+      <p class="muted">
+        Projekt och arbetstid.
+      </p>
+
+    </div>
+
+
+    <button
+      class="btn primary2"
+      onclick="openForm('project')">
+
+      + Nytt projekt
+
+    </button>
+
+  </div>
+
+
+  <div class="card table-wrap">
+
+    <table class="table">
+
+      <thead>
+
+        <tr>
+
+          <th>
+            ID
+          </th>
+
+          <th>
+            Projekt
+          </th>
+
+          <th>
+            Företag
+          </th>
+
+          <th>
+            Arbetsplats
+          </th>
+
+          <th>
+            Ansvarig
+          </th>
+
+          <th>
+            Timmar
+          </th>
+
+          <th>
+            Status
+          </th>
+
+          <th>
+            Åtgärd
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody
+        id="projectsTable">
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     CUSTOMERS
+     ===================================================== -->
+
+<section
+  id="customers"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Kunder
+      </h1>
+
+      <p class="muted">
+        Kundregister.
+      </p>
+
+    </div>
+
+
+    <button
+      class="btn primary2"
+      onclick="openForm('customer')">
+
+      + Ny kund
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="customersGrid"
+    class="grid g3">
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     WORKPLACES
+     ===================================================== -->
+
+<section
+  id="workplaces"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Arbetsplatser
+      </h1>
+
+      <p class="muted">
+        Arbetsplatser och adresser.
+      </p>
+
+    </div>
+
+
+    <button
+      class="btn primary2"
+      onclick="openForm('workplace')">
+
+      + Ny arbetsplats
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="workplacesGrid"
+    class="grid g3">
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     TIME
+     ===================================================== -->
+
+<section
+  id="time"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Tidrapport
+      </h1>
+
+      <p class="muted">
+        Dag, vecka och månad.
+      </p>
+
+    </div>
+
+
+    <button
+      class="btn primary2"
+      onclick="openForm('time')">
+
+      + Registrera tid
+
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="tabs">
+
+      <button
+        class="tab active"
+        onclick="setTime('day',this)">
+
+        Dag
+
+      </button>
+
+
+      <button
+        class="tab"
+        onclick="setTime('week',this)">
+
+        Vecka
+
+      </button>
+
+
+      <button
+        class="tab"
+        onclick="setTime('month',this)">
+
+        Månad
+
+      </button>
+
+    </div>
+
+
+    <div id="timeView">
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     PLANNING
+     ===================================================== -->
+
+<section
+  id="planning"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Planering
+      </h1>
+
+      <p class="muted">
+        Schema och bemanning.
+      </p>
+
+    </div>
+
+
+    <button
+      class="btn primary2"
+      onclick="openForm('planning')">
+
+      + Planera
+
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="tabs">
+
+      <button
+        class="tab"
+        onclick="setPlan('day',this)">
+
+        Dag
+
+      </button>
+
+
+      <button
+        class="tab active"
+        onclick="setPlan('week',this)">
+
+        Vecka
+
+      </button>
+
+
+      <button
+        class="tab"
+        onclick="setPlan('month',this)">
+
+        Månad
+
+      </button>
+
+    </div>
+
+
+    <div id="planView">
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     REPORTS
+     ===================================================== -->
+
+<section
+  id="reports"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        Rapporter
+      </h1>
+
+      <p class="muted">
+        Sammanställningar.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="grid g3">
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Denna vecka
+      </span>
+
+      <div
+        id="reportHours"
+        class="value">
+
+        0:00
+
+      </div>
+
+      <span class="trend">
+        tid
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Projekt
+      </span>
+
+      <div
+        id="reportProjects"
+        class="value">
+
+        0
+
+      </div>
+
+      <span class="trend">
+        registrerade
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Anställda
+      </span>
+
+      <div
+        id="reportEmployees"
+        class="value">
+
+        0
+
+      </div>
+
+      <span class="trend">
+        registrerade
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     SYSTEM
+     ===================================================== -->
+
+<section
+  id="system"
+  class="page">
+
+  <div class="head">
+
+    <div>
+
+      <h1>
+        App / System
+      </h1>
+
+      <p class="muted">
+        Teknisk administration.
+        Inga företagsdata.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="grid g3">
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Version
+      </span>
+
+      <div class="value">
+        v1.1
+      </div>
+
+      <span class="trend">
+        CRUD demo
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        System
+      </span>
+
+      <div class="value">
+        Online
+      </div>
+
+      <span class="trend">
+        Frontend OK
+      </span>
+
+    </div>
+
+
+    <div class="card metric">
+
+      <span class="muted">
+        Storage
+      </span>
+
+      <div class="value">
+        Local
+      </div>
+
+      <span class="trend">
+        Webbläsare
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+</div>
+
+</main>
+
+
+<!-- =====================================================
+     MOBILE BOTTOM
+     ===================================================== -->
+
+<nav
+  id="bottom"
+  class="bottom">
+
+</nav>
+
+
+<!-- =====================================================
+     TOAST
+     ===================================================== -->
+
+<div
+  id="toast"
+  class="toast">
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT START
+     ===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   DATABASE
+   ===================================================== */
+
+const STORAGE_KEY =
+  "tidpunkt_v11_data";
+
+
+const initialData = {
+
+  companies: [
+
+    {
+      id: 1,
+      name: "Nordic Städ AB",
+      org: "559001-1234",
+      status: "Aktiv"
+    },
+
+    {
+      id: 2,
+      name: "Uppsala Service AB",
+      org: "559002-5678",
+      status: "Aktiv"
+    },
+
+    {
+      id: 3,
+      name: "Gävle Projekt AB",
+      org: "559003-9012",
+      status: "Aktiv"
+    }
+
+  ],
+
+
+  employees: [
+
+    {
+      id: 1,
+      name: "Anna Andersson",
+      company: "Nordic Städ AB",
+      role: "Arbetsledare",
+      status: "Aktiv",
+      week: "38:20"
+    },
+
+    {
+      id: 2,
+      name: "Erik Johansson",
+      company: "Nordic Städ AB",
+      role: "Städare",
+      status: "Aktiv",
+      week: "36:45"
+    },
+
+    {
+      id: 3,
+      name: "Sara Nilsson",
+      company: "Uppsala Service AB",
+      role: "Städare",
+      status: "Aktiv",
+      week: "32:10"
+    }
+
+  ],
+
+
+  projects: [
+
+    {
+      id: 1,
+      code: "P8",
+      name: "Gullmarsvägen 50",
+      company: "Nordic Städ AB",
+      place: "Gullmarsvägen 50",
+      manager: "Anna Andersson",
+      hours: "84:20",
+      status: "Pågår"
+    },
+
+    {
+      id: 2,
+      code: "P7",
+      name: "Änghalsvägen 2B",
+      company: "Nordic Städ AB",
+      place: "Änghalsvägen 2B",
+      manager: "Erik Johansson",
+      hours: "61:10",
+      status: "Pågår"
+    }
+
+  ],
+
+
+  customers: [
+
+    {
+      id: 1,
+      name: "Nordic Fastigheter",
+      city: "Uppsala",
+      projects: 8
+    },
+
+    {
+      id: 2,
+      name: "Mälardalen Bygg",
+      city: "Stockholm",
+      projects: 3
+    }
+
+  ],
+
+
+  workplaces: [
+
+    {
+      id: 1,
+      name: "Gullmarsvägen 50",
+      address: "Gullmarsvägen 50",
+      status: "Aktiv"
+    },
+
+    {
+      id: 2,
+      name: "Änghalsvägen 2B",
+      address: "Änghalsvägen 2B",
+      status: "Aktiv"
+    }
+
+  ],
+
+
+  times: [],
+
+  planning: [],
+
+  activity: []
+
+};
+
+
+function loadDatabase() {
+
+  try {
+
+    const saved =
+      localStorage.getItem(
+        STORAGE_KEY
+      );
+
+    if (saved) {
+
+      return JSON.parse(saved);
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Database error:",
+      error
+    );
+
+  }
+
+
+  return structuredClone(
+    initialData
+  );
+
+}
+
+
+let db =
+  loadDatabase();
+
+
+function saveDatabase() {
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(db)
+  );
+
+  renderAll();
+
+}
+
+
+/* =====================================================
+   ROLES
+   ===================================================== */
+
+const NAV = [
+
+  [
+    "dashboard",
+    "⌂",
+    "Dashboard"
+  ],
+
+  [
+    "companies",
+    "▣",
+    "Företag"
+  ],
+
+  [
+    "employees",
+    "♙",
+    "Personal"
+  ],
+
+  [
+    "projects",
+    "▦",
+    "Projekt"
+  ],
+
+  [
+    "customers",
+    "◎",
+    "Kunder"
+  ],
+
+  [
+    "workplaces",
+    "⌖",
+    "Arbetsplatser"
+  ],
+
+  [
+    "time",
+    "◷",
+    "Tidrapport"
+  ],
+
+  [
+    "planning",
+    "□",
+    "Planering"
+  ],
+
+  [
+    "reports",
+    "▥",
+    "Rapporter"
+  ],
+
+  [
+    "system",
+    "⚙",
+    "App / System"
+  ]
+
+];
+
+
+const PERMISSIONS = {
+
+  admin:
+    NAV.map(
+      item => item[0]
+    ),
+
+  company: [
+
+    "dashboard",
+    "employees",
+    "projects",
+    "customers",
+    "workplaces",
+    "time",
+    "planning",
+    "reports"
+
+  ],
+
+  employee: [
+
+    "time",
+    "planning"
+
+  ]
+
+};
+
+
+const ROLE_DATA = {
+
+  admin: [
+    "Administratör",
+    "AD"
+  ],
+
+  company: [
+    "Företag",
+    "FT"
+  ],
+
+  employee: [
+    "Anställd",
+    "AN"
+  ]
+
+};
+
+
+let currentPage =
+  "dashboard";
+
+
+let timeMode =
+  "day";
+
+
+let planMode =
+  "week";
+
+
+/* =====================================================
+   AUTH
+   ===================================================== */
+
+function getRole() {
+
+  return localStorage.getItem(
+    "tidpunkt_role"
+  );
+
+}
+
+
+function getUser() {
+
+  return localStorage.getItem(
+    "tidpunkt_user"
+  );
+
+}
+
+
+function login() {
+
+  const username =
+    document
+      .getElementById("user")
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById("pass")
+      .value
+      .trim();
+
+
+  const selectedRole =
+    document
+      .getElementById("role")
+      .value;
+
+
+  if (
+    !username ||
+    !password
+  ) {
+
+    toast(
+      "Fyll i användarnamn och lösenord."
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "tidpunkt_role",
+    selectedRole
+  );
+
+
+  localStorage.setItem(
+    "tidpunkt_user",
+    username
+  );
+
+
+  startApplication();
+
+}
+
+
+function logout() {
+
+  localStorage.removeItem(
+    "tidpunkt_role"
+  );
+
+  localStorage.removeItem(
+    "tidpunkt_user"
+  );
+
+
+  location.reload();
+
+}
+
+
+/* =====================================================
+   START APPLICATION
+   ===================================================== */
+
+function startApplication() {
+
+  const currentRole =
+    getRole();
+
+
+  if (!currentRole) {
+
+    document
+      .getElementById("login")
+      .style.display = "flex";
+
+    return;
+
+  }
+
+
+  const roleInfo =
+    ROLE_DATA[currentRole];
+
+
+  document
+    .getElementById("login")
+    .style.display = "none";
+
+
+  document
+    .getElementById("rolePill")
+    .textContent =
+      roleInfo[0];
+
+
+  document
+    .getElementById("avatar")
+    .textContent =
+      roleInfo[1];
+
+
+  document
+    .getElementById("drawerUser")
+    .innerHTML = `
+
+      <b>
+        ${escapeHTML(
+          getUser() || "Demo"
+        )}
+      </b>
+
+      <div class="muted">
+        ${roleInfo[0]}
+      </div>
+
+  `;
+
+
+  renderNavigation();
+
+
+  if (
+    currentRole ===
+    "employee"
+  ) {
+
+    navigate("time");
+
+  } else {
+
+    navigate("dashboard");
+
+  }
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
+
+function renderNavigation() {
+
+  const currentRole =
+    getRole();
+
+
+  const allowed =
+    PERMISSIONS[
+      currentRole
+    ] || [];
+
+
+  const html =
+    NAV
+      .filter(
+        item =>
+          allowed.includes(
+            item[0]
+          )
+      )
+      .map(
+        item => `
+
+          <button
+            class="${
+              currentPage === item[0]
+                ? "active"
+                : ""
+            }"
+            onclick="
+              navigate('${item[0]}')
+            ">
+
+            ${item[1]}
+            ${item[2]}
+
+          </button>
+
+        `
+      )
+      .join("");
+
+
+  document
+    .getElementById("nav")
+    .innerHTML =
+      html;
+
+
+  document
+    .getElementById("drawerNav")
+    .innerHTML = `
+
+      <div class="nav">
+
+        ${html}
+
+      </div>
+
+  `;
+
+
+  document
+    .getElementById("bottom")
+    .innerHTML =
+      NAV
+        .filter(
+          item =>
+            allowed.includes(
+              item[0]
+            )
+        )
+        .slice(0,4)
+        .map(
+          item => `
+
+            <button
+              class="${
+                currentPage === item[0]
+                  ? "active"
+                  : ""
+              }"
+              onclick="
+                navigate('${item[0]}')
+              ">
+
+              ${item[1]}
+
+              <small>
+                ${item[2]}
+              </small>
+
+            </button>
+
+          `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   NAVIGATE
+   ===================================================== */
+
+function navigate(targetPage) {
+
+  const currentRole =
+    getRole();
+
+
+  const allowed =
+    PERMISSIONS[
+      currentRole
+    ] || [];
+
+
+  if (
+    !allowed.includes(
+      targetPage
+    )
+  ) {
+
+    toast(
+      "Du saknar behörighet."
+    );
+
+    return;
+
+  }
+
+
+  currentPage =
+    targetPage;
+
+
+  document
+    .querySelectorAll(
+      ".page"
+    )
+    .forEach(
+      page => {
+
+        page.classList.remove(
+          "active"
+        );
+
+      }
+    );
+
+
+  const target =
+    document.getElementById(
+      targetPage
+    );
+
+
+  if (target) {
+
+    target.classList.add(
+      "active"
+    );
+
+  }
+
+
+  renderNavigation();
+
+
+  const names = {
+
+    dashboard:
+      "Dashboard",
+
+    companies:
+      "Företag",
+
+    employees:
+      "Personal",
+
+    projects:
+      "Projekt",
+
+    customers:
+      "Kunder",
+
+    workplaces:
+      "Arbetsplatser",
+
+    time:
+      "Tidrapport",
+
+    planning:
+      "Planering",
+
+    reports:
+      "Rapporter",
+
+    system:
+      "App / System"
+
+  };
+
+
+  document
+    .getElementById(
+      "crumb"
+    )
+    .textContent =
+
+      ROLE_DATA[
+        currentRole
+      ][0]
+
+      + " / "
+
+      + names[
+        targetPage
+      ];
+
+
+  if (
+    targetPage ===
+    "dashboard"
+  ) {
+
+    renderDashboard();
+
+  }
+
+
+  if (
+    targetPage ===
+    "time"
+  ) {
+
+    renderTime();
+
+  }
+
+
+  if (
+    targetPage ===
+    "planning"
+  ) {
+
+    renderPlanning();
+
+  }
+
+
+  closeDrawer();
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
+
+function renderDashboard() {
+
+  document
+    .getElementById(
+      "countCompanies"
+    )
+    .textContent =
+      db.companies.length;
+
+
+  document
+    .getElementById(
+      "countEmployees"
+    )
+    .textContent =
+      db.employees.length;
+
+
+  document
+    .getElementById(
+      "countProjects"
+    )
+    .textContent =
+      db.projects.length;
+
+
+  document
+    .getElementById(
+      "countCustomers"
+    )
+    .textContent =
+      db.customers.length;
+
+
+  const values = [
+    58,
+    72,
+    61,
+    88,
+    77,
+    46,
+    66
+  ];
+
+
+  const days = [
+    "M",
+    "T",
+    "O",
+    "T",
+    "F",
+    "L",
+    "S"
+  ];
+
+
+  document
+    .getElementById(
+      "chart"
+    )
+    .innerHTML =
+
+      values
+        .map(
+          (
+            value,
+            index
+          ) => `
+
+            <div class="chartcol">
+
+              <i
+                style="
+                  height:${value}%;
+                ">
+              </i>
+
+              <span>
+                ${days[index]}
+              </span>
+
+            </div>
+
+          `
+        )
+        .join("");
+
+
+  const activities =
+    db.activity.length
+      ? db.activity
+      : [
+          {
+            text:
+              "Systemet startat",
+
+            time:
+              "nu"
+          }
+        ];
+
+
+  document
+    .getElementById(
+      "activity"
+    )
+    .innerHTML =
+
+      activities
+        .slice(-5)
+        .reverse()
+        .map(
+          activity => `
+
+            <div class="row">
+
+              <div>
+
+                <b>
+                  ${escapeHTML(
+                    activity.text
+                  )}
+                </b>
+
+                <div class="muted">
+                  ${escapeHTML(
+                    activity.time
+                  )}
+                </div>
+
+              </div>
+
+              <span class="badge">
+                OK
+              </span>
+
+            </div>
+
+          `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   RENDER TABLES
+   ===================================================== */
+
+function renderTables() {
+
+  document
+    .getElementById(
+      "companiesTable"
+    )
+    .innerHTML =
+
+      db.companies
+        .map(
+          company => `
+
+            <tr>
+
+              <td>
+                ${escapeHTML(
+                  company.name
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  company.org
+                )}
+              </td>
+
+              <td>
+                ${
+                  db.employees
+                    .filter(
+                      employee =>
+                        employee.company ===
+                        company.name
+                    )
+                    .length
+                }
+              </td>
+
+              <td>
+                ${
+                  db.projects
+                    .filter(
+                      project =>
+                        project.company ===
+                        company.name
+                    )
+                    .length
+                }
+              </td>
+
+              <td>
+
+                <span class="badge">
+                  ${escapeHTML(
+                    company.status
+                  )}
+                </span>
+
+              </td>
+
+              <td>
+
+                <button
+                  class="btn"
+                  onclick="
+                    removeItem(
+                      'companies',
+                      ${company.id}
+                    )
+                  ">
+
+                  Ta bort
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          `
+        )
+        .join("");
+
+
+  document
+    .getElementById(
+      "employeesTable"
+    )
+    .innerHTML =
+
+      db.employees
+        .map(
+          employee => `
+
+            <tr>
+
+              <td>
+                ${escapeHTML(
+                  employee.name
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  employee.company
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  employee.role
+                )}
+              </td>
+
+              <td>
+
+                <span class="badge">
+                  ${escapeHTML(
+                    employee.status
+                  )}
+                </span>
+
+              </td>
+
+              <td>
+                ${employee.week}
+              </td>
+
+              <td>
+
+                <button
+                  class="btn"
+                  onclick="
+                    removeItem(
+                      'employees',
+                      ${employee.id}
+                    )
+                  ">
+
+                  Ta bort
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          `
+        )
+        .join("");
+
+
+  document
+    .getElementById(
+      "projectsTable"
+    )
+    .innerHTML =
+
+      db.projects
+        .map(
+          project => `
+
+            <tr>
+
+              <td>
+                ${escapeHTML(
+                  project.code
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  project.name
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  project.company
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  project.place
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  project.manager
+                )}
+              </td>
+
+              <td>
+                ${project.hours}
+              </td>
+
+              <td>
+
+                <span class="badge">
+                  ${escapeHTML(
+                    project.status
+                  )}
+                </span>
+
+              </td>
+
+              <td>
+
+                <button
+                  class="btn"
+                  onclick="
+                    removeItem(
+                      'projects',
+                      ${project.id}
+                    )
+                  ">
+
+                  Ta bort
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   CARDS
+   ===================================================== */
+
+function renderCards() {
+
+  document
+    .getElementById(
+      "customersGrid"
+    )
+    .innerHTML =
+
+      db.customers
+        .map(
+          customer => `
+
+            <div class="card">
+
+              <h3>
+                ${escapeHTML(
+                  customer.name
+                )}
+              </h3>
+
+              <div class="muted">
+                ${escapeHTML(
+                  customer.city
+                )}
+              </div>
+
+              <div
+                class="trend"
+                style="
+                  margin-top:12px;
+                ">
+
+                ${customer.projects || 0}
+                projekt
+
+              </div>
+
+              <button
+                class="btn"
+                style="
+                  margin-top:12px;
+                "
+                onclick="
+                  removeItem(
+                    'customers',
+                    ${customer.id}
+                  )
+                ">
+
+                Ta bort
+
+              </button>
+
+            </div>
+
+          `
+        )
+        .join("");
+
+
+  document
+    .getElementById(
+      "workplacesGrid"
+    )
+    .innerHTML =
+
+      db.workplaces
+        .map(
+          workplace => `
+
+            <div class="card">
+
+              <h3>
+                ${escapeHTML(
+                  workplace.name
+                )}
+              </h3>
+
+              <div class="muted">
+                ${escapeHTML(
+                  workplace.address
+                )}
+              </div>
+
+              <span
+                class="badge"
+                style="
+                  margin-top:12px;
+                ">
+
+                ${escapeHTML(
+                  workplace.status
+                )}
+
+              </span>
+
+              <br>
+
+              <button
+                class="btn"
+                style="
+                  margin-top:12px;
+                "
+                onclick="
+                  removeItem(
+                    'workplaces',
+                    ${workplace.id}
+                  )
+                ">
+
+                Ta bort
+
+              </button>
+
+            </div>
+
+          `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   RENDER ALL
+   ===================================================== */
+
+function renderAll() {
+
+  renderTables();
+
+  renderCards();
+
+  renderDashboard();
+
+
+  if (
+    currentPage ===
+    "time"
+  ) {
+
+    renderTime();
+
+  }
+
+
+  if (
+    currentPage ===
+    "planning"
+  ) {
+
+    renderPlanning();
+
+  }
+
+
+  if (
+    currentPage ===
+    "reports"
+  ) {
+
+    renderReports();
+
+  }
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+   ===================================================== */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    character => ({
+
+      "&":
+        "&amp;",
+
+      "<":
+        "&lt;",
+
+      ">":
+        "&gt;",
+
+      '"':
+        "&quot;",
+
+      "'":
+        "&#039;"
+
+    }[character])
+  );
+
+}
+
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+
+function toast(
+  message
+) {
+
+  const element =
+    document
+      .getElementById(
+        "toast"
+      );
+
+
+  element.textContent =
+    message;
+
+
+  element.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () => {
+
+      element.classList.remove(
+        "show"
+      );
+
+    },
+    2200
+  );
+
+}
+
+
+/* =====================================================
+   MOBILE DRAWER
+   ===================================================== */
+
+function openDrawer() {
+
+  document
+    .getElementById(
+      "drawer"
+    )
+    .classList.add(
+      "open"
+    );
+
+
+  document
+    .getElementById(
+      "overlay"
+    )
+    .classList.add(
+      "open"
+    );
+
+}
+
+
+function closeDrawer() {
+
+  document
+    .getElementById(
+      "drawer"
+    )
+    .classList.remove(
+      "open"
+    );
+
+
+  document
+    .getElementById(
+      "overlay"
+    )
+    .classList.remove(
+      "open"
+    );
+
+}
+
 /* =====================================================
    ADD / CREATE FORMS
    ===================================================== */
@@ -1502,7 +5235,6 @@ function renderReports() {
 
 }
 
-
 /* =====================================================
    INITIALIZE
    ===================================================== */
@@ -1510,3 +5242,8 @@ function renderReports() {
 renderAll();
 
 startApplication();
+
+</script>
+
+</body>
+</html>
