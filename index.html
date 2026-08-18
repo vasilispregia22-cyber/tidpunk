@@ -3543,7 +3543,7 @@ function toggleCompanyAccess(id) {
 
             <b>
                 Vill du öppna åtkomsten för
-                "${esc(company.name)}" igen?
+                "${escapeHTML(company.name)}" igen?
             </b>
 
             <br><br>
@@ -3662,12 +3662,13 @@ function permanentDeleteCompany(id) {
                     <br><br>
 
                     <strong>
-                        ${esc(company.name)}
+                        ${escapeHTML(company.name)}
                     </strong>
 
                     <br>
+                    
+                    ${escapeHTML(company.org)}
 
-                    ${esc(company.org)}
 
                 </div>
 
