@@ -1,156 +1,222 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TIDPUNKT – Two Apps Demo v0.9</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TIDPUNKT</title>
 
 <style>
-*{box-sizing:border-box}
 
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:#f4f7f6;
-  color:#17231f
+/* =========================================================
+   TIDPUNKT DEMO v0.12
+   ORIGINAL DESIGN
+   ========================================================= */
+
+:root{
+  --bg:#f4f7f5;
+  --card:#ffffff;
+  --text:#17231f;
+  --muted:#718079;
+  --line:#e1e8e5;
+  --primary:#155c4a;
+  --primary-dark:#10231d;
+  --primary-light:#214a3d;
+  --danger:#b33b3b;
+  --warning:#765b00;
+  --warning-bg:#fff7df;
+  --success:#1f7658;
+  --shadow:0 18px 50px rgba(0,0,0,.07);
 }
 
-button,input{
-  font:inherit
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
 }
 
 button{
-  cursor:pointer
+  cursor:pointer;
 }
 
 .hidden{
-  display:none!important
+  display:none!important;
 }
 
 .screen{
-  min-height:100vh
+  min-height:100vh;
 }
 
 .login{
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:30px
+  padding:30px;
 }
 
 .login-card{
   width:min(460px,100%);
-  background:#fff;
-  border:1px solid #e1e8e5;
+  background:var(--card);
+  border:1px solid var(--line);
   border-radius:22px;
-  padding:28px;
-  box-shadow:0 18px 50px #00000012
+  padding:30px;
+  box-shadow:var(--shadow);
 }
 
 .logo{
   font-size:30px;
   font-weight:800;
-  letter-spacing:-1px
+  letter-spacing:-1px;
 }
 
-.muted{
-  color:#708079;
-  font-size:14px
+.sub{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
 }
 
 .choices{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
-  margin-top:22px
+  margin-top:22px;
 }
 
 .choice{
-  border:1px solid #dbe4e0;
+  border:1px solid var(--line);
   background:#fff;
   border-radius:16px;
   padding:22px 14px;
-  text-align:center
+  text-align:center;
+  transition:.15s;
 }
 
 .choice:hover{
   border-color:#79a995;
-  transform:translateY(-1px)
+  transform:translateY(-1px);
+}
+
+.choice.active{
+  border-color:var(--primary);
+  background:#f3f8f5;
 }
 
 .icon{
   font-size:32px;
   display:block;
-  margin-bottom:8px
+  margin-bottom:8px;
 }
 
 .field{
-  margin-top:14px
+  margin-top:14px;
 }
 
-label{
+.field label{
   display:block;
   font-size:13px;
   font-weight:700;
-  margin-bottom:6px
+  margin-bottom:6px;
 }
 
-input{
+.field input,
+.field select,
+.field textarea{
   width:100%;
   border:1px solid #d7e1dd;
   border-radius:11px;
   padding:12px;
-  background:#fff
-}
-
-.btn{
-  border:1px solid #d5e0dc;
   background:#fff;
-  border-radius:10px;
-  padding:10px 14px
+  color:var(--text);
+  outline:none;
 }
 
-.btn.primary{
-  background:#155c4a;
-  color:#fff;
-  border-color:#155c4a
-}
-
-.btn.danger{
-  color:#9a2929
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:#79a995;
+  box-shadow:0 0 0 3px rgba(21,92,74,.08);
 }
 
 .actions{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
-  margin-top:16px
+  margin-top:16px;
+}
+
+.btn{
+  border:1px solid #d5e0dc;
+  background:#fff;
+  color:var(--text);
+  border-radius:10px;
+  padding:10px 14px;
+  transition:.15s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:var(--primary);
+  color:#fff;
+  border-color:var(--primary);
+}
+
+.btn.danger{
+  color:var(--danger);
 }
 
 .notice{
   min-height:20px;
   margin-top:12px;
-  color:#9a2929;
-  font-size:13px
+  color:var(--danger);
+  font-size:13px;
 }
 
 .app{
   display:flex;
-  min-height:100vh
+  min-height:100vh;
 }
 
 .sidebar{
   width:245px;
-  background:#10231d;
+  background:var(--primary-dark);
   color:#fff;
   padding:22px 14px;
-  flex-shrink:0
+  flex-shrink:0;
 }
 
 .sidebar .brand{
   padding:4px 10px 22px;
   font-size:24px;
-  font-weight:800
+  font-weight:800;
 }
 
 .sidebar .mode{
@@ -158,7 +224,7 @@ input{
   color:#a8bbb4;
   padding:0 10px 14px;
   text-transform:uppercase;
-  letter-spacing:.08em
+  letter-spacing:.08em;
 }
 
 .nav button{
@@ -167,21 +233,21 @@ input{
   background:transparent;
   color:#dce8e3;
   text-align:left;
-  padding:12px 12px;
+  padding:12px;
   border-radius:10px;
-  margin:2px 0
+  margin:2px 0;
 }
 
 .nav button.active,
 .nav button:hover{
-  background:#214a3d;
-  color:#fff
+  background:var(--primary-light);
+  color:#fff;
 }
 
 .main{
   flex:1;
   padding:28px;
-  min-width:0
+  min-width:0;
 }
 
 .top{
@@ -189,48 +255,55 @@ input{
   justify-content:space-between;
   align-items:center;
   gap:16px;
-  margin-bottom:22px
+  margin-bottom:22px;
 }
 
 .top h1{
   margin:0;
-  font-size:28px
+  font-size:28px;
+}
+
+.app-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:14px
+  grid-template-columns:
+    repeat(4,minmax(0,1fr));
+  gap:14px;
 }
 
 .card{
   background:#fff;
-  border:1px solid #e0e8e5;
+  border:1px solid var(--line);
   border-radius:16px;
-  padding:18px
+  padding:18px;
 }
 
 .metric .label{
   font-size:13px;
-  color:#718079
+  color:var(--muted);
 }
 
 .metric .value{
   font-size:30px;
   font-weight:800;
-  margin-top:7px
+  margin-top:7px;
 }
 
 .grid2{
   display:grid;
   grid-template-columns:1.2fr .8fr;
   gap:14px;
-  margin-top:14px
+  margin-top:14px;
 }
 
 .table{
   width:100%;
-  border-collapse:collapse
+  border-collapse:collapse;
 }
 
 .table th,
@@ -238,7 +311,11 @@ input{
   padding:11px 8px;
   border-bottom:1px solid #e9efed;
   text-align:left;
-  font-size:13px
+  font-size:13px;
+}
+
+.table th{
+  font-weight:800;
 }
 
 .badge{
@@ -246,31 +323,108 @@ input{
   padding:5px 8px;
   border-radius:999px;
   background:#edf5f1;
-  font-size:11px
+  font-size:11px;
 }
 
-.error{
-  background:#fff5f5
+.badge.warning{
+  background:#fff7df;
+  color:#765b00;
 }
 
-.app-header{
+.badge.danger{
+  background:#fff0f0;
+  color:#9a2929;
+}
+
+.badge.success{
+  background:#edf7f2;
+  color:#1f7658;
+}
+
+.danger-box{
+  background:#fff0f0;
+  color:#8f2929;
+  border:1px solid #f0d2d2;
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+}
+
+.confirm-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
   display:flex;
   align-items:center;
-  gap:10px
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.confirm-box{
+  width:min(600px,100%);
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,.2);
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.empty{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.coupon-code{
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+.kpi-small{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.stat-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid #edf1ef;
+}
+
+.stat-row:last-child{
+  border-bottom:0;
 }
 
 @media(max-width:900px){
 
   .sidebar{
-    width:210px
+    width:210px;
   }
 
   .cards{
-    grid-template-columns:repeat(2,1fr)
+    grid-template-columns:
+      repeat(2,1fr);
   }
 
   .grid2{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
 }
@@ -278,41 +432,56 @@ input{
 @media(max-width:650px){
 
   .app{
-    display:block
+    display:block;
   }
 
   .sidebar{
     width:100%;
-    padding:12px
+    padding:12px;
   }
 
   .nav{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:4px
+    gap:4px;
   }
 
   .main{
-    padding:16px
+    padding:16px;
   }
 
   .cards{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .choices{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
+  }
+
+  .table{
+    min-width:650px;
+  }
+
+  .card{
+    overflow-x:auto;
   }
 
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- ================= PUBLIC APP LOGIN ================= -->
 
-<div id="publicLogin" class="screen login">
+<!-- =========================================================
+     LOGIN SCREEN
+     ========================================================= -->
+
+<div
+  id="loginScreen"
+  class="screen login"
+>
 
   <div class="login-card">
 
@@ -320,68 +489,78 @@ input{
       TIDPUNKT
     </div>
 
-    <p class="muted">
-      Välj inloggning
+    <p class="sub">
+      Välj hur du vill logga in.
     </p>
+
 
     <div class="choices">
 
       <button
-        class="choice"
-        onclick="choosePublic('company')"
+        id="catCompany"
+        class="choice active"
+        onclick="selectLoginCategory('company')"
       >
-        <span class="icon">🏢</span>
-        <b>Företag</b>
+
+        <span class="icon">
+          🏢
+        </span>
+
+        <b>
+          Företag
+        </b>
+
         <br>
-        <span class="muted">
+
+        <span class="sub">
           Företagsinloggning
         </span>
+
       </button>
 
+
       <button
+        id="catPrivate"
         class="choice"
-        onclick="choosePublic('employee')"
+        onclick="selectLoginCategory('private')"
       >
-        <span class="icon">👤</span>
-        <b>Anställd</b>
+
+        <span class="icon">
+          👤
+        </span>
+
+        <b>
+          Anställd
+        </b>
+
         <br>
-        <span class="muted">
+
+        <span class="sub">
           Medarbetarinloggning
         </span>
+
       </button>
 
     </div>
 
-    <!-- TEMPORARY DEMO ADMIN BUTTON -->
 
-    <div style="margin-top:14px">
+    <!-- COMPANY LOGIN -->
 
-      <button
-        class="btn"
-        style="width:100%;padding:12px"
-        onclick="openAdminApp()"
-      >
-        🔐 Admin App
-      </button>
-
-    </div>
-
-    <div
-      id="publicForm"
-      class="hidden"
-    >
+    <div id="companyLoginFields">
 
       <div class="field">
 
-        <label id="publicUserLabel">
+        <label>
           Användarnamn
         </label>
 
         <input
-          id="publicUser"
+          id="loginUser"
+          placeholder="Företag"
         >
 
       </div>
+
 
       <div class="field">
 
@@ -390,34 +569,104 @@ input{
         </label>
 
         <input
-          id="publicPass"
+          id="loginPass"
           type="password"
+          placeholder="Lösenord"
         >
 
       </div>
 
-      <div class="actions">
+    </div>
 
-        <button
-          class="btn primary"
-          onclick="publicLogin()"
-        >
-          Logga in
-        </button>
 
-        <button
-          class="btn"
-          onclick="resetPublic()"
+    <!-- EMPLOYEE LOGIN -->
+
+    <div
+      id="privateLoginFields"
+      style="display:none"
+    >
+
+      <div class="field">
+
+        <label>
+          Användarnamn
+        </label>
+
+        <input
+          id="privateUser"
+          placeholder="Användarnamn"
         >
-          Tillbaka
-        </button>
 
       </div>
 
-      <div
-        id="publicNotice"
-        class="notice"
-      ></div>
+
+      <div class="field">
+
+        <label>
+          Lösenord
+        </label>
+
+        <input
+          id="privatePass"
+          type="password"
+          placeholder="Lösenord"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="actions">
+
+      <button
+        class="btn primary"
+        onclick="login()"
+      >
+        Logga in
+      </button>
+
+
+      <button
+        id="companyRegisterButton"
+        class="btn"
+        onclick="openCompanyRegistration()"
+      >
+        🆕 Registrera företag
+      </button>
+
+    </div>
+
+
+    <div
+      id="loginNotice"
+      class="notice"
+      style="color:#718079"
+    >
+      Företag: demoanvändare
+      <b>nordic</b>,
+      lösenord
+      <b>123456</b>.
+    </div>
+
+
+    <!-- TEMPORARY DEMO ADMIN BUTTON -->
+
+    <div
+      style="
+        margin-top:14px;
+        padding-top:14px;
+        border-top:1px solid #edf1ef
+      "
+    >
+
+      <button
+        class="btn"
+        style="width:100%"
+        onclick="openAdminLogin()"
+      >
+        🔐 Admin App
+      </button>
 
     </div>
 
@@ -426,22 +675,26 @@ input{
 </div>
 
 
-<!-- ================= ADMIN APP LOGIN ================= -->
+<!-- =========================================================
+     ADMIN LOGIN
+     ========================================================= -->
 
 <div
-  id="adminLogin"
-  class="screen login hidden"
+  id="adminLoginScreen"
+  class="screen login"
+  style="display:none"
 >
 
   <div class="login-card">
 
     <div class="logo">
-      TIDPUNKT ADMIN
+      TIDPUNKT
     </div>
 
-    <p class="muted">
-      Admin App – säker åtkomst
+    <p class="sub">
+      Admin App
     </p>
+
 
     <div class="field">
 
@@ -452,9 +705,11 @@ input{
       <input
         id="adminUser"
         value="demo"
+        autocomplete="username"
       >
 
     </div>
+
 
     <div class="field">
 
@@ -465,9 +720,11 @@ input{
       <input
         id="adminPass"
         type="password"
+        autocomplete="current-password"
       >
 
     </div>
+
 
     <div class="actions">
 
@@ -478,38 +735,50 @@ input{
         Logga in
       </button>
 
+
       <button
         class="btn"
-        onclick="backToPublic()"
+        onclick="closeAdminLogin()"
       >
         Tillbaka
       </button>
 
     </div>
 
+
     <div
       id="adminNotice"
       class="notice"
     ></div>
 
-    <p
-      class="muted"
-      style="margin-top:16px"
+
+    <div
+      class="sub"
+      style="margin-top:14px"
     >
-      DEMO: demo / demo
-    </p>
+      DEMO:
+      <b>demo / demo</b>
+    </div>
 
   </div>
 
 </div>
 
 
-<!-- ================= ADMIN APP ================= -->
+<!-- =========================================================
+     MAIN APP
+     ========================================================= -->
 
 <div
-  id="adminApp"
-  class="app hidden"
+  id="mainApp"
+  class="app"
+  style="display:none"
 >
+
+
+  <!-- =======================================================
+       SIDEBAR
+       ======================================================= -->
 
   <aside class="sidebar">
 
@@ -518,75 +787,98 @@ input{
     </div>
 
     <div class="mode">
-      Admin App
+      Admin Control Center
     </div>
+
 
     <nav class="nav">
 
+
       <button
-        class="active"
-        data-page="adminDashboard"
-        onclick="adminPage('adminDashboard')"
+        data-p="dashboard"
+        onclick="show('dashboard')"
       >
         🏠 Dashboard
       </button>
 
+
       <button
-        data-page="companies"
-        onclick="adminPage('companies')"
+        data-p="companies"
+        onclick="show('companies')"
       >
         🏢 Företag
       </button>
 
+
       <button
-        data-page="subscriptions"
-        onclick="adminPage('subscriptions')"
+        data-p="subscriptions"
+        onclick="show('subscriptions')"
       >
         💳 Abonnemang
       </button>
 
+
       <button
-        data-page="errors"
-        onclick="adminPage('errors')"
+        data-p="coupons"
+        onclick="show('coupons')"
+      >
+        🎟️ Kuponger
+      </button>
+
+
+      <button
+        data-p="systemErrors"
+        onclick="show('systemErrors')"
       >
         ⚠️ Systemfel
       </button>
 
+
       <button
-        data-page="tools"
-        onclick="adminPage('tools')"
+        data-p="tools"
+        onclick="show('tools')"
       >
         🔧 Verktyg
       </button>
 
+
       <button
-        data-page="security"
-        onclick="adminPage('security')"
+        data-p="security"
+        onclick="show('security')"
       >
         🔐 Säkerhet
       </button>
 
+
       <button
-        data-page="logs"
-        onclick="adminPage('logs')"
+        data-p="logs"
+        onclick="show('logs')"
       >
         📋 Loggar
       </button>
 
+
       <button
-        data-page="system"
-        onclick="adminPage('system')"
+        data-p="system"
+        onclick="show('system')"
       >
         ⚙️ System
       </button>
 
+
     </nav>
+
 
     <div style="margin-top:20px">
 
       <button
         class="btn"
-        style="width:100%"
+        style="
+          width:100%;
+          color:#fff;
+          background:transparent;
+          border-color:#49645a
+        "
         onclick="logout()"
       >
         Logga ut
@@ -597,7 +889,12 @@ input{
   </aside>
 
 
+  <!-- =======================================================
+       MAIN CONTENT
+       ======================================================= -->
+
   <main class="main">
+
 
     <div class="top">
 
@@ -605,24 +902,24 @@ input{
 
         <div>
 
-          <h1 id="adminTitle">
-            Dashboard
+          <h1>
+            TIDPUNKT
           </h1>
 
           <div
-            class="muted"
-            id="adminSubtitle"
+            id="crumb"
+            class="sub"
           >
-            Kort översikt.
+            Admin / Dashboard
           </div>
 
         </div>
 
       </div>
 
+
       <span
         class="badge"
-        id="roleBadge"
       >
         ADMIN
       </span>
@@ -630,14 +927,17 @@ input{
     </div>
 
 
-    <!-- ================= DASHBOARD ================= -->
+    <!-- =====================================================
+         DASHBOARD
+         ===================================================== -->
 
     <section
-      id="adminDashboard"
-      class="admin-page"
+      id="dashboard"
+      class="page"
     >
 
       <div class="cards">
+
 
         <div class="card metric">
 
@@ -645,8 +945,11 @@ input{
             🏢 Totalt företag
           </div>
 
-          <div class="value">
-            3
+          <div
+            id="dashTotalCompanies"
+            class="value"
+          >
+            0
           </div>
 
         </div>
@@ -658,8 +961,11 @@ input{
             💳 Aktiva abonnemang
           </div>
 
-          <div class="value">
-            2
+          <div
+            id="dashActiveSubscriptions"
+            class="value"
+          >
+            0
           </div>
 
         </div>
@@ -671,8 +977,11 @@ input{
             ⚠️ Obetalda abonnemang
           </div>
 
-          <div class="value">
-            1
+          <div
+            id="dashUnpaidSubscriptions"
+            class="value"
+          >
+            0
           </div>
 
         </div>
@@ -684,16 +993,85 @@ input{
             🟢 Aktiva företag
           </div>
 
-          <div class="value">
-            3
+          <div
+            id="dashActiveCompanies"
+            class="value"
+          >
+            0
           </div>
 
         </div>
+
+
+        <div class="card metric">
+
+          <div class="label">
+            🎟️ Kuponger använda
+          </div>
+
+          <div
+            id="dashCouponsUsed"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="card metric">
+
+          <div class="label">
+            ⏳ Kuponger utgångna
+          </div>
+
+          <div
+            id="dashCouponsExpired"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="card metric">
+
+          <div class="label">
+            🎟️ Aktiva kuponger
+          </div>
+
+          <div
+            id="dashActiveCoupons"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="card metric">
+
+          <div class="label">
+            ♾️ Permanenta kuponger
+          </div>
+
+          <div
+            id="dashPermanentCoupons"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
 
       </div>
 
 
       <div class="grid2">
+
 
         <div class="card">
 
@@ -701,60 +1079,36 @@ input{
             ⚠️ Systemfel
           </h3>
 
-          <p class="muted">
-            2 fel kräver uppmärksamhet.
+          <p class="sub">
+            Problem som behöver uppmärksamhet.
           </p>
 
           <table class="table">
 
-            <tr>
-              <th>Företag</th>
-              <th>Fel</th>
-              <th></th>
-            </tr>
+            <thead>
 
-            <tr>
-              <td>
-                Nordic Städ AB
-              </td>
+              <tr>
 
-              <td>
-                TIME-102
-              </td>
+                <th>
+                  Företag
+                </th>
 
-              <td>
-                <button
-                  class="btn"
-                  onclick="adminPage('errors')"
-                >
-                  Visa
-                </button>
-              </td>
+                <th>
+                  Fel
+                </th>
 
-            </tr>
+                <th>
+                  Status
+                </th>
 
-            <tr>
+              </tr>
 
-              <td>
-                Gävle Projekt AB
-              </td>
+            </thead>
 
-              <td>
-                AUTH-201
-              </td>
 
-              <td>
+            <tbody id="dashboardErrors">
 
-                <button
-                  class="btn"
-                  onclick="adminPage('errors')"
-                >
-                  Visa
-                </button>
-
-              </td>
-
-            </tr>
+            </tbody>
 
           </table>
 
@@ -771,6 +1125,46 @@ input{
             Alla system fungerar normalt.
           </p>
 
+
+          <div class="stat-row">
+
+            <span>
+              Företag
+            </span>
+
+            <b id="systemCompanyCount">
+              0
+            </b>
+
+          </div>
+
+
+          <div class="stat-row">
+
+            <span>
+              Aktiva företag
+            </span>
+
+            <b id="systemActiveCount">
+              0
+            </b>
+
+          </div>
+
+
+          <div class="stat-row">
+
+            <span>
+              Aktiva kuponger
+            </span>
+
+            <b id="systemCouponCount">
+              0
+            </b>
+
+          </div>
+
+
         </div>
 
       </div>
@@ -778,134 +1172,80 @@ input{
     </section>
 
 
-    <!-- ================= FÖRETAG ================= -->
+    <!-- =====================================================
+         COMPANIES
+         ===================================================== -->
 
     <section
       id="companies"
-      class="admin-page hidden"
+      class="page"
     >
 
       <div class="card">
 
-        <h3>
-          Företag
-        </h3>
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-bottom:14px
+          "
+        >
+
+          <div>
+
+            <h2 style="margin:0">
+              Företag
+            </h2>
+
+            <div class="sub">
+              Företag som använder TIDPUNKT.
+            </div>
+
+          </div>
+
+        </div>
+
 
         <table class="table">
 
-          <tr>
+          <thead>
 
-            <th>
-              Företag
-            </th>
+            <tr>
 
-            <th>
-              Anställda
-            </th>
+              <th>
+                Företag
+              </th>
 
-            <th>
-              Status
-            </th>
+              <th>
+                Org.nr
+              </th>
 
-            <th></th>
+              <th>
+                Anställda
+              </th>
 
-          </tr>
+              <th>
+                Abonnemang
+              </th>
 
+              <th>
+                Status
+              </th>
 
-          <tr>
+              <th>
+                Åtgärd
+              </th>
 
-            <td>
-              Nordic Städ AB
-            </td>
+            </tr>
 
-            <td>
-              12 / 30
-            </td>
-
-            <td>
-              🟢 Aktiv
-            </td>
-
-            <td>
-
-              <button
-                class="btn"
-                onclick="companyDetails(
-                  'Nordic Städ AB',
-                  '12 / 30',
-                  '600 kr/mån'
-                )"
-              >
-                Öppna
-              </button>
-
-            </td>
-
-          </tr>
+          </thead>
 
 
-          <tr>
-
-            <td>
-              Uppsala Service AB
-            </td>
-
-            <td>
-              9 / 30
-            </td>
-
-            <td>
-              🟢 Aktiv
-            </td>
-
-            <td>
-
-              <button
-                class="btn"
-                onclick="companyDetails(
-                  'Uppsala Service AB',
-                  '9 / 30',
-                  '600 kr/mån'
-                )"
-              >
-                Öppna
-              </button>
-
-            </td>
-
-          </tr>
-
-
-          <tr>
-
-            <td>
-              Gävle Projekt AB
-            </td>
-
-            <td>
-              6 / 30
-            </td>
-
-            <td>
-              🟢 Aktiv
-            </td>
-
-            <td>
-
-              <button
-                class="btn"
-                onclick="companyDetails(
-                  'Gävle Projekt AB',
-                  '6 / 30',
-                  '600 kr/mån'
-                )"
-              >
-                Öppna
-              </button>
-
-            </td>
-
-          </tr>
+          <tbody
+            id="companiesTable"
+          ></tbody>
 
         </table>
 
@@ -914,103 +1254,60 @@ input{
     </section>
 
 
-    <!-- ================= ABONNEMANG ================= -->
+    <!-- =====================================================
+         SUBSCRIPTIONS
+         ===================================================== -->
 
     <section
       id="subscriptions"
-      class="admin-page hidden"
+      class="page"
     >
 
       <div class="card">
 
-        <h3>
+        <h2>
           Abonnemang
-        </h3>
+        </h2>
+
+        <div class="sub">
+          Paket och betalningsstatus.
+        </div>
+
 
         <table class="table">
 
-          <tr>
+          <thead>
 
-            <th>
-              Företag
-            </th>
+            <tr>
 
-            <th>
-              Paket
-            </th>
+              <th>
+                Företag
+              </th>
 
-            <th>
-              Pris
-            </th>
+              <th>
+                Paket
+              </th>
 
-            <th>
-              Status
-            </th>
+              <th>
+                Pris
+              </th>
 
-          </tr>
+              <th>
+                Status
+              </th>
 
+              <th>
+                Kupong
+              </th>
 
-          <tr>
+            </tr>
 
-            <td>
-              Nordic Städ AB
-            </td>
-
-            <td>
-              30 anställda
-            </td>
-
-            <td>
-              600 kr/mån
-            </td>
-
-            <td>
-              🟢 Aktiv
-            </td>
-
-          </tr>
+          </thead>
 
 
-          <tr>
-
-            <td>
-              Uppsala Service AB
-            </td>
-
-            <td>
-              30 anställda
-            </td>
-
-            <td>
-              600 kr/mån
-            </td>
-
-            <td>
-              ⚠️ Obetald
-            </td>
-
-          </tr>
-
-
-          <tr>
-
-            <td>
-              Gävle Projekt AB
-            </td>
-
-            <td>
-              30 anställda
-            </td>
-
-            <td>
-              600 kr/mån
-            </td>
-
-            <td>
-              🟢 Aktiv
-            </td>
-
-          </tr>
+          <tbody
+            id="subscriptionsTable"
+          ></tbody>
 
         </table>
 
@@ -1019,106 +1316,155 @@ input{
     </section>
 
 
-    <!-- ================= SYSTEMFEL ================= -->
+    <!-- =====================================================
+         COUPONS
+         ===================================================== -->
 
     <section
-      id="errors"
-      class="admin-page hidden"
+      id="coupons"
+      class="page"
     >
 
-      <div class="card">
+      <div
+        class="top"
+        style="margin-bottom:14px"
+      >
 
-        <h3>
-          ⚠️ Systemfel
-        </h3>
+        <div>
+
+          <h2 style="margin:0">
+            🎟️ Kuponger
+          </h2>
+
+          <div class="sub">
+            Skapa och hantera gratispass.
+          </div>
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          onclick="openCreateCoupon()"
+        >
+          + Skapa kupong
+        </button>
+
+      </div>
+
+
+      <div class="cards">
+
+
+        <div class="card metric">
+
+          <div class="label">
+            Aktiva
+          </div>
+
+          <div
+            id="couponActiveCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="card metric">
+
+          <div class="label">
+            Använda
+          </div>
+
+          <div
+            id="couponUsedCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="card metric">
+
+          <div class="label">
+            Utgångna
+          </div>
+
+          <div
+            id="couponExpiredCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="card metric">
+
+          <div class="label">
+            Permanenta
+          </div>
+
+          <div
+            id="couponPermanentCount"
+            class="value"
+          >
+            0
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="card"
+        style="margin-top:14px"
+      >
 
         <table class="table">
 
-          <tr>
+          <thead>
 
-            <th>
-              Företag
-            </th>
+            <tr>
 
-            <th>
-              Kod
-            </th>
+              <th>
+                Kod
+              </th>
 
-            <th>
-              Orsak
-            </th>
+              <th>
+                Typ
+              </th>
 
-            <th>
-              Status
-            </th>
+              <th>
+                Användningar
+              </th>
 
-            <th></th>
+              <th>
+                Status
+              </th>
 
-          </tr>
+              <th>
+                Företag
+              </th>
 
+              <th>
+                Åtgärd
+              </th>
 
-          <tr>
+            </tr>
 
-            <td>
-              Nordic Städ AB
-            </td>
-
-            <td>
-              TIME-102
-            </td>
-
-            <td>
-              Tidrapport kunde inte sparas
-            </td>
-
-            <td>
-              Pågående
-            </td>
-
-            <td>
-
-              <button
-                class="btn primary"
-                onclick="repair(this)"
-              >
-                Åtgärda
-              </button>
-
-            </td>
-
-          </tr>
+          </thead>
 
 
-          <tr>
-
-            <td>
-              Gävle Projekt AB
-            </td>
-
-            <td>
-              AUTH-201
-            </td>
-
-            <td>
-              Session kunde inte verifieras
-            </td>
-
-            <td>
-              Pågående
-            </td>
-
-            <td>
-
-              <button
-                class="btn primary"
-                onclick="repair(this)"
-              >
-                Åtgärda
-              </button>
-
-            </td>
-
-          </tr>
+          <tbody
+            id="couponsTable"
+          ></tbody>
 
         </table>
 
@@ -1127,14 +1473,77 @@ input{
     </section>
 
 
-    <!-- ================= VERKTYG ================= -->
+    <!-- =====================================================
+         SYSTEM ERRORS
+         ===================================================== -->
+
+    <section
+      id="systemErrors"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2>
+          ⚠️ Systemfel
+        </h2>
+
+        <div class="sub">
+          Problem och åtgärder.
+        </div>
+
+
+        <table class="table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Företag
+              </th>
+
+              <th>
+                Kod
+              </th>
+
+              <th>
+                Orsak
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th></th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody
+            id="errorsTable"
+          ></tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TOOLS
+         ===================================================== -->
 
     <section
       id="tools"
-      class="admin-page hidden"
+      class="page"
     >
 
       <div class="cards">
+
 
         <div class="card">
 
@@ -1142,15 +1551,17 @@ input{
             🔍 Diagnostik
           </h3>
 
-          <p class="muted">
+          <p class="sub">
             Kontrollera systemet.
           </p>
 
           <button
             class="btn primary"
-            onclick="toast(
-              'Diagnostik klar – inga kritiska fel.'
-            )"
+            onclick="
+              toast(
+                'Diagnostik klar – inga kritiska fel.'
+              )
+            "
           >
             Kör diagnostik
           </button>
@@ -1164,43 +1575,48 @@ input{
             🔧 Reparationskontroll
           </h3>
 
-          <p class="muted">
-            Kontrollera om automatiska
-            reparationer finns.
+          <p class="sub">
+            Kontrollera automatiska reparationer.
           </p>
 
           <button
             class="btn primary"
-            onclick="toast(
-              'Reparationskontroll klar.'
-            )"
+            onclick="
+              toast(
+                'Reparationskontroll klar.'
+              )
+            "
           >
             Kontrollera
           </button>
 
         </div>
 
+
       </div>
 
     </section>
 
 
-    <!-- ================= SÄKERHET ================= -->
+    <!-- =====================================================
+         SECURITY
+         ===================================================== -->
 
     <section
       id="security"
-      class="admin-page hidden"
+      class="page"
     >
 
       <div class="card">
 
-        <h3>
+        <h2>
           🔐 Säkerhet
-        </h3>
+        </h2>
 
-        <p>
+        <div class="sub">
           Admin accounts och permissions.
-        </p>
+        </div>
+
 
         <div class="actions">
 
@@ -1216,67 +1632,81 @@ input{
 
         <table class="table">
 
-          <tr>
+          <thead>
 
-            <th>
-              Admin
-            </th>
+            <tr>
 
-            <th>
-              Roll
-            </th>
+              <th>
+                Admin
+              </th>
 
-            <th>
-              Status
-            </th>
+              <th>
+                Roll
+              </th>
 
-            <th>
-              Permissions
-            </th>
+              <th>
+                Status
+              </th>
 
-          </tr>
+              <th>
+                Permissions
+              </th>
 
+            </tr>
 
-          <tr>
-
-            <td>
-              Elson
-            </td>
-
-            <td>
-              OWNER
-            </td>
-
-            <td>
-              🟢 Aktiv
-            </td>
-
-            <td>
-              ALL
-            </td>
-
-          </tr>
+          </thead>
 
 
-          <tr>
+          <tbody>
 
-            <td>
-              Maria
-            </td>
+            <tr>
 
-            <td>
-              ADMIN
-            </td>
+              <td>
+                Elson
+              </td>
 
-            <td>
-              🟢 Aktiv
-            </td>
+              <td>
+                OWNER
+              </td>
 
-            <td>
-              Dashboard, Företag, Systemfel
-            </td>
+              <td>
+                <span class="badge success">
+                  Aktiv
+                </span>
+              </td>
 
-          </tr>
+              <td>
+                ALL
+              </td>
+
+            </tr>
+
+
+            <tr>
+
+              <td>
+                Maria
+              </td>
+
+              <td>
+                ADMIN
+              </td>
+
+              <td>
+                <span class="badge success">
+                  Aktiv
+                </span>
+              </td>
+
+              <td>
+                Dashboard,
+                Företag,
+                Systemfel
+              </td>
+
+            </tr>
+
+          </tbody>
 
         </table>
 
@@ -1285,70 +1715,52 @@ input{
     </section>
 
 
-    <!-- ================= LOGGAR ================= -->
+    <!-- =====================================================
+         LOGS
+         ===================================================== -->
 
     <section
       id="logs"
-      class="admin-page hidden"
+      class="page"
     >
 
       <div class="card">
 
-        <h3>
+        <h2>
           📋 Loggar
-        </h3>
+        </h2>
+
+        <div class="sub">
+          Admin- och systemhändelser.
+        </div>
+
 
         <table class="table">
 
-          <tr>
+          <thead>
 
-            <th>
-              Tid
-            </th>
+            <tr>
 
-            <th>
-              Åtgärd
-            </th>
+              <th>
+                Tid
+              </th>
 
-            <th>
-              Resultat
-            </th>
+              <th>
+                Åtgärd
+              </th>
 
-          </tr>
+              <th>
+                Resultat
+              </th>
 
+            </tr>
 
-          <tr>
-
-            <td>
-              19/08/2026 18:30
-            </td>
-
-            <td>
-              Admin login
-            </td>
-
-            <td>
-              Success
-            </td>
-
-          </tr>
+          </thead>
 
 
-          <tr>
-
-            <td>
-              19/08/2026 18:35
-            </td>
-
-            <td>
-              Systemfel TIME-102
-            </td>
-
-            <td>
-              Pending
-            </td>
-
-          </tr>
+          <tbody
+            id="logsTable"
+          ></tbody>
 
         </table>
 
@@ -1357,14 +1769,17 @@ input{
     </section>
 
 
-    <!-- ================= SYSTEM ================= -->
+    <!-- =====================================================
+         SYSTEM
+         ===================================================== -->
 
     <section
       id="system"
-      class="admin-page hidden"
+      class="page"
     >
 
       <div class="grid2">
+
 
         <div class="card">
 
@@ -1386,11 +1801,17 @@ input{
           </h3>
 
           <p>
-            <b>v0.8.0</b> – Aktuell
+            <b>
+              v0.12.0
+            </b>
+            – Aktuell
           </p>
 
           <p>
-            <b>v0.7.0</b> – Senaste stabila
+            <b>
+              v0.11.0
+            </b>
+            – Senaste stabila
           </p>
 
         </div>
@@ -1407,26 +1828,37 @@ input{
           🛟 Backup & Restore
         </h3>
 
-        <p class="muted">
+        <p class="sub">
           Senaste backup:
           19/08/2026 18:20
         </p>
+
 
         <div class="actions">
 
           <button
             class="btn primary"
-            onclick="toast('Backup skapad.')"
+            onclick="
+              toast(
+                'Backup skapad.'
+              )
+            "
           >
             Skapa backup
           </button>
 
+
           <button
             class="btn"
-            onclick="toast('Backup-historik öppnad.')"
+            onclick="
+              toast(
+                'Backup-historik öppnad.'
+              )
+            "
           >
             Visa backup
           </button>
+
 
           <button
             class="btn danger"
@@ -1440,6 +1872,7 @@ input{
       </div>
 
     </section>
+
 
   </main>
 
@@ -1457,291 +1890,3279 @@ input{
     color:#fff;
     padding:12px 16px;
     border-radius:12px;
-    box-shadow:0 10px 30px #0003
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    z-index:10000
   "
 ></div>
 
 
 <script>
 
-let publicMode="company";
+/* =========================================================
+   DATA
+   ========================================================= */
 
-let adminUser="";
+let C = [
 
+  {
+    id:1,
+    name:"Nordic Städ AB",
+    org:"559001-1234",
+    contact:"Anna Andersson",
+    email:"anna@nordic.se",
+    username:"nordic",
+    password:"123456",
+    employees:"12",
+    projects:"3",
+    status:"Aktiv",
+    subscription:"Active",
+    subscriptionPrice:600,
+    couponCode:"",
+    couponType:"",
+    couponGrantedAt:null,
+    trialEndsAt:null
+  },
 
-function choosePublic(mode){
+  {
+    id:2,
+    name:"Uppsala Service AB",
+    org:"559002-1234",
+    contact:"Erik Svensson",
+    email:"erik@uppsala.se",
+    username:"uppsala",
+    password:"123456",
+    employees:"9",
+    projects:"2",
+    status:"Aktiv",
+    subscription:"Unpaid",
+    subscriptionPrice:600,
+    couponCode:"",
+    couponType:"",
+    couponGrantedAt:null,
+    trialEndsAt:null
+  },
 
-  publicMode=mode;
-
-  document
-    .getElementById("publicForm")
-    .classList
-    .remove("hidden");
-
-  document
-    .getElementById("publicUser")
-    .value="";
-
-  document
-    .getElementById("publicPass")
-    .value="";
-
-  document
-    .getElementById("publicUser")
-    .placeholder=
-      mode==="company"
-      ?"nordic"
-      :"anna";
-
-  document
-    .getElementById("publicNotice")
-    .textContent="";
-
-}
-
-
-function resetPublic(){
-
-  document
-    .getElementById("publicForm")
-    .classList
-    .add("hidden");
-
-  document
-    .getElementById("publicNotice")
-    .textContent="";
-
-}
-
-
-function publicLogin(){
-
-  const u=
-    document
-      .getElementById("publicUser")
-      .value
-      .trim()
-      .toLowerCase();
-
-  const p=
-    document
-      .getElementById("publicPass")
-      .value;
-
-  const ok=
-    publicMode==="company"
-    ?
-    (u==="nordic" && p==="123456")
-    :
-    (u==="anna" && p==="demo");
-
-  if(!ok){
-
-    document
-      .getElementById("publicNotice")
-      .textContent=
-        "Fel användarnamn eller lösenord.";
-
-    return;
-
+  {
+    id:3,
+    name:"Gävle Projekt AB",
+    org:"559003-1234",
+    contact:"Maria Larsson",
+    email:"maria@gavle.se",
+    username:"gavle",
+    password:"123456",
+    employees:"6",
+    projects:"1",
+    status:"Aktiv",
+    subscription:"Active",
+    subscriptionPrice:600,
+    couponCode:"",
+    couponType:"",
+    couponGrantedAt:null,
+    trialEndsAt:null
   }
 
-  alert(
-    publicMode==="company"
-    ?
-    "Företag-inloggning fungerar i DEMO."
-    :
-    "Anställd-inloggning fungerar i DEMO."
+];
+
+
+let COUPONS = [
+
+  {
+    id:1,
+    code:"PARTNER30",
+    type:"30 dagar",
+    maxUses:5,
+    used:1,
+    active:true,
+    createdAt:"2026-08-19T18:00:00",
+    uses:[
+      {
+        company:"Demo Partner AB",
+        date:"2026-08-19"
+      }
+    ]
+  },
+
+  {
+    id:2,
+    code:"PARTNERFREE",
+    type:"Permanent",
+    maxUses:1,
+    used:0,
+    active:true,
+    createdAt:"2026-08-19T18:00:00",
+    uses:[]
+  },
+
+  {
+    id:3,
+    code:"WELCOME30",
+    type:"30 dagar",
+    maxUses:1,
+    used:1,
+    active:false,
+    createdAt:"2026-08-01T18:00:00",
+    uses:[
+      {
+        company:"Old Demo AB",
+        date:"2026-08-01"
+      }
+    ]
+  }
+
+];
+
+
+const SYSTEM_ERRORS = [
+
+  {
+    company:"Nordic Städ AB",
+    code:"TIME-102",
+    reason:"Tidrapport kunde inte sparas",
+    status:"Pågående"
+  },
+
+  {
+    company:"Gävle Projekt AB",
+    code:"AUTH-201",
+    reason:"Session kunde inte verifieras",
+    status:"Pågående"
+  }
+
+];
+
+
+const LOGS = [
+
+  {
+    time:"19/08/2026 18:30",
+    action:"Admin login",
+    result:"Success"
+  },
+
+  {
+    time:"19/08/2026 18:35",
+    action:"Systemfel TIME-102",
+    result:"Pending"
+  },
+
+  {
+    time:"19/08/2026 18:40",
+    action:"Coupon PARTNER30",
+    result:"Used"
+  }
+
+];
+
+
+const crumbs={
+
+  dashboard:"Admin / Dashboard",
+
+  companies:"Admin / Företag",
+
+  subscriptions:"Admin / Abonnemang",
+
+  coupons:"Admin / Kuponger",
+
+  systemErrors:"Admin / Systemfel",
+
+  tools:"Admin / Verktyg",
+
+  security:"Admin / Säkerhet",
+
+  logs:"Admin / Loggar",
+
+  system:"Admin / System"
+
+};
+
+
+/* =========================================================
+   PERMISSIONS
+   ========================================================= */
+
+const PERMISSIONS={
+
+  admin:[
+
+    "dashboard",
+
+    "companies",
+
+    "subscriptions",
+
+    "coupons",
+
+    "systemErrors",
+
+    "tools",
+
+    "security",
+
+    "logs",
+
+    "system"
+
+  ],
+
+  company:[
+
+    "dashboard",
+
+    "employees",
+
+    "projects",
+
+    "customers",
+
+    "workplaces",
+
+    "time",
+
+    "planning",
+
+    "reports"
+
+  ],
+
+  private:[
+
+    "dashboard",
+
+    "time",
+
+    "planning",
+
+    "reports"
+
+  ]
+
+};
+
+
+const PRIVATE_USERS=[
+
+  {
+    username:"privat",
+    password:"demo",
+    name:"Privat användare"
+  }
+
+];
+
+
+let loginCategory="company";
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+function saveCompanies(){
+
+  localStorage.setItem(
+    "tidpunkt_companies_v12",
+    JSON.stringify(C)
   );
 
 }
 
 
-function openAdminApp(){
+function loadCompanies(){
 
-  document
-    .getElementById("publicLogin")
-    .classList
-    .add("hidden");
+  try{
 
-  document
-    .getElementById("adminLogin")
-    .classList
-    .remove("hidden");
+    const saved=
+      localStorage.getItem(
+        "tidpunkt_companies_v12"
+      );
 
-}
+    if(saved){
 
+      C=
+        JSON.parse(saved);
 
-function backToPublic(){
+    }
 
-  document
-    .getElementById("adminLogin")
-    .classList
-    .add("hidden");
+  }catch(e){
 
-  document
-    .getElementById("publicLogin")
-    .classList
-    .remove("hidden");
+    console.log(
+      "Company storage error",
+      e
+    );
+
+  }
 
 }
 
 
-function adminLogin(){
+function saveCoupons(){
 
-  const u=
-    document
-      .getElementById("adminUser")
-      .value
-      .trim()
-      .toLowerCase();
+  localStorage.setItem(
+    "tidpunkt_coupons_v12",
+    JSON.stringify(COUPONS)
+  );
 
-  const p=
-    document
-      .getElementById("adminPass")
-      .value;
+}
+
+
+function loadCoupons(){
+
+  try{
+
+    const saved=
+      localStorage.getItem(
+        "tidpunkt_coupons_v12"
+      );
+
+    if(saved){
+
+      COUPONS=
+        JSON.parse(saved);
+
+    }
+
+  }catch(e){
+
+    console.log(
+      "Coupon storage error",
+      e
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTH STORAGE
+   ========================================================= */
+
+function getAuth(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        "tidpunkt_auth_v2"
+      )
+
+      ||
+
+      localStorage.getItem(
+        "tidpunkt_auth"
+      )
+
+      ||
+
+      "null"
+
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function setAuth(auth){
+
+  localStorage.setItem(
+    "tidpunkt_auth_v2",
+    JSON.stringify(auth)
+  );
+
+  localStorage.removeItem(
+    "tidpunkt_auth"
+  );
+
+}
+
+
+function clearAuth(){
+
+  localStorage.removeItem(
+    "tidpunkt_auth_v2"
+  );
+
+  localStorage.removeItem(
+    "tidpunkt_auth"
+  );
+
+}
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function formatDate(date){
+
+  if(!date)
+    return "-";
+
+  const d=
+    new Date(date);
 
   if(
-    (u==="demo" || u==="admin")
-    &&
-    p==="demo"
+    Number.isNaN(
+      d.getTime()
+    )
+  )
+    return "-";
+
+  return d.toLocaleDateString(
+    "sv-SE"
+  );
+
+}
+
+
+function toast(msg){
+
+  const t=
+    document.getElementById(
+      "toast"
+    );
+
+  t.textContent=
+    msg;
+
+  t.classList.remove(
+    "hidden"
+  );
+
+  clearTimeout(
+    window._toast
+  );
+
+  window._toast=
+    setTimeout(
+      ()=>{
+        t.classList.add(
+          "hidden"
+        );
+      },
+      2500
+    );
+
+}
+
+
+function isCouponExpired(coupon){
+
+  if(!coupon)
+    return false;
+
+  if(coupon.type!=="30 dagar")
+    return false;
+
+  if(!coupon.expiresAt)
+    return false;
+
+  return(
+    new Date(coupon.expiresAt)
+    <
+    new Date()
+  );
+
+}
+
+
+function couponUsesAvailable(coupon){
+
+  if(!coupon)
+    return false;
+
+  return(
+    Number(coupon.used || 0)
+    <
+    Number(coupon.maxUses || 0)
+  );
+
+}
+
+
+function findValidCoupon(code){
+
+  const normalized=
+    String(code || "")
+      .trim()
+      .toUpperCase();
+
+  if(!normalized)
+    return null;
+
+  const coupon=
+    COUPONS.find(
+      c =>
+        String(c.code)
+          .toUpperCase()
+          ===
+        normalized
+    );
+
+  if(!coupon)
+    return null;
+
+  if(!coupon.active)
+    return null;
+
+  if(
+    isCouponExpired(coupon)
+  )
+    return null;
+
+  if(
+    !couponUsesAvailable(coupon)
+  )
+    return null;
+
+  return coupon;
+
+}
+
+
+/* =========================================================
+   LOGIN CATEGORY
+   ========================================================= */
+
+function selectLoginCategory(category){
+
+  loginCategory=
+    category;
+
+
+  document
+    .getElementById("catCompany")
+    .classList
+    .toggle(
+      "active",
+      category==="company"
+    );
+
+
+  document
+    .getElementById("catPrivate")
+    .classList
+    .toggle(
+      "active",
+      category==="private"
+    );
+
+
+  document
+    .getElementById(
+      "companyLoginFields"
+    )
+    .style
+    .display=
+      category==="company"
+      ?
+      "block"
+      :
+      "none";
+
+
+  document
+    .getElementById(
+      "privateLoginFields"
+    )
+    .style
+    .display=
+      category==="private"
+      ?
+      "block"
+      :
+      "none";
+
+
+  document
+    .getElementById(
+      "companyRegisterButton"
+    )
+    .style
+    .display=
+      category==="company"
+      ?
+      "block"
+      :
+      "none";
+
+
+  document
+    .getElementById(
+      "loginNotice"
+    )
+    .innerHTML=
+
+      category==="company"
+
+      ?
+
+      'Företag: demoanvändare <b>nordic</b>, lösenord <b>123456</b>.'
+
+      :
+
+      'Anställd demo: användare <b>privat</b>, lösenord <b>demo</b>.';
+
+}
+
+
+/* =========================================================
+   LOGIN SCREEN
+   ========================================================= */
+
+function showLogin(){
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .style
+    .display="flex";
+
+
+  document
+    .getElementById(
+      "adminLoginScreen"
+    )
+    .style
+    .display="none";
+
+
+  document
+    .getElementById(
+      "mainApp"
+    )
+    .style
+    .display="none";
+
+}
+
+
+function openAdminLogin(){
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .style
+    .display="none";
+
+
+  document
+    .getElementById(
+      "adminLoginScreen"
+    )
+    .style
+    .display="flex";
+
+
+  document
+    .getElementById(
+      "adminUser"
+    )
+    .focus();
+
+}
+
+
+function closeAdminLogin(){
+
+  showLogin();
+
+}
+
+
+/* =========================================================
+   MAIN LOGIN
+   ========================================================= */
+
+function login(){
+
+  const note=
+    document.getElementById(
+      "loginNotice"
+    );
+
+
+  /* COMPANY */
+
+  if(
+    loginCategory==="company"
   ){
 
-    adminUser=u;
+    const username=
+      document
+        .getElementById(
+          "loginUser"
+        )
+        .value
+        .trim()
+        .toLowerCase();
 
-    document
-      .getElementById("adminLogin")
-      .classList
-      .add("hidden");
 
-    document
-      .getElementById("adminApp")
-      .classList
-      .remove("hidden");
+    const password=
+      document
+        .getElementById(
+          "loginPass"
+        )
+        .value;
 
-    adminPage("adminDashboard");
 
-    document
-      .getElementById("roleBadge")
-      .textContent=
-        u==="demo"
-        ?"OWNER"
-        :"ADMIN";
+    const c=
+      C.find(
+        x =>
+          String(
+            x.username
+          )
+          .toLowerCase()
+          ===
+          username
+
+          &&
+
+          x.password===
+          password
+      );
+
+
+    if(!c){
+
+      note.textContent=
+        "Fel användarnamn eller lösenord.";
+
+      return;
+
+    }
+
+
+    if(
+      c.status==="Avstängd"
+    ){
+
+      note.textContent=
+        "Företagets åtkomst är avstängd av administratören.";
+
+      return;
+
+    }
+
+
+    if(
+      c.subscription!=="Active"
+      &&
+      !c.couponType
+    ){
+
+      note.innerHTML=
+
+        `Företaget är registrerat men abonnemanget är inte aktivt.
+        <br>
+        <button
+          class="btn primary"
+          style="margin-top:8px"
+          onclick="openSubscriptionPayment(${c.id})"
+        >
+          Aktivera demo
+        </button>`;
+
+      return;
+
+    }
+
+
+    setAuth({
+
+      role:"company",
+
+      companyId:c.id,
+
+      username:c.username,
+
+      name:c.name
+
+    });
+
+
+    enterApp();
 
     return;
 
   }
 
-  document
-    .getElementById("adminNotice")
-    .textContent=
-      "Fel Admin-inloggning. DEMO: demo / demo.";
+
+  /* PRIVATE / EMPLOYEE */
+
+  const username=
+    document
+      .getElementById(
+        "privateUser"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const password=
+    document
+      .getElementById(
+        "privatePass"
+      )
+      .value;
+
+
+  const u=
+    PRIVATE_USERS.find(
+      x =>
+        x.username===
+        username
+        &&
+        x.password===
+        password
+    );
+
+
+  if(!u){
+
+    note.textContent=
+      "Fel användarnamn eller lösenord.";
+
+    return;
+
+  }
+
+
+  setAuth({
+
+    role:"private",
+
+    username:u.username,
+
+    name:u.name
+
+  });
+
+
+  enterApp();
 
 }
 
 
-function adminPage(id){
+/* =========================================================
+   ADMIN LOGIN
+   ========================================================= */
 
-  document
-    .querySelectorAll(".admin-page")
-    .forEach(
-      x =>
-        x
-          .classList
-          .add("hidden")
+function adminLogin(){
+
+  const user=
+    (
+      document
+        .getElementById(
+          "adminUser"
+        )
+        ?.value
+      ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  const pass=
+    document
+      .getElementById(
+        "adminPass"
+      )
+      ?.value
+    ||
+    "";
+
+
+  const note=
+    document.getElementById(
+      "adminNotice"
     );
 
-  const el=
-    document
-      .getElementById(id);
 
-  if(el)
-    el
-      .classList
-      .remove("hidden");
+  if(
+    (user==="demo" || user==="admin")
+    &&
+    pass==="demo"
+  ){
+
+    setAuth({
+
+      role:"admin",
+
+      username:user,
+
+      name:"Admin Demo"
+
+    });
+
+
+    if(note)
+      note.textContent="";
+
+
+    location.hash=
+      "#admin";
+
+
+    enterApp();
+
+    return;
+
+  }
+
+
+  if(note)
+    note.textContent=
+      "Fel Admin-inloggning. Demo: demo / demo.";
+
+}
+
+
+/* =========================================================
+   ENTER APP
+   ========================================================= */
+
+function enterApp(){
+
+  const auth=
+    getAuth();
+
+
+  if(
+    !auth
+    ||
+    !PERMISSIONS[
+      auth.role
+    ]
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
 
 
   document
-    .querySelectorAll(".nav button")
+    .getElementById(
+      "loginScreen"
+    )
+    .style
+    .display="none";
+
+
+  document
+    .getElementById(
+      "adminLoginScreen"
+    )
+    .style
+    .display="none";
+
+
+  document
+    .getElementById(
+      "mainApp"
+    )
+    .style
+    .display="flex";
+
+
+  applyRoleUI();
+
+
+  const first=
+    auth.role==="admin"
+    ?
+    "dashboard"
+    :
+    auth.role==="company"
+    ?
+    "dashboard"
+    :
+    "time";
+
+
+  if(
+    document.getElementById(
+      first
+    )
+  ){
+
+    show(first);
+
+  }
+
+
+  toast(
+
+    auth.role==="admin"
+
+    ?
+
+    "Inloggad som Administratör"
+
+    :
+
+    auth.role==="company"
+
+    ?
+
+    "Inloggad som Företag"
+
+    :
+
+    "Inloggad som Anställd"
+
+  );
+
+}
+
+
+/* =========================================================
+   ROLE UI
+   ========================================================= */
+
+function applyRoleUI(){
+
+  const auth=
+    getAuth();
+
+  if(!auth)
+    return;
+
+
+  const allowed=
+    PERMISSIONS[
+      auth.role
+    ]
+    ||
+    [];
+
+
+  document
+    .querySelectorAll(
+      "[data-p]"
+    )
+    .forEach(
+      button=>{
+
+        button.style.display=
+          allowed.includes(
+            button.dataset.p
+          )
+          ?
+          ""
+          :
+          "none";
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".page"
+    )
+    .forEach(
+      page=>{
+
+        page.style.display=
+          allowed.includes(
+            page.id
+          )
+          ?
+          ""
+          :
+          "none";
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   SHOW PAGE
+   ========================================================= */
+
+function show(id){
+
+  const auth=
+    getAuth();
+
+
+  const allowed=
+    auth
+    ?
+    PERMISSIONS[
+      auth.role
+    ] || []
+    :
+    [];
+
+
+  if(
+    !auth
+    ||
+    !allowed.includes(id)
+  ){
+
+    toast(
+      "Du saknar behörighet."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .querySelectorAll(
+      ".page"
+    )
+    .forEach(
+      p =>
+        p.classList.remove(
+          "active"
+        )
+    );
+
+
+  const target=
+    document.getElementById(
+      id
+    );
+
+
+  if(!target)
+    return;
+
+
+  target
+    .classList
+    .add("active");
+
+
+  document
+    .querySelectorAll(
+      ".nav button"
+    )
     .forEach(
       b =>
-        b
-          .classList
-          .toggle(
-            "active",
-            b.dataset.page===id
-          )
+        b.classList.toggle(
+          "active",
+          b.dataset.p===id
+        )
     );
 
 
-  const titles={
+  const prefix=
+    auth.role==="admin"
+    ?
+    "Admin"
+    :
+    auth.role==="company"
+    ?
+    "Företag"
+    :
+    "Anställd";
 
-    adminDashboard:[
-      "Dashboard",
-      "Kort översikt."
-    ],
 
-    companies:[
-      "Företag",
-      "Företagsöversikt."
-    ],
+  const title=
+    (
+      crumbs[id]
+      ||
+      id
+    )
+    .split(" / ")
+    .pop();
 
-    subscriptions:[
-      "Abonnemang",
-      "Paket och betalningsstatus."
-    ],
 
-    errors:[
-      "Systemfel",
-      "Problem och åtgärder."
-    ],
+  document
+    .getElementById(
+      "crumb"
+    )
+    .textContent=
+      prefix+
+      " / "+
+      title;
 
-    tools:[
-      "Verktyg",
-      "Diagnostik och reparation."
-    ],
 
-    security:[
-      "Säkerhet",
-      "Admins och permissions."
-    ],
+  if(
+    id==="dashboard"
+  )
+    updateAdminDashboard();
 
-    logs:[
-      "Loggar",
-      "Admin- och systemhändelser."
-    ],
 
-    system:[
-      "System",
-      "Status, versioner och backup."
-    ]
+  if(
+    id==="coupons"
+  )
+    renderCoupons();
+
+
+  if(
+    id==="companies"
+  )
+    renderCompanies();
+
+
+  if(
+    id==="subscriptions"
+  )
+    renderSubscriptions();
+
+
+  if(
+    id==="systemErrors"
+  )
+    renderErrors();
+
+
+  if(
+    id==="logs"
+  )
+    renderLogs();
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+function logout(){
+
+  clearAuth();
+
+  location.hash="";
+
+  location.reload();
+
+}
+
+
+/* =========================================================
+   COMPANY REGISTRATION
+   ========================================================= */
+
+function openCompanyRegistration(){
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center
+        "
+      >
+
+        <h2 style="margin:0">
+          Registrera företag
+        </h2>
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <p class="sub">
+        Skapa företagskonto.
+      </p>
+
+
+      <div class="field">
+
+        <label>
+          Företagsnamn
+        </label>
+
+        <input
+          id="rName"
+          placeholder="Företag AB"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Org.nr
+        </label>
+
+        <input
+          id="rOrg"
+          placeholder="559001-1234"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Kontaktperson
+        </label>
+
+        <input
+          id="rContact"
+          placeholder="Förnamn Efternamn"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          E-post
+        </label>
+
+        <input
+          id="rEmail"
+          type="email"
+          placeholder="namn@foretag.se"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Användarnamn
+        </label>
+
+        <input
+          id="rUser"
+          placeholder="foretag123"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Lösenord
+        </label>
+
+        <input
+          id="rPass"
+          type="password"
+          placeholder="Minst 6 tecken"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          🎟️ Kupong
+          <span class="kpi-small">
+            (valfritt)
+          </span>
+        </label>
+
+        <input
+          id="rCoupon"
+          placeholder="t.ex. PARTNER30"
+        >
+
+        <div
+          class="sub"
+          style="margin-top:6px"
+        >
+          Har du fått en gratis kod?
+          Ange den här.
+        </div>
+
+      </div>
+
+
+      <div
+        class="modal-actions"
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn primary"
+          onclick="registerCompany(this)"
+        >
+          Registrera
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+/* =========================================================
+   REGISTER COMPANY
+   ========================================================= */
+
+function registerCompany(btn){
+
+  const g=
+    id =>
+      document
+        .getElementById(id)
+        .value
+        .trim();
+
+
+  const name=
+    g("rName");
+
+  const org=
+    g("rOrg");
+
+  const contact=
+    g("rContact");
+
+  const email=
+    g("rEmail");
+
+  const username=
+    g("rUser");
+
+  const password=
+    g("rPass");
+
+  const couponCode=
+    g("rCoupon");
+
+
+  if(
+    !name
+    ||
+    !org
+    ||
+    !contact
+    ||
+    !email
+    ||
+    !username
+    ||
+    password.length<6
+  ){
+
+    toast(
+      "Fyll i alla fält. Lösenord minst 6 tecken."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    C.some(
+      c =>
+        String(
+          c.username
+        )
+        .toLowerCase()
+        ===
+        username.toLowerCase()
+    )
+  ){
+
+    toast(
+      "Användarnamnet används redan."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    C.some(
+      c =>
+        String(
+          c.org
+        )
+        .toLowerCase()
+        ===
+        org.toLowerCase()
+    )
+  ){
+
+    toast(
+      "Org.nr finns redan."
+    );
+
+    return;
+
+  }
+
+
+  let coupon=null;
+
+
+  if(couponCode){
+
+    coupon=
+      findValidCoupon(
+        couponCode
+      );
+
+
+    if(!coupon){
+
+      toast(
+        "⚠ Kupongen är ogiltig, inaktiv eller har nått sin användningsgräns."
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  const c={
+
+    id:Date.now(),
+
+    name,
+
+    org,
+
+    contact,
+
+    email,
+
+    username,
+
+    password,
+
+    employees:"0",
+
+    projects:"0",
+
+    status:"Aktiv",
+
+    subscription:
+      coupon
+      ?
+      "Active"
+      :
+      "Unpaid",
+
+    subscriptionPrice:600,
+
+    couponCode:"",
+
+    couponType:"",
+
+    couponGrantedAt:null,
+
+    trialEndsAt:null
 
   };
 
 
-  document
-    .getElementById("adminTitle")
-    .textContent=
-      titles[id][0];
+  if(coupon){
 
-  document
-    .getElementById("adminSubtitle")
-    .textContent=
-      titles[id][1];
+    applyCouponToCompany(
+      coupon,
+      c
+    );
+
+  }
+
+
+  C.push(c);
+
+
+  saveCompanies();
+
+  saveCoupons();
+
+
+  btn
+    .closest(
+      ".confirm-modal"
+    )
+    .remove();
+
+
+  renderCompanies();
+
+  renderSubscriptions();
+
+  renderCoupons();
+
+  updateAdminDashboard();
+
+
+  if(coupon){
+
+    const type=
+      c.couponType===
+      "Permanent"
+
+      ?
+
+      "permanent gratis access"
+
+      :
+
+      "30 dagar gratis provperiod";
+
+
+    toast(
+      `🎟️ Kupongen ${c.couponCode} är godkänd – ${type}.`
+    );
+
+    return;
+
+  }
+
+
+  openSubscriptionPayment(
+    c.id
+  );
 
 }
 
 
-function repair(btn){
+/* =========================================================
+   APPLY COUPON
+   ========================================================= */
 
-  const row=
-    btn.closest("tr");
+function applyCouponToCompany(
+  coupon,
+  company
+){
 
-  row.cells[3]
+  coupon.used=
+    Number(
+      coupon.used || 0
+    )+1;
+
+
+  if(!coupon.uses)
+    coupon.uses=[];
+
+
+  coupon.uses.push({
+
+    company:
+      company.name,
+
+    date:
+      new Date()
+        .toISOString()
+        .slice(
+          0,
+          10
+        )
+
+  });
+
+
+  company.couponCode=
+    coupon.code;
+
+  company.couponType=
+    coupon.type;
+
+  company.couponGrantedAt=
+    new Date()
+      .toISOString();
+
+
+  if(
+    coupon.type===
+    "30 dagar"
+  ){
+
+    company.trialEndsAt=
+      new Date(
+        Date.now()
+        +
+        30*86400000
+      )
+      .toISOString();
+
+  }
+
+
+  if(
+    coupon.type===
+    "Permanent"
+  ){
+
+    company.trialEndsAt=
+      null;
+
+  }
+
+
+  if(
+    coupon.used>=
+    coupon.maxUses
+  ){
+
+    coupon.active=
+      false;
+
+  }
+
+}
+
+
+/* =========================================================
+   SUBSCRIPTION
+   ========================================================= */
+
+function openSubscriptionPayment(id){
+
+  const c=
+    C.find(
+      x=>x.id===id
+    );
+
+
+  if(!c)
+    return;
+
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <h2>
+        Aktivera abonnemang
+      </h2>
+
+      <p>
+        <b>
+          ${escapeHtml(
+            c.name
+          )}
+        </b>
+      </p>
+
+
+      <div
+        class="danger-box"
+        style="
+          background:#fff7df;
+          color:#765b00
+        "
+      >
+
+        Detta är en demo-betalning.
+        Ingen riktig betalning genomförs.
+
+      </div>
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Senare
+        </button>
+
+
+        <button
+          class="btn primary"
+          onclick="
+            activateSubscription(
+              ${c.id}
+            )
+          "
+        >
+          Betala & aktivera
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+function activateSubscription(id){
+
+  const c=
+    C.find(
+      x=>x.id===id
+    );
+
+
+  if(!c)
+    return;
+
+
+  c.subscription=
+    "Active";
+
+
+  c.subscriptionStarted=
+    new Date()
+      .toISOString();
+
+
+  c.subscriptionExpires=
+    new Date(
+      Date.now()
+      +
+      30*86400000
+    )
+    .toISOString();
+
+
+  saveCompanies();
+
+
+  document
+    .querySelectorAll(
+      ".confirm-modal"
+    )
+    .forEach(
+      x=>x.remove()
+    );
+
+
+  renderCompanies();
+
+  renderSubscriptions();
+
+  updateAdminDashboard();
+
+
+  setAuth({
+
+    role:"company",
+
+    companyId:c.id,
+
+    username:c.username,
+
+    name:c.name
+
+  });
+
+
+  enterApp();
+
+}
+
+
+/* =========================================================
+   COUPON CREATION
+   ========================================================= */
+
+function openCreateCoupon(){
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center
+        "
+      >
+
+        <h2 style="margin:0">
+          🎟️ Skapa kupong
+        </h2>
+
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <p class="sub">
+        Skapa ett gratispass som du kan ge
+        till en valfri företagare.
+      </p>
+
+
+      <div class="field">
+
+        <label>
+          Kod
+        </label>
+
+        <input
+          id="couponCreateCode"
+          placeholder="PARTNER30"
+          style="
+            text-transform:uppercase
+          "
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Typ
+        </label>
+
+        <select
+          id="couponCreateType"
+        >
+
+          <option value="30 dagar">
+            30 dagar
+          </option>
+
+          <option value="Permanent">
+            Permanent
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Max antal användningar
+        </label>
+
+        <input
+          id="couponCreateUses"
+          type="number"
+          min="1"
+          value="1"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Status
+        </label>
+
+        <select
+          id="couponCreateActive"
+        >
+
+          <option value="true">
+            Aktiv
+          </option>
+
+          <option value="false">
+            Inaktiv
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div
+        class="modal-actions"
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn primary"
+          onclick="createCoupon(this)"
+        >
+          Skapa kupong
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+/* =========================================================
+   CREATE COUPON
+   ========================================================= */
+
+function createCoupon(btn){
+
+  const code=
+    document
+      .getElementById(
+        "couponCreateCode"
+      )
+      .value
+      .trim()
+      .toUpperCase();
+
+
+  const type=
+    document
+      .getElementById(
+        "couponCreateType"
+      )
+      .value;
+
+
+  const maxUses=
+    Number(
+      document
+        .getElementById(
+          "couponCreateUses"
+        )
+        .value
+    );
+
+
+  const active=
+    document
+      .getElementById(
+        "couponCreateActive"
+      )
+      .value
+      ===
+      "true";
+
+
+  if(
+    !code
+    ||
+    maxUses<1
+  ){
+
+    toast(
+      "Ange kod och minst 1 användning."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    COUPONS.some(
+      c =>
+        String(
+          c.code
+        )
+        .toUpperCase()
+        ===
+        code
+    )
+  ){
+
+    toast(
+      "Kupongkoden finns redan."
+    );
+
+    return;
+
+  }
+
+
+  COUPONS.push({
+
+    id:Date.now(),
+
+    code,
+
+    type,
+
+    maxUses,
+
+    used:0,
+
+    active,
+
+    createdAt:
+      new Date()
+        .toISOString(),
+
+    uses:[]
+
+  });
+
+
+  saveCoupons();
+
+
+  btn
+    .closest(
+      ".confirm-modal"
+    )
+    .remove();
+
+
+  renderCoupons();
+
+  updateAdminDashboard();
+
+
+  toast(
+    `Kupongen ${code} skapades.`
+  );
+
+}
+
+
+/* =========================================================
+   COUPON TOGGLE
+   ========================================================= */
+
+function toggleCoupon(id){
+
+  const coupon=
+    COUPONS.find(
+      c=>c.id===id
+    );
+
+
+  if(!coupon)
+    return;
+
+
+  coupon.active=
+    !coupon.active;
+
+
+  saveCoupons();
+
+
+  renderCoupons();
+
+  updateAdminDashboard();
+
+
+  toast(
+    coupon.active
+    ?
+    "Kupongen är aktiverad."
+    :
+    "Kupongen är avstängd."
+  );
+
+}
+
+
+/* =========================================================
+   COUPON DELETE
+   ========================================================= */
+
+function deleteCoupon(id){
+
+  const coupon=
+    COUPONS.find(
+      c=>c.id===id
+    );
+
+
+  if(!coupon)
+    return;
+
+
+  confirmAction(
+
+    "Radera kupong?",
+
+    `
+      Vill du radera kupongen
+      <b>
+        ${escapeHtml(
+          coupon.code
+        )}
+      </b>?
+      <br><br>
+      Historiska användningar sparas inte
+      i denna demo.
+    `,
+
+    ()=>{
+
+      COUPONS=
+        COUPONS.filter(
+          c=>c.id!==id
+        );
+
+
+      saveCoupons();
+
+
+      renderCoupons();
+
+      updateAdminDashboard();
+
+
+      toast(
+        "Kupongen har raderats."
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   RENDER COUPONS
+   ========================================================= */
+
+function renderCoupons(){
+
+  const table=
+    document.getElementById(
+      "couponsTable"
+    );
+
+
+  if(!table)
+    return;
+
+
+  const activeCount=
+    COUPONS.filter(
+      c =>
+        c.active
+        &&
+        !isCouponExpired(c)
+        &&
+        couponUsesAvailable(c)
+    )
+    .length;
+
+
+  const usedCount=
+    COUPONS.reduce(
+      (sum,c)=>
+        sum+
+        Number(
+          c.used || 0
+        ),
+      0
+    );
+
+
+  const expiredCount=
+    COUPONS.filter(
+      c =>
+        isCouponExpired(c)
+    )
+    .length;
+
+
+  const permanentCount=
+    COUPONS.filter(
+      c =>
+        c.type==="Permanent"
+    )
+    .length;
+
+
+  document
+    .getElementById(
+      "couponActiveCount"
+    )
     .textContent=
-      "🟢 Åtgärdad";
+      activeCount;
 
-  btn.remove();
+
+  document
+    .getElementById(
+      "couponUsedCount"
+    )
+    .textContent=
+      usedCount;
+
+
+  document
+    .getElementById(
+      "couponExpiredCount"
+    )
+    .textContent=
+      expiredCount;
+
+
+  document
+    .getElementById(
+      "couponPermanentCount"
+    )
+    .textContent=
+      permanentCount;
+
+
+  if(!COUPONS.length){
+
+    table.innerHTML=`
+
+      <tr>
+
+        <td
+          colspan="6"
+          class="empty"
+        >
+          Inga kuponger ännu.
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  table.innerHTML=
+    COUPONS
+      .map(
+        coupon=>{
+
+          const expired=
+            isCouponExpired(
+              coupon
+            );
+
+
+          const exhausted=
+            !couponUsesAvailable(
+              coupon
+            );
+
+
+          const status=
+            !coupon.active
+            ?
+            `<span class="badge danger">
+              Inaktiv
+            </span>`
+
+            :
+
+            expired
+            ?
+            `<span class="badge warning">
+              Utgången
+            </span>`
+
+            :
+
+            exhausted
+            ?
+            `<span class="badge warning">
+              Förbrukad
+            </span>`
+
+            :
+
+            `<span class="badge success">
+              Aktiv
+            </span>`;
+
+
+          const companies=
+            coupon.uses
+            &&
+            coupon.uses.length
+            ?
+
+            coupon.uses
+              .map(
+                u =>
+                  escapeHtml(
+                    u.company
+                  )
+              )
+              .join(
+                ", "
+              )
+
+            :
+
+            "-";
+
+
+          return `
+
+            <tr>
+
+              <td>
+
+                <span class="coupon-code">
+                  ${escapeHtml(
+                    coupon.code
+                  )}
+                </span>
+
+              </td>
+
+
+              <td>
+                ${escapeHtml(
+                  coupon.type
+                )}
+              </td>
+
+
+              <td>
+                ${Number(
+                  coupon.used || 0
+                )}
+                /
+                ${Number(
+                  coupon.maxUses || 0
+                )}
+              </td>
+
+
+              <td>
+                ${status}
+              </td>
+
+
+              <td>
+                ${companies}
+              </td>
+
+
+              <td>
+
+                <div
+                  style="
+                    display:flex;
+                    gap:5px;
+                    flex-wrap:wrap
+                  "
+                >
+
+                  <button
+                    class="btn"
+                    onclick="
+                      toggleCoupon(
+                        ${coupon.id}
+                      )
+                    "
+                  >
+                    ${
+                      coupon.active
+                      ?
+                      "Stäng"
+                      :
+                      "Aktivera"
+                    }
+                  </button>
+
+
+                  <button
+                    class="btn danger"
+                    onclick="
+                      deleteCoupon(
+                        ${coupon.id}
+                      )
+                    "
+                  >
+                    Radera
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   UPDATE DASHBOARD
+   ========================================================= */
+
+function updateAdminDashboard(){
+
+  const totalCompanies=
+    C.length;
+
+
+  const activeCompanies=
+    C.filter(
+      c =>
+        c.status==="Aktiv"
+    )
+    .length;
+
+
+  const activeSubscriptions=
+    C.filter(
+      c =>
+        c.subscription==="Active"
+    )
+    .length;
+
+
+  const unpaidSubscriptions=
+    C.filter(
+      c =>
+        c.subscription!=="Active"
+        &&
+        !c.couponType
+    )
+    .length;
+
+
+  const couponsUsed=
+    COUPONS.reduce(
+      (sum,c)=>
+        sum+
+        Number(
+          c.used || 0
+        ),
+      0
+    );
+
+
+  const couponsExpired=
+    COUPONS.filter(
+      c =>
+        isCouponExpired(c)
+    )
+    .length;
+
+
+  const activeCoupons=
+    COUPONS.filter(
+      c =>
+        c.active
+        &&
+        !isCouponExpired(c)
+        &&
+        couponUsesAvailable(c)
+    )
+    .length;
+
+
+  const permanentCoupons=
+    COUPONS.filter(
+      c =>
+        c.type==="Permanent"
+    )
+    .length;
+
+
+  document
+    .getElementById(
+      "dashTotalCompanies"
+    )
+    .textContent=
+      totalCompanies;
+
+
+  document
+    .getElementById(
+      "dashActiveCompanies"
+    )
+    .textContent=
+      activeCompanies;
+
+
+  document
+    .getElementById(
+      "dashActiveSubscriptions"
+    )
+    .textContent=
+      activeSubscriptions;
+
+
+  document
+    .getElementById(
+      "dashUnpaidSubscriptions"
+    )
+    .textContent=
+      unpaidSubscriptions;
+
+
+  document
+    .getElementById(
+      "dashCouponsUsed"
+    )
+    .textContent=
+      couponsUsed;
+
+
+  document
+    .getElementById(
+      "dashCouponsExpired"
+    )
+    .textContent=
+      couponsExpired;
+
+
+  document
+    .getElementById(
+      "dashActiveCoupons"
+    )
+    .textContent=
+      activeCoupons;
+
+
+  document
+    .getElementById(
+      "dashPermanentCoupons"
+    )
+    .textContent=
+      permanentCoupons;
+
+
+  document
+    .getElementById(
+      "systemCompanyCount"
+    )
+    .textContent=
+      totalCompanies;
+
+
+  document
+    .getElementById(
+      "systemActiveCount"
+    )
+    .textContent=
+      activeCompanies;
+
+
+  document
+    .getElementById(
+      "systemCouponCount"
+    )
+    .textContent=
+      activeCoupons;
+
+
+  renderDashboardErrors();
+
+}
+
+
+/* =========================================================
+   DASHBOARD ERRORS
+   ========================================================= */
+
+function renderDashboardErrors(){
+
+  const table=
+    document.getElementById(
+      "dashboardErrors"
+    );
+
+
+  if(!table)
+    return;
+
+
+  table.innerHTML=
+    SYSTEM_ERRORS
+      .slice(
+        0,
+        4
+      )
+      .map(
+        e => `
+
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                e.company
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                e.code
+              )}
+            </td>
+
+            <td>
+              <span class="badge warning">
+                ${escapeHtml(
+                  e.status
+                )}
+              </span>
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   RENDER COMPANIES
+   ========================================================= */
+
+function renderCompanies(){
+
+  const table=
+    document.getElementById(
+      "companiesTable"
+    );
+
+
+  if(!table)
+    return;
+
+
+  table.innerHTML=
+    C
+      .map(
+        c=>{
+
+          let subscription=
+            c.subscription;
+
+
+          if(
+            c.couponType
+            ===
+            "Permanent"
+          ){
+
+            subscription=
+              "Permanent gratis";
+
+          }
+
+
+          if(
+            c.couponType
+            ===
+            "30 dagar"
+          ){
+
+            const end=
+              new Date(
+                c.trialEndsAt
+              );
+
+
+            const expired=
+              end<
+              new Date();
+
+
+            subscription=
+              expired
+              ?
+              "Trial utgången"
+              :
+              "Gratis trial";
+
+          }
+
+
+          return `
+
+            <tr>
+
+              <td>
+
+                <b>
+                  ${escapeHtml(
+                    c.name
+                  )}
+                </b>
+
+                <div class="kpi-small">
+                  ${escapeHtml(
+                    c.contact
+                  )}
+                </div>
+
+              </td>
+
+
+              <td>
+                ${escapeHtml(
+                  c.org
+                )}
+              </td>
+
+
+              <td>
+                ${escapeHtml(
+                  c.employees
+                )}
+              </td>
+
+
+              <td>
+                ${escapeHtml(
+                  subscription
+                )}
+              </td>
+
+
+              <td>
+
+                ${
+                  c.status==="Aktiv"
+
+                  ?
+
+                  `<span class="badge success">
+                    Aktiv
+                  </span>`
+
+                  :
+
+                  `<span class="badge danger">
+                    Avstängd
+                  </span>`
+                }
+
+              </td>
+
+
+              <td>
+
+                <div
+                  style="
+                    display:flex;
+                    gap:5px;
+                    flex-wrap:wrap
+                  "
+                >
+
+                  <button
+                    class="btn"
+                    onclick="
+                      companyDetails(
+                        ${c.id}
+                      )
+                    "
+                  >
+                    Öppna
+                  </button>
+
+
+                  <button
+                    class="btn"
+                    onclick="
+                      toggleCompanyAccess(
+                        ${c.id}
+                      )
+                    "
+                  >
+                    ${
+                      c.status==="Aktiv"
+                      ?
+                      "Stäng"
+                      :
+                      "Öppna"
+                    }
+                  </button>
+
+
+                  <button
+                    class="btn danger"
+                    onclick="
+                      permanentDeleteCompany(
+                        ${c.id}
+                      )
+                    "
+                  >
+                    Radera
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   RENDER SUBSCRIPTIONS
+   ========================================================= */
+
+function renderSubscriptions(){
+
+  const table=
+    document.getElementById(
+      "subscriptionsTable"
+    );
+
+
+  if(!table)
+    return;
+
+
+  table.innerHTML=
+    C
+      .map(
+        c=>{
+
+          let status=
+            c.subscription;
+
+
+          if(
+            c.couponType==="Permanent"
+          ){
+
+            status=
+              "Permanent gratis";
+
+          }
+
+
+          if(
+            c.couponType==="30 dagar"
+          ){
+
+            const expired=
+              c.trialEndsAt
+              &&
+              new Date(
+                c.trialEndsAt
+              )
+              <
+              new Date();
+
+
+            status=
+              expired
+              ?
+              "Trial utgången"
+              :
+              "30 dagar gratis";
+
+          }
+
+
+          return `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  c.name
+                )}
+              </td>
+
+              <td>
+                30 anställda
+              </td>
+
+              <td>
+                ${c.subscriptionPrice || 600}
+                kr/mån
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  status
+                )}
+              </td>
+
+              <td>
+
+                ${
+                  c.couponCode
+
+                  ?
+
+                  `<span class="coupon-code">
+                    ${escapeHtml(
+                      c.couponCode
+                    )}
+                  </span>`
+
+                  :
+
+                  "-"
+                }
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   RENDER ERRORS
+   ========================================================= */
+
+function renderErrors(){
+
+  const table=
+    document.getElementById(
+      "errorsTable"
+    );
+
+
+  if(!table)
+    return;
+
+
+  table.innerHTML=
+    SYSTEM_ERRORS
+      .map(
+        (e,index)=>`
+
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                e.company
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                e.code
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                e.reason
+              )}
+            </td>
+
+            <td>
+              <span class="badge warning">
+                ${escapeHtml(
+                  e.status
+                )}
+              </span>
+            </td>
+
+            <td>
+
+              <button
+                class="btn primary"
+                onclick="
+                  repairError(
+                    ${index}
+                  )
+                "
+              >
+                Åtgärda
+              </button>
+
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   REPAIR ERROR
+   ========================================================= */
+
+function repairError(index){
+
+  if(
+    !SYSTEM_ERRORS[index]
+  )
+    return;
+
+
+  SYSTEM_ERRORS[index].status=
+    "Åtgärdad";
+
+
+  renderErrors();
+
+  renderDashboardErrors();
+
 
   toast(
     "Problemet är markerat som åtgärdat."
@@ -1750,113 +5171,999 @@ function repair(btn){
 }
 
 
-function companyDetails(
-  name,
-  employees,
-  price
-){
+/* =========================================================
+   COMPANY DETAILS
+   ========================================================= */
 
-  alert(
-    name+
-    "\nAnställda: "+
-    employees+
-    "\nAbonnemang: "+
-    price+
-    "\n\n"+
-    "I nästa version öppnas "+
-    "företagets fullständiga "+
-    "adminprofil här."
-  );
+function companyDetails(id){
 
-}
+  const c=
+    C.find(
+      x=>x.id===id
+    );
 
 
-function inviteAdmin(){
-
-  alert(
-    "DEMO: Här skapar Owner "+
-    "en Admin-inbjudan via e-post "+
-    "och väljer permissions."
-  );
-
-}
+  if(!c)
+    return;
 
 
-function confirmRestore(){
+  let couponText=
+    "Ingen";
+
 
   if(
-    confirm(
-      "Skapa emergency-backup och "+
-      "återställ till senaste stabila version?"
-    )
+    c.couponType==="Permanent"
+  ){
+
+    couponText=
+      "Permanent gratis";
+
+  }
+
+
+  if(
+    c.couponType==="30 dagar"
+  ){
+
+    couponText=
+      "30 dagar gratis";
+
+  }
+
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center
+        "
+      >
+
+        <h2 style="margin:0">
+          ${escapeHtml(
+            c.name
+          )}
+        </h2>
+
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div
+        class="stat-row"
+        style="margin-top:16px"
+      >
+
+        <span>
+          Org.nr
+        </span>
+
+        <b>
+          ${escapeHtml(
+            c.org
+          )}
+        </b>
+
+      </div>
+
+
+      <div class="stat-row">
+
+        <span>
+          Kontaktperson
+        </span>
+
+        <b>
+          ${escapeHtml(
+            c.contact
+          )}
+        </b>
+
+      </div>
+
+
+      <div class="stat-row">
+
+        <span>
+          E-post
+        </span>
+
+        <b>
+          ${escapeHtml(
+            c.email
+          )}
+        </b>
+
+      </div>
+
+
+      <div class="stat-row">
+
+        <span>
+          Anställda
+        </span>
+
+        <b>
+          ${escapeHtml(
+            c.employees
+          )}
+        </b>
+
+      </div>
+
+
+      <div class="stat-row">
+
+        <span>
+          Kupong
+        </span>
+
+        <b>
+          ${escapeHtml(
+            couponText
+          )}
+        </b>
+
+      </div>
+
+
+      ${
+        c.couponCode
+
+        ?
+
+        `
+
+          <div class="stat-row">
+
+            <span>
+              Kupongkod
+            </span>
+
+            <b class="coupon-code">
+              ${escapeHtml(
+                c.couponCode
+              )}
+            </b>
+
+          </div>
+
+        `
+
+        :
+
+        ""
+      }
+
+
+      ${
+        c.trialEndsAt
+
+        ?
+
+        `
+
+          <div class="stat-row">
+
+            <span>
+              Trial slut
+            </span>
+
+            <b>
+              ${formatDate(
+                c.trialEndsAt
+              )}
+            </b>
+
+          </div>
+
+        `
+
+        :
+
+        ""
+      }
+
+
+      <div
+        class="actions"
+        style="
+          justify-content:flex-end
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Stäng
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+/* =========================================================
+   COMPANY ACCESS
+   ========================================================= */
+
+function toggleCompanyAccess(id){
+
+  const auth=
+    getAuth();
+
+
+  if(
+    !auth
+    ||
+    auth.role!=="admin"
   ){
 
     toast(
-      "DEMO: Backup skapad och "+
-      "rollback genomförd."
+      "Endast administratören kan ändra åtkomst."
     );
+
+    return;
 
   }
 
-}
 
-
-function toast(msg){
-
-  const t=
-    document
-      .getElementById("toast");
-
-  t.textContent=msg;
-
-  t.classList
-    .remove("hidden");
-
-  clearTimeout(
-    window._toast
-  );
-
-  window._toast=
-    setTimeout(
-      () =>
-        t
-          .classList
-          .add("hidden"),
-      2500
+  const c=
+    C.find(
+      x=>x.id===id
     );
 
-}
+
+  if(!c)
+    return;
 
 
-/*
-  Owner/Admin App key for the DEMO:
-
-  Ctrl+Shift+A opens the Admin App.
-
-  In the real product this becomes
-  a cryptographically authenticated
-  Admin/Owner app key flow.
-*/
+  const action=
+    c.status==="Avstängd"
+    ?
+    "Öppna åtkomst"
+    :
+    "Stäng åtkomst";
 
 
-document.addEventListener(
-  "keydown",
-  e => {
+  confirmAction(
 
-    if(
-      e.ctrlKey &&
-      e.shiftKey &&
-      e.key.toLowerCase()==="a"
-    ){
+    action,
 
-      e.preventDefault();
+    `
+      Vill du
+      ${
+        c.status==="Avstängd"
+        ?
+        "öppna"
+        :
+        "stänga"
+      }
+      åtkomsten för
+      <b>
+        ${escapeHtml(
+          c.name
+        )}
+      </b>?
 
-      openAdminApp();
+      <br><br>
+
+      Företagets data raderas inte.
+    `,
+
+    ()=>{
+
+      c.status=
+        c.status==="Avstängd"
+        ?
+        "Aktiv"
+        :
+        "Avstängd";
+
+
+      saveCompanies();
+
+      renderCompanies();
+
+      updateAdminDashboard();
+
+
+      toast(
+
+        c.status==="Avstängd"
+
+        ?
+
+        "Åtkomsten är stängd."
+
+        :
+
+        "Åtkomsten är öppen igen."
+
+      );
 
     }
 
+  );
+
+}
+
+
+/* =========================================================
+   PERMANENT DELETE
+   ========================================================= */
+
+function permanentDeleteCompany(id){
+
+  const auth=
+    getAuth();
+
+
+  if(
+    !auth
+    ||
+    auth.role!=="admin"
+  ){
+
+    toast(
+      "Endast administratören kan radera företag."
+    );
+
+    return;
+
   }
-);
+
+
+  const c=
+    C.find(
+      x=>x.id===id
+    );
+
+
+  if(!c)
+    return;
+
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <h2>
+        Permanent radera?
+      </h2>
+
+
+      <p>
+        Du är på väg att radera
+        <b>
+          ${escapeHtml(
+            c.name
+          )}
+        </b>.
+      </p>
+
+
+      <div class="danger-box">
+
+        Företagets data tas bort permanent
+        och kan inte ångras.
+
+      </div>
+
+
+      <label
+        style="
+          display:block;
+          margin-top:14px;
+          font-size:12px;
+          font-weight:800
+        "
+      >
+        Skriv RADERA
+      </label>
+
+
+      <input
+        id="deleteWord"
+        style="
+          width:100%;
+          padding:11px;
+          border:1px solid var(--line);
+          border-radius:10px;
+          margin-top:6px
+        "
+      >
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn"
+          style="
+            background:#b33b3b;
+            color:#fff
+          "
+          onclick="
+            confirmPermanentDelete(
+              ${id},
+              this
+            )
+          "
+        >
+          RADERA
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+/* =========================================================
+   CONFIRM DELETE
+   ========================================================= */
+
+function confirmPermanentDelete(
+  id,
+  btn
+){
+
+  const input=
+    document.getElementById(
+      "deleteWord"
+    );
+
+
+  if(
+    !input
+    ||
+    input.value
+      .trim()
+      .toUpperCase()
+      !==
+      "RADERA"
+  ){
+
+    toast(
+      "Skriv RADERA för att fortsätta."
+    );
+
+    return;
+
+  }
+
+
+  C=
+    C.filter(
+      x=>x.id!==id
+    );
+
+
+  saveCompanies();
+
+
+  btn
+    .closest(
+      ".confirm-modal"
+    )
+    .remove();
+
+
+  renderCompanies();
+
+  renderSubscriptions();
+
+  updateAdminDashboard();
+
+
+  toast(
+    "Företaget har raderats permanent."
+  );
+
+}
+
+
+/* =========================================================
+   CONFIRM ACTION
+   ========================================================= */
+
+function confirmAction(
+  title,
+  message,
+  action
+){
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <h2>
+        ${title}
+      </h2>
+
+
+      <p>
+        ${message}
+      </p>
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px;
+          margin-top:18px
+        "
+      >
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn primary"
+          id="confirmActionBtn"
+        >
+          Bekräfta
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+
+  m
+    .querySelector(
+      "#confirmActionBtn"
+    )
+    .onclick=()=>{
+
+      action();
+
+      m.remove();
+
+    };
+
+}
+
+
+/* =========================================================
+   INVITE ADMIN
+   ========================================================= */
+
+function inviteAdmin(){
+
+  const m=
+    document.createElement(
+      "div"
+    );
+
+
+  m.className=
+    "confirm-modal";
+
+
+  m.innerHTML=`
+
+    <div class="confirm-box">
+
+      <h2>
+        + Lägg till Admin
+      </h2>
+
+
+      <p class="sub">
+        DEMO: Här kommer senare
+        e-postinbjudan och permissions.
+      </p>
+
+
+      <div class="field">
+
+        <label>
+          Namn
+        </label>
+
+        <input
+          id="inviteName"
+          placeholder="Namn Efternamn"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          E-post
+        </label>
+
+        <input
+          id="inviteEmail"
+          type="email"
+          placeholder="admin@example.com"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Roll
+        </label>
+
+        <select
+          id="inviteRole"
+        >
+
+          <option>
+            ADMIN
+          </option>
+
+          <option>
+            SUPPORT
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn"
+          onclick="
+            this
+              .closest('.confirm-modal')
+              .remove()
+          "
+        >
+          Avbryt
+        </button>
+
+
+        <button
+          class="btn primary"
+          onclick="sendAdminInvite(this)"
+        >
+          Skicka inbjudan
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .body
+    .appendChild(m);
+
+}
+
+
+function sendAdminInvite(btn){
+
+  const name=
+    document
+      .getElementById(
+        "inviteName"
+      )
+      .value
+      .trim();
+
+
+  const email=
+    document
+      .getElementById(
+        "inviteEmail"
+      )
+      .value
+      .trim();
+
+
+  if(
+    !name
+    ||
+    !email
+  ){
+
+    toast(
+      "Fyll i namn och e-post."
+    );
+
+    return;
+
+  }
+
+
+  btn
+    .closest(
+      ".confirm-modal"
+    )
+    .remove();
+
+
+  toast(
+    `DEMO: Inbjudan skickad till ${email}.`
+  );
+
+}
+
+
+/* =========================================================
+   LOGS
+   ========================================================= */
+
+function renderLogs(){
+
+  const table=
+    document.getElementById(
+      "logsTable"
+    );
+
+
+  if(!table)
+    return;
+
+
+  table.innerHTML=
+    LOGS
+      .map(
+        l=>`
+
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                l.time
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                l.action
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                l.result
+              )}
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   BACKUP
+   ========================================================= */
+
+function confirmRestore(){
+
+  confirmAction(
+
+    "Återställ version?",
+
+    `
+      Detta är en DEMO.
+      <br><br>
+      I den riktiga versionen kommer
+      systemet först att skapa en backup
+      och sedan återställa vald stabil version.
+    `,
+
+    ()=>{
+
+      toast(
+        "DEMO: Backup skapad och rollback genomförd."
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   AUTH ROUTING
+   ========================================================= */
+
+function applyAuth(){
+
+  const auth=
+    getAuth();
+
+
+  const adminRoute=
+    location.hash===
+    "#admin";
+
+
+  if(!auth){
+
+    if(adminRoute){
+
+      openAdminLogin();
+
+    }else{
+
+      showLogin();
+
+    }
+
+    return;
+
+  }
+
+
+  if(
+    !PERMISSIONS[
+      auth.role
+    ]
+  ){
+
+    clearAuth();
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  if(
+    auth.role==="admin"
+    &&
+    !adminRoute
+  ){
+
+    location.hash=
+      "#admin";
+
+  }
+
+
+  if(
+    auth.role!=="admin"
+    &&
+    adminRoute
+  ){
+
+    clearAuth();
+
+    openAdminLogin();
+
+    return;
+
+  }
+
+
+  enterApp();
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+loadCompanies();
+
+loadCoupons();
+
+applyAuth();
 
 </script>
 
