@@ -2481,3 +2481,1059 @@ class="toast"
 
 
 <script>
+const crumbs={
+  dashboard:"Admin / Dashboard",
+  companies:"Admin / Företag",
+  employees:"Admin / Personal",
+  projects:"Admin / Projekt",
+  customers:"Admin / Kunder",
+  workplaces:"Admin / Arbetsplatser",
+  time:"Admin / Tidrapport",
+  planning:"Admin / Planering",
+  reports:"Admin / Rapporter",
+  system:"Admin / App / System"
+};
+
+
+document
+  .querySelectorAll(
+    ".nav button,.mobile-nav button,.mobile-bottom button"
+  )
+  .forEach(
+    b =>
+      b.onclick=() =>
+        show(b.dataset.p)
+  );
+
+
+function openMobileMenu(){
+
+  document
+    .getElementById(
+      "mobileDrawer"
+    )
+    .classList.add(
+      "open"
+    );
+
+  document
+    .getElementById(
+      "mobileOverlay"
+    )
+    .classList.add(
+      "open"
+    );
+
+}
+
+
+function closeMobileMenu(){
+
+  document
+    .getElementById(
+      "mobileDrawer"
+    )
+    .classList.remove(
+      "open"
+    );
+
+  document
+    .getElementById(
+      "mobileOverlay"
+    )
+    .classList.remove(
+      "open"
+    );
+
+}
+
+
+let C =
+  JSON.parse(
+    localStorage.getItem(
+      "tidpunkt_companies"
+    )
+    ||
+    "null"
+  )
+  ||
+  [
+
+    {
+      id:1,
+      name:"Nordic Städ AB",
+      org:"559001-1234",
+      employees:"12",
+      projects:"6",
+      status:"Aktiv",
+      subscription:"Active",
+      username:"nordic",
+      password:"123456"
+    },
+
+    {
+      id:2,
+      name:"Uppsala Service AB",
+      org:"559002-5678",
+      employees:"9",
+      projects:"4",
+      status:"Aktiv",
+      subscription:"Unpaid",
+      username:"uppsala",
+      password:"123456"
+    },
+
+    {
+      id:3,
+      name:"Gävle Projekt AB",
+      org:"559003-9012",
+      employees:"6",
+      projects:"4",
+      status:"Aktiv",
+      subscription:"Active",
+      username:"gavle",
+      password:"123456"
+    }
+
+  ];
+
+
+function saveCompanies(){
+
+  localStorage.setItem(
+    "tidpunkt_companies",
+    JSON.stringify(C)
+  );
+
+}
+
+
+const E=[
+
+  [
+    "Anna Andersson",
+    "Nordic Städ AB",
+    "Arbetsledare",
+    "Aktiv",
+    "38:20"
+  ],
+
+  [
+    "Erik Johansson",
+    "Nordic Städ AB",
+    "Städare",
+    "Aktiv",
+    "36:45"
+  ],
+
+  [
+    "Sara Nilsson",
+    "Uppsala Service AB",
+    "Städare",
+    "Aktiv",
+    "32:10"
+  ],
+
+  [
+    "Johan Karlsson",
+    "Uppsala Service AB",
+    "Arbetsledare",
+    "Aktiv",
+    "40:05"
+  ],
+
+  [
+    "Maja Berg",
+    "Gävle Projekt AB",
+    "Städare",
+    "Aktiv",
+    "35:30"
+  ]
+
+];
+
+
+const P=[
+
+  [
+    "P8 Gullmarsvägen 50",
+    "Nordic Städ AB",
+    "Gullmarsvägen 50",
+    "Anna Andersson",
+    "84:20",
+    "Pågår"
+  ],
+
+  [
+    "P7 Änghalsvägen 2B",
+    "Nordic Städ AB",
+    "Änghalsvägen 2B",
+    "Erik Johansson",
+    "61:10",
+    "Pågår"
+  ],
+
+  [
+    "P5 Skolvägen 3",
+    "Uppsala Service AB",
+    "Skolvägen 3",
+    "Johan Karlsson",
+    "92:15",
+    "Pågår"
+  ],
+
+  [
+    "P4 Mariatorget 6A",
+    "Gävle Projekt AB",
+    "Mariatorget 6A",
+    "Maja Berg",
+    "44:50",
+    "Klar"
+  ]
+
+];
+
+
+function renderCompanies(){
+
+  document
+    .getElementById(
+      "companiesTable"
+    )
+    .innerHTML=
+
+      C.map(
+        c => `
+
+          <tr>
+
+            <td>
+              <b>
+                ${escapeHtml(c.name)}
+              </b>
+            </td>
+
+            <td>
+              ${escapeHtml(c.org)}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                c.employees || "0"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                c.projects || "0"
+              )}
+            </td>
+
+            <td>
+
+              <span
+                class="badge ${
+                  c.status==="Avstängd"
+                  ? "gold"
+                  : ""
+                }"
+              >
+
+                ${escapeHtml(
+                  c.status
+                )}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              <span
+                class="badge ${
+                  c.subscription==="Active"
+                  ? ""
+                  : "gold"
+                }"
+              >
+
+                ${escapeHtml(
+                  c.subscription || "Unpaid"
+                )}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              <button
+                class="btn"
+                onclick="
+                  toggleCompanyAccess(${c.id})
+                "
+              >
+
+                ${
+                  c.status==="Avstängd"
+                  ? "Öppna åtkomst"
+                  : "Stäng åtkomst"
+                }
+
+              </button>
+
+              <button
+                class="btn"
+                style="
+                  margin-left:5px;
+                  color:#a32d2d
+                "
+                onclick="
+                  permanentDeleteCompany(${c.id})
+                "
+              >
+
+                Permanent radera
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+function escapeHtml(v){
+
+  return String(
+    v ?? ""
+  )
+  .replace(
+    /[&<>"']/g,
+    m =>
+      ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m])
+  );
+
+}
+
+
+function table(
+  id,
+  data
+){
+
+  document
+    .getElementById(id)
+    .innerHTML=
+
+      data
+      .map(
+        row =>
+
+          "<tr>"
+
+          +
+
+          row
+          .map(
+            v =>
+
+              (
+                v==="Aktiv"
+                ||
+                v==="Pågår"
+                ||
+                v==="Klar"
+              )
+
+              ?
+
+              `
+                <td>
+
+                  <span
+                    class="
+                      badge
+                      ${
+                        v==="Pågår"
+                        ? "gold"
+                        : ""
+                      }
+                    "
+                  >
+                    ${v}
+                  </span>
+
+                </td>
+              `
+
+              :
+
+              `<td>${v}</td>`
+
+          )
+          .join("")
+
+          +
+
+          "</tr>"
+      )
+      .join("");
+
+}
+
+
+renderCompanies();
+
+table(
+  "employeesTable",
+  E
+);
+
+table(
+  "projectsTable",
+  P
+);
+
+
+document
+  .getElementById(
+    "customersGrid"
+  )
+  .innerHTML=
+
+  [
+
+    [
+      "Nordic Fastigheter",
+      "Uppsala",
+      "8 projekt"
+    ],
+
+    [
+      "Mälardalen Bygg",
+      "Stockholm",
+      "3 projekt"
+    ],
+
+    [
+      "Gävle Kommun",
+      "Gävle",
+      "3 projekt"
+    ]
+
+  ]
+  .map(
+    x => `
+
+      <div class="card">
+
+        <h3>
+          ${x[0]}
+        </h3>
+
+        <div class="sub">
+          ${x[1]}
+        </div>
+
+        <div
+          class="number"
+          style="margin-top:15px"
+        >
+          ${x[2]}
+        </div>
+
+      </div>
+
+    `
+  )
+  .join("");
+
+
+document
+  .getElementById(
+    "workplacesGrid"
+  )
+  .innerHTML=
+
+  [
+    "Gullmarsvägen 50",
+    "Änghalsvägen 2B",
+    "Skolvägen 3",
+    "Mariatorget 6A"
+  ]
+  .map(
+    x => `
+
+      <div class="card">
+
+        <h3>
+          ${x}
+        </h3>
+
+        <div class="sub">
+          Demo arbetsplats
+        </div>
+
+        <span
+          class="badge"
+          style="margin-top:12px"
+        >
+          Aktiv
+        </span>
+
+      </div>
+
+    `
+  )
+  .join("");
+
+
+document
+  .getElementById(
+    "activity"
+  )
+  .innerHTML=
+
+  [
+
+    [
+      "Ny tidrapport",
+      "Anna Andersson • 08:42"
+    ],
+
+    [
+      "Projekt uppdaterat",
+      "P8 Gullmarsvägen 50 • 08:15"
+    ],
+
+    [
+      "Ny anställd",
+      "Gävle Projekt AB • 07:55"
+    ],
+
+    [
+      "Backup",
+      "System • 06:00"
+    ]
+
+  ]
+  .map(
+    x => `
+
+      <div class="row">
+
+        <div>
+
+          <b>
+            ${x[0]}
+          </b>
+
+          <div class="sub">
+            ${x[1]}
+          </div>
+
+        </div>
+
+        <span class="badge">
+          OK
+        </span>
+
+      </div>
+
+    `
+  )
+  .join("");
+
+
+document
+  .getElementById(
+    "chart"
+  )
+  .innerHTML=
+
+  [
+    58,
+    72,
+    61,
+    88,
+    77,
+    46,
+    66
+  ]
+  .map(
+    (v,i) => `
+
+      <div class="barcol">
+
+        <i
+          style="
+            height:${v}%
+          "
+        ></i>
+
+        <span>
+          ${
+            [
+              "M",
+              "T",
+              "O",
+              "T",
+              "F",
+              "L",
+              "S"
+            ][i]
+          }
+        </span>
+
+      </div>
+
+    `
+  )
+  .join("");
+
+
+let tm="day";
+
+
+let selectedDate =
+  new Date(
+    2026,
+    7,
+    17
+  );
+
+
+function timeMode(
+  mode
+){
+
+  tm=mode;
+
+
+  document
+    .getElementById("td")
+    .classList.toggle(
+      "active",
+      mode==="day"
+    );
+
+
+  document
+    .getElementById("tw")
+    .classList.toggle(
+      "active",
+      mode==="week"
+    );
+
+
+  document
+    .getElementById("tm")
+    .classList.toggle(
+      "active",
+      mode==="month"
+    );
+
+
+  renderTime();
+
+}
+
+
+function moveTime(
+  days
+){
+
+  selectedDate.setDate(
+    selectedDate.getDate()
+    +
+    days
+  );
+
+
+  renderTime();
+
+}
+
+
+function renderTime(){
+
+  const e =
+    document
+      .getElementById(
+        "timeview"
+      );
+
+
+  if(
+    tm==="day"
+  ){
+
+    e.innerHTML=`
+
+      <div class="period">
+
+        <button
+          class="arrow"
+          onclick="moveTime(-1)"
+        >
+          ‹
+        </button>
+
+        <b>
+          17 augusti 2026
+        </b>
+
+        <button
+          class="arrow"
+          onclick="moveTime(1)"
+        >
+          ›
+        </button>
+
+      </div>
+
+
+      <div class="day">
+
+        <div class="day-top">
+
+          <b>
+            Anna Andersson ·
+            P8 Gullmarsvägen 50
+          </b>
+
+          <span class="hours">
+            08:00–16:30
+          </span>
+
+        </div>
+
+        <div class="sub">
+          Städning · paus 30 min
+        </div>
+
+      </div>
+
+
+      <div class="day">
+
+        <div class="day-top">
+
+          <b>
+            Erik Johansson ·
+            P7 Änghalsvägen 2B
+          </b>
+
+          <span class="hours">
+            07:30–15:45
+          </span>
+
+        </div>
+
+        <div class="sub">
+          Kontorsstädning · paus 30 min
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <b>
+          SUMMA DAG
+        </b>
+
+        <span class="number">
+          16:15
+        </span>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  if(
+    tm==="week"
+  ){
+
+    const names=[
+      "Mån",
+      "Tis",
+      "Ons",
+      "Tor",
+      "Fre",
+      "Lör",
+      "Sön"
+    ];
+
+
+    const hours=[
+      38,
+      42,
+      46,
+      41,
+      39,
+      18,
+      0
+    ];
+
+
+    e.innerHTML=`
+
+      <div class="period">
+
+        <button
+          class="arrow"
+          onclick="moveTime(-7)"
+        >
+          ‹
+        </button>
+
+        <b>
+          Vecka 34 ·
+          17–23 augusti
+        </b>
+
+        <button
+          class="arrow"
+          onclick="moveTime(7)"
+        >
+          ›
+        </button>
+
+      </div>
+
+
+      ${
+        names
+        .map(
+          (name,i) => `
+
+            <div class="week">
+
+              <b>
+                ${name}
+              </b>
+
+              <div class="bar">
+
+                <i
+                  style="
+                    width:${
+                      Math.min(
+                        100,
+                        hours[i]/48*100
+                      )
+                    }%
+                  "
+                ></i>
+
+              </div>
+
+              <span class="hours">
+                ${hours[i]}:00
+              </span>
+
+            </div>
+
+          `
+        )
+        .join("")
+      }
+
+
+      <div class="row">
+
+        <b>
+          SUMMA VECKA
+        </b>
+
+        <span class="number">
+          224:00
+        </span>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  let cells =
+    [
+      "M",
+      "T",
+      "O",
+      "T",
+      "F",
+      "L",
+      "S"
+    ]
+    .map(
+      x =>
+        `
+          <div class="calhead">
+            ${x}
+          </div>
+        `
+    )
+    .join("");
+
+
+  for(
+    let i=1;
+    i<=31;
+    i++
+  ){
+
+    cells += `
+
+      <div class="calday">
+
+        <b>
+          ${i}
+        </b>
+
+        ${
+          i%2===0
+
+          ?
+
+          `
+            <span class="calhours">
+              ${6+i%4}:30
+            </span>
+          `
+
+          :
+
+          ""
+        }
+
+      </div>
+
+    `;
+
+  }
+
+
+  e.innerHTML=`
+
+    <div class="period">
+
+      <button
+        class="arrow"
+        onclick="moveMonth(-1)"
+      >
+        ‹
+      </button>
+
+      <b>
+        Augusti 2026
+      </b>
+
+      <button
+        class="arrow"
+        onclick="moveMonth(1)"
+      >
+        ›
+      </button>
+
+    </div>
+
+
+    <div class="calendar">
+
+      ${cells}
+
+    </div>
+
+
+    <div class="row">
+
+      <b>
+        SUMMA MÅNAD
+      </b>
+
+      <span class="number">
+        812:40
+      </span>
+
+    </div>
+
+  `;
+
+}
+
+
+function moveMonth(
+  amount
+){
+
+  selectedDate.setMonth(
+    selectedDate.getMonth()
+    +
+    amount
+  );
+
+
+  renderTime();
+
+}
+
+
+let pmode="week";
+
+
+function planMode(
+  mode
+){
+
+  pmode=mode;
+
+
+  document
+    .getElementById("pd")
+    .classList.toggle(
+      "active",
+      mode==="day"
+    );
+
+
+  document
+    .getElementById("pw")
+    .classList.toggle(
+      "active",
+      mode==="week"
+    );
+
+
+  document
+    .getElementById("pm")
+    .classList.toggle(
+      "active",
+      mode==="month"
+    );
+
+
+  renderPlan();
+
+}
