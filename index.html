@@ -2282,6 +2282,172 @@ button{
 </section>
 
 
+
+<section id="emergencyAccess" class="page">
+
+  <div class="head">
+    <div>
+      <h1>🚨 Emergency Access</h1>
+      <p>Återställ och felsök ett specifikt företag med en engångskod.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:15px;border-left:4px solid #b7791f">
+    <h3>⚠️ Full Emergency Access</h3>
+    <p class="sub">
+      Koden kan endast användas en gång och gäller endast för det företag
+      som skapade den. En Emergency-session ger full teknisk åtkomst,
+      inklusive korrigering av låsta tidrapporter. OWNER har alltid åtkomst;
+      ADMIN måste ha behörigheten Emergency Access.
+    </p>
+  </div>
+
+  <div class="grid two" style="margin-top:15px">
+
+    <div class="card">
+      <h3>🔑 Använd Emergency Code</h3>
+
+      <div class="field" style="margin-top:12px">
+        <label>One-Time Emergency Code</label>
+        <input
+          id="emergencyCodeInput"
+          type="text"
+          placeholder="TID-XXXX-XXXX"
+          autocomplete="off"
+        >
+      </div>
+
+      <button
+        class="btn primary"
+        type="button"
+        onclick="redeemEmergencyCode()"
+        style="margin-top:12px"
+      >
+        🔓 Öppna Emergency Access
+      </button>
+
+      <div
+        id="emergencyLoginNotice"
+        class="login-note"
+        style="margin-top:10px"
+      ></div>
+    </div>
+
+    <div class="card">
+      <h3>📋 Aktiv session</h3>
+      <div id="emergencySessionInfo" class="sub" style="margin-top:10px">
+        Ingen Emergency-session aktiv.
+      </div>
+
+      <button
+        id="closeEmergencySessionBtn"
+        class="btn"
+        type="button"
+        onclick="closeEmergencySession()"
+        style="display:none;margin-top:12px"
+      >
+        🔒 Avsluta Emergency Session
+      </button>
+    </div>
+
+  </div>
+
+  <div
+    id="emergencyCompanyPanel"
+    class="card"
+    style="display:none;margin-top:15px"
+  >
+    <div class="head">
+      <div>
+        <h3 id="emergencyCompanyName">Company</h3>
+        <p class="sub">
+          Full Emergency Access aktiv. Ändringar loggas automatiskt.
+        </p>
+      </div>
+
+      <span class="badge success">EMERGENCY ACTIVE</span>
+    </div>
+
+    <div class="grid three" style="margin-top:15px">
+
+      <button class="btn" type="button" onclick="emergencyOpenCompany()">
+        🏢 Företag
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenEmployees()">
+        👥 Anställda
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenProjects()">
+        📁 Projekt
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenPlanning()">
+        📅 Planering
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenTimeReports()">
+        ⏱️ Tidrapporter
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenLockedHours()">
+        🔓 Låsta timmar
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenReports()">
+        📊 Rapporter
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenCustomers()">
+        👤 Kunder
+      </button>
+
+      <button class="btn" type="button" onclick="emergencyOpenWorkplaces()">
+        📍 Arbetsplatser
+      </button>
+
+    </div>
+
+    
+  
+<section id="emergencySystemRecovery" class="card emergency-recovery-section">
+  <div class="head">
+    <div>
+      <h3>🆘 System Recovery</h3>
+      <p class="sub">Diagnostik och säker återställning utan att radera företagets data.</p>
+    </div>
+    <span class="badge">RECOVERY</span>
+  </div>
+
+  <div class="grid three recovery-actions">
+    <button class="btn" type="button" onclick="emergencyRunDiagnostics()">🔍 Kontrollera systemfel</button>
+    <button class="btn" type="button" onclick="emergencyCreateSnapshot()">💾 Skapa säkerhetskopia</button>
+    <button class="btn" type="button" onclick="emergencyCheckIntegrity()">🛡️ Kontrollera dataintegritet</button>
+    <button class="btn" type="button" onclick="emergencyRestoreLastSnapshot()">🔄 Återställ senaste säkerhetskopia</button>
+    <button class="btn" type="button" onclick="emergencyClearRecoveryStatus()">🧹 Rensa status</button>
+  </div>
+
+  <div id="emergencyRecoveryStatus" class="recovery-status" style="margin-top:12px">
+    Ingen recovery-åtgärd körd ännu.
+  </div>
+
+  <div id="emergencyRecoveryDetails" class="recovery-details" style="margin-top:10px"></div>
+</section>
+
+<div id="emergencyAuditBottom" class="card emergency-audit-bottom" style="margin-top:28px">
+  <div class="head">
+    <div>
+      <h4>📋 Emergency Audit Log</h4>
+      <p class="sub">Historik över alla Emergency-åtgärder i den aktuella sessionen.</p>
+    </div>
+    <span class="badge">AUDIT</span>
+  </div>
+  <div id="emergencyAuditLog" class="sub" style="margin-top:10px">Inga Emergency-åtgärder ännu.</div>
+</div>
+</div>
+
+</section>
+
 </main>
 
 
@@ -2665,6 +2831,147 @@ const P=[
 ];
 
 
+
+/* ================= EMERGENCY TEST DATA =================
+   Demo data used only to test Emergency Access.
+   Every record is linked to a companyId.
+   This can be removed later when the real backend is connected.
+========================================================= */
+
+const EMERGENCY_TEST_DATA_KEY="tidpunkt_emergency_test_data_v1";
+
+const EMERGENCY_TEST_DATA={
+  companies:{
+    1:{
+      contactPerson:"Elson Preja",
+      email:"nordic@tidpunkt.local",
+      phone:"018-555 100",
+      address:"Kungsgatan 12",
+      postalCode:"753 21",
+      city:"Uppsala",
+      country:"Sverige",
+      website:"www.nordicstad.se",
+      invoiceEmail:"faktura@nordicstad.se",
+      notes:"Testföretag – Emergency Access",
+      created:"2026-01-15"
+    },
+    2:{
+      contactPerson:"Maria Svensson",
+      email:"uppsala@tidpunkt.local",
+      phone:"018-555 200",
+      address:"S:t Persgatan 8",
+      postalCode:"753 20",
+      city:"Uppsala",
+      country:"Sverige",
+      website:"www.uppsalaservice.se",
+      invoiceEmail:"faktura@uppsalaservice.se",
+      notes:"Testföretag",
+      created:"2026-02-03"
+    },
+    3:{
+      contactPerson:"Johan Berg",
+      email:"gavle@tidpunkt.local",
+      phone:"026-555 300",
+      address:"Drottninggatan 15",
+      postalCode:"803 20",
+      city:"Gävle",
+      country:"Sverige",
+      website:"www.gavleprojekt.se",
+      invoiceEmail:"faktura@gavleprojekt.se",
+      notes:"Testföretag",
+      created:"2026-02-20"
+    }
+  },
+
+  time:{
+    1:[
+      {id:"T1-001",employee:"Anna Andersson",date:"2026-08-17",project:"P8 Gullmarsvägen 50",place:"Gullmarsvägen 50",start:"07:30",end:"15:30",break:"00:30",status:"Godkänd",locked:false},
+      {id:"T1-002",employee:"Anna Andersson",date:"2026-08-18",project:"P8 Gullmarsvägen 50",place:"Gullmarsvägen 50",start:"08:00",end:"16:00",break:"00:30",status:"Godkänd",locked:true},
+      {id:"T1-003",employee:"Erik Johansson",date:"2026-08-17",project:"P7 Änghalsvägen 2B",place:"Änghalsvägen 2B",start:"08:00",end:"16:00",break:"00:30",status:"Godkänd",locked:false},
+      {id:"T1-004",employee:"Erik Johansson",date:"2026-08-18",project:"P7 Änghalsvägen 2B",place:"Änghalsvägen 2B",start:"07:00",end:"15:00",break:"00:30",status:"Rapporterad",locked:true}
+    ],
+    2:[
+      {id:"T2-001",employee:"Sara Nilsson",date:"2026-08-17",project:"P5 Skolvägen 3",place:"Skolvägen 3",start:"08:00",end:"16:00",break:"00:30",status:"Godkänd",locked:false},
+      {id:"T2-002",employee:"Johan Karlsson",date:"2026-08-18",project:"P5 Skolvägen 3",place:"Skolvägen 3",start:"07:30",end:"16:00",break:"00:30",status:"Godkänd",locked:true}
+    ],
+    3:[
+      {id:"T3-001",employee:"Maja Berg",date:"2026-08-17",project:"P4 Mariatorget 6A",place:"Mariatorget 6A",start:"08:00",end:"16:00",break:"00:30",status:"Godkänd",locked:false}
+    ]
+  },
+
+  reports:{
+    1:[
+      {id:"REP-001",employee:"Anna Andersson",date:"2026-08-17",project:"P8 Gullmarsvägen 50",type:"Dagsrapport",text:"Städning utförd enligt plan. Kök, badrum och gemensamma ytor klara.",status:"Inskickad"},
+      {id:"REP-002",employee:"Erik Johansson",date:"2026-08-18",project:"P7 Änghalsvägen 2B",type:"Dagsrapport",text:"Arbetet genomfört. Två mindre avvikelser noterades och åtgärdades.",status:"Inskickad"},
+      {id:"REP-003",employee:"Anna Andersson",date:"2026-08-18",project:"P8 Gullmarsvägen 50",type:"Kvalitetsrapport",text:"Slutkontroll genomförd.",status:"Godkänd"}
+    ],
+    2:[
+      {id:"REP-004",employee:"Sara Nilsson",date:"2026-08-17",project:"P5 Skolvägen 3",type:"Dagsrapport",text:"Samtliga planerade moment utförda.",status:"Inskickad"},
+      {id:"REP-005",employee:"Johan Karlsson",date:"2026-08-18",project:"P5 Skolvägen 3",type:"Dagsrapport",text:"Arbetet avslutat enligt plan.",status:"Godkänd"}
+    ],
+    3:[
+      {id:"REP-006",employee:"Maja Berg",date:"2026-08-17",project:"P4 Mariatorget 6A",type:"Dagsrapport",text:"Arbetsplatsen städad och kontrollerad.",status:"Inskickad"}
+    ]
+  },
+
+  customers:{
+    1:[
+      {id:"CUS-001",name:"Uppsala Fastigheter AB",org:"556700-1001",contact:"Lars Nilsson",email:"lars@uppsalafastigheter.se",phone:"018-600 101",address:"Stationsgatan 4",city:"Uppsala",projects:["P8 Gullmarsvägen 50"]},
+      {id:"CUS-002",name:"Nordic Kontor AB",org:"556700-1002",contact:"Eva Berg",email:"eva@nordickontor.se",phone:"018-600 102",address:"Kungsgatan 20",city:"Uppsala",projects:["P7 Änghalsvägen 2B"]}
+    ],
+    2:[
+      {id:"CUS-003",name:"Servicefastigheter Uppsala AB",org:"556700-2001",contact:"Peter Andersson",email:"peter@servicefast.se",phone:"018-600 201",address:"Skolvägen 3",city:"Uppsala",projects:["P5 Skolvägen 3"]}
+    ],
+    3:[
+      {id:"CUS-004",name:"Gävle Bostäder AB",org:"556700-3001",contact:"Maria Lind",email:"maria@gavlebostader.se",phone:"026-600 301",address:"Mariatorget 6A",city:"Gävle",projects:["P4 Mariatorget 6A"]}
+    ]
+  },
+
+  workplaces:{
+    1:[
+      {id:"WP-001",name:"Gullmarsvägen 50",address:"Gullmarsvägen 50",postalCode:"753 31",city:"Uppsala",customer:"Uppsala Fastigheter AB",project:"P8 Gullmarsvägen 50",status:"Aktiv"},
+      {id:"WP-002",name:"Änghalsvägen 2B",address:"Änghalsvägen 2B",postalCode:"754 41",city:"Uppsala",customer:"Nordic Kontor AB",project:"P7 Änghalsvägen 2B",status:"Aktiv"}
+    ],
+    2:[
+      {id:"WP-003",name:"Skolvägen 3",address:"Skolvägen 3",postalCode:"754 50",city:"Uppsala",customer:"Servicefastigheter Uppsala AB",project:"P5 Skolvägen 3",status:"Aktiv"}
+    ],
+    3:[
+      {id:"WP-004",name:"Mariatorget 6A",address:"Mariatorget 6A",postalCode:"803 20",city:"Gävle",customer:"Gävle Bostäder AB",project:"P4 Mariatorget 6A",status:"Aktiv"}
+    ]
+  },
+
+  planning:{
+    1:[
+      {id:"PL-001",date:"2026-08-17",project:"P8 Gullmarsvägen 50",employee:"Anna Andersson",start:"07:30",end:"15:30",status:"Klar"},
+      {id:"PL-002",date:"2026-08-18",project:"P8 Gullmarsvägen 50",employee:"Anna Andersson",start:"08:00",end:"16:00",status:"Klar"},
+      {id:"PL-003",date:"2026-08-18",project:"P7 Änghalsvägen 2B",employee:"Erik Johansson",start:"07:00",end:"15:00",status:"Pågår"},
+      {id:"PL-004",date:"2026-08-19",project:"P7 Änghalsvägen 2B",employee:"Erik Johansson",start:"08:00",end:"16:00",status:"Planerad"}
+    ],
+    2:[
+      {id:"PL-005",date:"2026-08-18",project:"P5 Skolvägen 3",employee:"Johan Karlsson",start:"07:30",end:"16:00",status:"Klar"},
+      {id:"PL-006",date:"2026-08-19",project:"P5 Skolvägen 3",employee:"Sara Nilsson",start:"08:00",end:"16:00",status:"Planerad"}
+    ],
+    3:[
+      {id:"PL-007",date:"2026-08-18",project:"P4 Mariatorget 6A",employee:"Maja Berg",start:"08:00",end:"16:00",status:"Klar"}
+    ]
+  }
+};
+
+function emergencyTestData(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(EMERGENCY_TEST_DATA_KEY)||"null");
+    if(saved && saved.time) return saved;
+  }catch(e){}
+  localStorage.setItem(EMERGENCY_TEST_DATA_KEY,JSON.stringify(EMERGENCY_TEST_DATA));
+  return EMERGENCY_TEST_DATA;
+}
+
+const EMERGENCY_DATA=emergencyTestData();
+
+function saveEmergencyTestData(){
+  localStorage.setItem(EMERGENCY_TEST_DATA_KEY,JSON.stringify(EMERGENCY_DATA));
+}
+
 /* ================= ADMIN CONTROL CENTER ================= */
 const ERROR_KEY="tidpunkt_system_errors_v1";
 const LOG_KEY="tidpunkt_admin_logs_v1";
@@ -2730,7 +3037,8 @@ const ADMIN_PERMISSION_LABELS={
   tools:"Verktyg",
   security:"Säkerhet",
   logs:"Loggar",
-  system:"System"
+  system:"System",
+  emergencyAccess:"Emergency Access"
 };
 
 function adminPermissionText(admin){
@@ -4690,7 +4998,9 @@ function show(id){
     ||
     (
       auth.role !== "owner" &&
-      !allowed.includes(id)
+      !allowed.includes(id) &&
+      !hasEmergencyCompanyAccess(id) &&
+      id!=="emergencyAccess"
     )
   ){
 
@@ -5934,7 +6244,8 @@ const ADMIN_ACCESS_CODES = [
 const ACCESS_LABELS={
   dashboard:"Dashboard",companies:"Företag",subscriptions:"Abonnemang",
   coupons:"Kuponger",systemErrors:"Systemfel",tools:"Verktyg",
-  security:"Säkerhet",logs:"Loggar",system:"System"
+  security:"Säkerhet",logs:"Loggar",system:"System",
+  emergencyAccess:"Emergency Access"
 };
 
 function saveAccess(){localStorage.setItem("tidpunkt_admin_access_v16",JSON.stringify(ADMIN_ACCESS_CODES));}
@@ -6452,8 +6763,30 @@ const OWNER_MENU_V26 = [
   ["security","🔐","Säkerhet"],
   ["logs","📋","Loggar"],
   ["system","⚙️","System"],
-  ["adminAccess","👥","Admin Access"]
+  ["adminAccess","👥","Admin Access"],
+  ["emergencyAccess","🚨","Emergency Access"]
 ];
+
+const EMERGENCY_COMPANY_PAGES=[
+  "dashboard",
+  "companies",
+  "companyDetail",
+  "employees",
+  "projects",
+  "planning",
+  "time",
+  "reports",
+  "customers",
+  "workplaces"
+];
+
+function isEmergencyActive(){
+  return !!(typeof emergencySession!=="undefined" && emergencySession);
+}
+
+function hasEmergencyCompanyAccess(id){
+  return isEmergencyActive() && EMERGENCY_COMPANY_PAGES.includes(id);
+}
 
 function renderV26Menu(){
 
@@ -6474,45 +6807,55 @@ function renderV26Menu(){
 
   nav.appendChild(title);
 
-  const items =
-    auth.role==="owner"
-    ? OWNER_MENU_V26
-    : OWNER_MENU_V26.filter(
-        item=>
-          (auth.permissions||[])
-            .includes(item[0])
-      );
+  let items;
+
+  if(auth.role==="owner"){
+    items=[...OWNER_MENU_V26];
+     if(!items.some(item=>item[0]==="emergencyAccess")){
+       const emergencyItem=OWNER_MENU_V26.find(item=>item[0]==="emergencyAccess");
+       if(emergencyItem)items.push(emergencyItem);
+     }
+  }else{
+    items=OWNER_MENU_V26.filter(item=>
+      (auth.permissions||[]).includes(item[0])
+    );
+
+    /* Emergency Access is always available to active TIDPUNKT Admins.
+       It is a special recovery capability, separate from normal permissions. */
+    if(!items.some(item=>item[0]==="emergencyAccess")){
+      const emergencyItem=OWNER_MENU_V26.find(item=>item[0]==="emergencyAccess");
+      if(emergencyItem)items.push(emergencyItem);
+    }
+
+    /* When an Emergency session is active, expose the company tools needed
+       to repair the affected company without granting unrelated system pages. */
+    if(isEmergencyActive()){
+      EMERGENCY_COMPANY_PAGES.forEach(function(id){
+        const item=OWNER_MENU_V26.find(x=>x[0]===id);
+        if(item && !items.some(x=>x[0]===id))items.push(item);
+      });
+    }
+  }
 
   items.forEach(item=>{
-
     const b=document.createElement("button");
-
     b.type="button";
     b.dataset.p=item[0];
-
-    b.innerHTML=
-      "<span>"+item[1]+"</span>"+
-      "<span>"+item[2]+"</span>";
-
-    b.onclick=function(){
-      show(item[0]);
-    };
-
+    b.innerHTML="<span>"+item[1]+"</span><span>"+item[2]+"</span>";
+    b.onclick=function(){show(item[0]);};
     nav.appendChild(b);
-
   });
 
   const foot=document.querySelector(".side .sidefoot");
 
   if(foot){
-
     foot.innerHTML =
       auth.role==="owner"
       ? "APP OWNER<br><span style='opacity:.55'>Full åtkomst</span>"
+      : isEmergencyActive()
+      ? "ADMIN APP<br><span style='opacity:.55'>EMERGENCY FULL ACCESS</span>"
       : "ADMIN APP<br><span style='opacity:.55'>Tilldelade behörigheter</span>";
-
   }
-
 }
 
 /* Owner: Username + Password */
@@ -7261,5 +7604,1710 @@ document.addEventListener("DOMContentLoaded",function(){
 }
 </style>
 
+
+<style id="tidpunkt-v36-emergency">
+#emergencyAccess .grid.three{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+#emergencyAccess .grid.three .btn{
+  width:100%;
+  min-height:44px;
+}
+#emergencyCompanyPanel{
+  border:1px solid #d8e2de;
+}
+@media(max-width:900px){
+  #emergencyAccess .grid.three{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:600px){
+  #emergencyAccess .grid.three{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
+<script>
+/* =========================================================
+   TIDPUNKT v0.36 — EMERGENCY ACCESS
+   Demo/local implementation.
+   Production must move code validation, one-time-use state,
+   expiry, authorization and audit logging to the server.
+   ========================================================= */
+
+const EMERGENCY_CODES = window.EMERGENCY_CODES || [
+  {
+    id:"emg-demo-001",
+    companyId:1,
+    companyName:"Nordic Städ AB",
+    code:"TID-EMG-7K4P-92LX",
+    status:"UNUSED",
+    expiresAt:Date.now()+24*60*60*1000
+  }
+];
+
+window.EMERGENCY_CODES=EMERGENCY_CODES;
+
+let emergencySession=null;
+
+function getEmergencyCode(code){
+  return EMERGENCY_CODES.find(function(x){
+    return x.status==="UNUSED" &&
+      x.code===code &&
+      Date.now()<x.expiresAt;
+  });
+}
+
+function redeemEmergencyCode(){
+
+  const input=document.getElementById("emergencyCodeInput");
+  const notice=document.getElementById("emergencyLoginNotice");
+
+  const code=(input?.value||"").trim().toUpperCase();
+  let auth=typeof getAuth==="function" ? getAuth() : null;
+
+  /* The Admin/Owner login stores its active role in the v0.37 auth state.
+     Prefer that state when present. */
+  if(!auth){
+    try{
+      const v=JSON.parse(localStorage.getItem("tidpunkt_admin_auth_v21")||"null");
+      if(v) auth=v;
+    }catch(e){}
+  }
+
+  if(!auth || (auth.role!=="admin" && auth.role!=="owner" && auth.role!=="ADMIN" && auth.role!=="OWNER")){
+    if(notice) notice.textContent="Endast TIDPUNKT Owner eller Admin kan använda Emergency Access.";
+    return;
+  }
+
+  const item=getEmergencyCode(code);
+
+  if(!item){
+    if(notice) notice.textContent="Ogiltig, använd eller utgången Emergency Code.";
+    return;
+  }
+
+  item.status="USED";
+  item.usedAt=Date.now();
+  item.usedBy=auth.username||auth.name||"TIDPUNKT Admin";
+
+  const role=String(auth.role||"").toLowerCase();
+
+  let resolvedCompanyId=item.companyId;
+  const matchedCompany=(C||[]).find(function(c){
+    return String(c.id)===String(item.companyId)
+      || String(c.name)===String(item.companyName);
+  });
+
+  if(matchedCompany){
+    resolvedCompanyId=matchedCompany.id;
+  }
+
+  emergencySession={
+    companyId:resolvedCompanyId,
+    companyName:matchedCompany?.name || item.companyName,
+    startedAt:Date.now(),
+    admin:auth.username||auth.name||(role==="owner"?"TIDPUNKT Owner":"TIDPUNKT Admin"),
+    codeId:item.id,
+    role
+  };
+
+  renderEmergencySession();
+
+  if(typeof renderV26Menu==="function")
+    renderV26Menu();
+
+  if(notice)
+    notice.textContent="Emergency Access aktiverad.";
+
+  if(typeof toast==="function")
+    toast("Emergency Access: "+item.companyName);
+}
+
+
+function renderEmergencyTestDataStatus(){
+  const el=document.getElementById("emergencyTestDataStatus");
+  const c=emergencyCompany();
+  if(!el||!c)return;
+
+  const counts={
+    employees:emergencyCompanyEmployees().length,
+    projects:emergencyCompanyProjects().length,
+    planning:emergencyCompanyPlanning().length,
+    time:emergencyCompanyTime().length,
+    reports:emergencyCompanyReports().length,
+    customers:emergencyCompanyCustomers().length,
+    workplaces:emergencyCompanyWorkplacesReal().length
+  };
+
+  el.innerHTML=
+    "🧪 TEST DATA AKTIV · "+
+    escapeHtml(c.name)+
+    " · "+counts.employees+" anställda · "+
+    counts.projects+" projekt · "+
+    counts.planning+" planeringar · "+
+    counts.time+" tidposter · "+
+    counts.reports+" rapporter · "+
+    counts.customers+" kunder · "+
+    counts.workplaces+" arbetsplatser";
+}
+
+function renderEmergencySession(){
+
+  const info=document.getElementById("emergencySessionInfo");
+  const panel=document.getElementById("emergencyCompanyPanel");
+  const close=document.getElementById("closeEmergencySessionBtn");
+  const name=document.getElementById("emergencyCompanyName");
+
+  if(!emergencySession){
+    if(info)info.textContent="Ingen Emergency-session aktiv.";
+    if(panel)panel.style.display="none";
+    if(close)close.style.display="none";
+    return;
+  }
+
+  if(info){
+    info.innerHTML=
+      "<strong>"+escapeHtml(emergencySession.companyName)+"</strong><br>"+
+      "Admin: "+escapeHtml(emergencySession.admin)+"<br>"+
+      "Full Emergency Access aktiv.";
+  }
+
+  if(name)name.textContent=emergencySession.companyName;
+  if(panel)panel.style.display="block";
+  if(close)close.style.display="inline-flex";
+
+  if(panel && !document.getElementById("emergencyTestDataStatus")){
+    const status=document.createElement("div");
+    status.id="emergencyTestDataStatus";
+    panel.prepend(status);
+  }
+  renderEmergencyTestDataStatus();
+}
+function closeEmergencySession(){
+  emergencySession=null;
+  renderEmergencySession();
+  if(typeof renderV26Menu==="function")
+    renderV26Menu();
+  if(typeof toast==="function")toast("Emergency Session avslutad.");
+}
+
+function requireEmergencySession(){
+  if(!emergencySession){
+    if(typeof toast==="function")
+      toast("Ingen aktiv Emergency Session.");
+    return false;
+  }
+  return true;
+}
+
+
+function emergencyCompanyId(){
+  return emergencySession ? String(emergencySession.companyId) : "";
+}
+
+function emergencyCompany(){
+  const id=emergencyCompanyId();
+  const c=(C||[]).find(x=>String(x.id)===id)||null;
+  if(!c)return null;
+
+  const seed=EMERGENCY_DATA?.companies?.[String(c.id)] || EMERGENCY_DATA?.companies?.[c.id];
+  if(seed){
+    Object.keys(seed).forEach(function(k){
+      if(c[k]===undefined || c[k]===null || c[k]===""){
+        c[k]=seed[k];
+      }
+    });
+  }
+
+  return c;
+}
+
+function emergencyEmployees(){
+  try{
+    const saved=JSON.parse(localStorage.getItem("tidpunkt_emergency_employees_v1")||"null");
+    if(Array.isArray(saved)) return saved;
+  }catch(e){}
+  return E.map(x=>({
+    name:x[0],company:x[1],role:x[2],status:x[3],hours:x[4]
+  }));
+}
+
+function saveEmergencyEmployees(data){
+  localStorage.setItem("tidpunkt_emergency_employees_v1",JSON.stringify(data));
+}
+
+function emergencyProjects(){
+  try{
+    const saved=JSON.parse(localStorage.getItem("tidpunkt_emergency_projects_v1")||"null");
+    if(Array.isArray(saved)) return saved;
+  }catch(e){}
+  return P.map(x=>({
+    name:x[0],company:x[1],place:x[2],manager:x[3],hours:x[4],status:x[5]
+  }));
+}
+
+function saveEmergencyProjects(data){
+  localStorage.setItem("tidpunkt_emergency_projects_v1",JSON.stringify(data));
+}
+
+function emergencyCompanyEmployees(){
+  if(!emergencyCompany())return [];
+  const seed=EMERGENCY_DATA?.time?.[emergencyCompanyId()]||[];
+  const names=[...new Set(seed.map(x=>x.employee))];
+
+  return names.map(function(name){
+    const source=(E||[]).map(function(x){
+      return {name:x[0],company:x[1],role:x[2],status:x[3],hours:x[4]};
+    }).find(function(x){return x.name===name;});
+
+    return source || {
+      name:name,
+      company:emergencyCompany().name,
+      role:"Städare",
+      status:"Aktiv",
+      hours:"0:00"
+    };
+  });
+}
+
+function emergencyCompanyProjects(){
+  if(!emergencyCompany())return [];
+  const id=emergencyCompanyId();
+  const projectRows=(P||[]).filter(function(x){
+    return String(x[1])===String(emergencyCompany().name);
+  }).map(function(x){
+    return {name:x[0],company:x[1],place:x[2],manager:x[3],hours:x[4],status:x[5]};
+  });
+
+  const seedProjects=(EMERGENCY_DATA?.planning?.[id]||[]).map(function(x){
+    return {
+      name:x.project,
+      company:emergencyCompany().name,
+      place:(EMERGENCY_DATA?.workplaces?.[id]||[]).find(w=>w.project===x.project)?.address || "",
+      manager:x.employee,
+      hours:x.start+"–"+x.end,
+      status:x.status
+    };
+  });
+
+  const merged=[...projectRows];
+  seedProjects.forEach(function(p){
+    if(!merged.some(function(x){return x.name===p.name;}))merged.push(p);
+  });
+  return merged;
+}
+
+function emergencyCompanyWorkplaces(){
+  return emergencyCompanyWorkplacesReal().map(function(x){return x.address;});
+}
+
+
+function emergencyCompanyData(type){
+  const id=emergencyCompanyId();
+  return (EMERGENCY_DATA[type]&&EMERGENCY_DATA[type][id]) || [];
+}
+
+function emergencyCompanyTime(){
+  return emergencyCompanyData("time");
+}
+
+function emergencyCompanyReports(){
+  return emergencyCompanyData("reports");
+}
+
+function emergencyCompanyCustomers(){
+  return emergencyCompanyData("customers");
+}
+
+function emergencyCompanyWorkplacesReal(){
+  return emergencyCompanyData("workplaces");
+}
+
+function emergencyCompanyPlanning(){
+  return emergencyCompanyData("planning");
+}
+
+function emergencyHoursForEmployee(name){
+  return emergencyCompanyTime().filter(x=>x.employee===name);
+}
+
+function emergencyNetHours(record){
+  const parse=t=>{
+    const [h,m]=String(t||"0:00").split(":").map(Number);
+    return (h||0)*60+(m||0);
+  };
+  return Math.max(0,parse(record.end)-parse(record.start)-parse(record.break));
+}
+
+function emergencyTotalMinutes(h){
+  const m=String(h||"0:00").split(":");
+  return (parseInt(m[0],10)||0)*60+(parseInt(m[1],10)||0);
+}
+
+function emergencyFormatMinutes(total){
+  const h=Math.floor(total/60);
+  const m=String(total%60).padStart(2,"0");
+  return h+":"+m;
+}
+
+function emergencyCustomers(){
+  const company=emergencyCompany();
+  if(!company)return [];
+
+  /* Existing customer dataset in this demo is not company-linked.
+     We only expose customers that are represented by this company's projects,
+     using project locations as the company-scoped source. */
+  const places=emergencyCompanyWorkplaces();
+  const map={
+    "Gullmarsvägen 50":{name:"Nordic Fastigheter",city:"Uppsala"},
+    "Änghalsvägen 2B":{name:"Nordic Fastigheter",city:"Uppsala"},
+    "Skolvägen 3":{name:"Mälardalen Bygg",city:"Stockholm"},
+    "Mariatorget 6A":{name:"Gävle Kommun",city:"Gävle"}
+  };
+
+  return places.map(p=>({
+    name:map[p]?.name||"Kund kopplad till "+p,
+    city:map[p]?.city||"",
+    workplace:p
+  }));
+}
+
+function emergencyReports(){
+  const employees=emergencyCompanyEmployees();
+  const projects=emergencyCompanyProjects();
+
+  return employees.map((e,i)=>({
+    id:"R-"+(i+1),
+    employee:e.name,
+    role:e.role,
+    hours:e.hours,
+    project:projects[i % Math.max(projects.length,1)]?.name||"—",
+    status:"Inskickad"
+  }));
+}
+
+function renderEmergencyInlinePanel(key,title,subtitle,body){
+  if(!requireEmergencySession())return;
+
+  const panel=document.getElementById("emergencyCompanyPanel");
+  if(!panel)return;
+
+  let repair=document.getElementById("emergencyRepairArea");
+  if(!repair){
+    repair=document.createElement("div");
+    repair.id="emergencyRepairArea";
+    repair.style.marginTop="15px";
+    const auditBottom=document.getElementById("emergencyAuditBottom");
+    if(auditBottom) panel.insertBefore(repair,auditBottom);
+    else panel.appendChild(repair);
+  }
+
+  repair.innerHTML=`
+    <div class="card emergency-inline-editor" data-repair="${escapeHtml(key)}">
+      <div class="head">
+        <div>
+          <h3>${title}</h3>
+          <p class="sub">${subtitle}</p>
+        </div>
+        <span class="badge success">EDIT MODE</span>
+      </div>
+      <div style="margin-top:14px">${body}</div>
+      <div class="actions" style="justify-content:flex-start;margin-top:10px">
+        <button class="btn" type="button" onclick="document.getElementById('emergencyRepairArea')?.remove()">Stäng redigering</button>
+      </div>
+    </div>
+  `;
+}
+
+function emergencySaveGeneric(button,action,details,reasonId){
+  if(!requireEmergencySession())return;
+  const reason=document.getElementById(reasonId)?.value.trim()||"";
+  if(!reason){toast("Ange orsak till ändringen.");return;}
+  emergencyAudit("EMERGENCY MODIFIED – "+action,details+" · Orsak: "+reason+" · Typ: EDIT EXISTING RECORD");
+  document.getElementById("emergencyRepairArea")?.remove();
+  toast(action+" ändrad. EMERGENCY MODIFIED registrerad.");
+}
+
+function saveEmergencyEmployeeChange(button){
+  emergencySaveGeneric(button,"Anställd",
+    (document.getElementById("emgEmpName")?.value||"Befintlig")+
+    " · Status: "+(document.getElementById("emgEmpStatus")?.value||""),
+    "emgEmpReason");
+}
+function saveEmergencyProjectChange(button){
+  emergencySaveGeneric(button,"Projekt",
+    (document.getElementById("emgProjectName")?.value||"Befintligt")+
+    " · Status: "+(document.getElementById("emgProjectStatus")?.value||""),
+    "emgProjectReason");
+}
+function saveEmergencyPlanningChange(button){
+  emergencySaveGeneric(button,"Planering",
+    (document.getElementById("emgPlanPass")?.value||"Befintligt pass")+
+    " · "+(document.getElementById("emgPlanStart")?.value||"")+"–"+(document.getElementById("emgPlanEnd")?.value||""),
+    "emgPlanReason");
+}
+function saveEmergencyReportChange(button){
+  emergencySaveGeneric(button,"Rapport",
+    (document.getElementById("emgReportName")?.value||"Befintlig rapport"),
+    "emgReportReason");
+}
+function saveEmergencyCustomerChange(button){
+  emergencySaveGeneric(button,"Kund",
+    (document.getElementById("emgCustomerName")?.value||"Befintlig kund")+
+    " · Status: "+(document.getElementById("emgCustomerStatus")?.value||""),
+    "emgCustomerReason");
+}
+function saveEmergencyWorkplaceChange(button){
+  emergencySaveGeneric(button,"Arbetsplats",
+    (document.getElementById("emgWorkplaceName")?.value||"Befintlig arbetsplats")+
+    " · Status: "+(document.getElementById("emgWorkplaceStatus")?.value||""),
+    "emgWorkplaceReason");
+}
+
+function emergencyAudit(action,details){
+
+  if(!emergencySession)return;
+
+  const box=document.getElementById("emergencyAuditLog");
+  if(!box)return;
+
+  const time=new Date().toLocaleString("sv-SE");
+
+  const row=document.createElement("div");
+  row.style.padding="8px 0";
+  row.style.borderBottom="1px solid #e5ebe8";
+
+  row.innerHTML=
+    "<strong>"+escapeHtml(action)+"</strong><br>"+
+    "<span class='sub'>"+
+    escapeHtml(details||"")+
+    " · "+escapeHtml(time)+
+    "</span>";
+
+  box.prepend(row);
+}
+
+function emergencyOpenCompany(){
+  if(!requireEmergencySession())return;
+
+  const c=emergencyCompany();
+  if(!c){
+    toast("Företaget kunde inte hittas.");
+    return;
+  }
+
+  emergencyAudit("Öppna Företag","Visa alla företagsuppgifter i Emergency Access");
+
+  renderEmergencyInlinePanel(
+    "company",
+    "🏢 Företag",
+    "Alla registrerade uppgifter för den aktuella företaget visas nedan. Inga andra företag visas.",
+    `
+      <div class="emergency-company-summary">
+
+        <div class="emergency-company-hero">
+          <div>
+            <div class="eyebrow">FÖRETAG</div>
+            <h3 id="emgCompanyDisplayName">${escapeHtml(c.name||"")}</h3>
+            <div class="sub">Organisationsnummer: <strong>${escapeHtml(c.org||"—")}</strong></div>
+          </div>
+          <span class="badge ${c.status==="Aktiv"?"success":""}">
+            ${escapeHtml(c.status||"—")}
+          </span>
+        </div>
+
+        <div class="grid two" style="margin-top:14px">
+
+          <div class="field">
+            <label>🏢 Företagsnamn</label>
+            <input id="emgCompanyNameEdit" value="${escapeHtml(c.name||"")}">
+          </div>
+
+          <div class="field">
+            <label>🔢 Organisationsnummer</label>
+            <input id="emgCompanyOrg" value="${escapeHtml(c.org||"")}">
+          </div>
+
+          <div class="field">
+            <label>👥 Antal anställda</label>
+            <input id="emgCompanyEmployees" value="${escapeHtml(c.employees??"")}">
+          </div>
+
+          <div class="field">
+            <label>📁 Antal projekt</label>
+            <input id="emgCompanyProjects" value="${escapeHtml(c.projects??"")}">
+          </div>
+
+          <div class="field">
+            <label>🔐 Företagsstatus</label>
+            <select id="emgCompanyStatus">
+              <option ${c.status==="Aktiv"?"selected":""}>Aktiv</option>
+              <option ${c.status==="Avstängd"?"selected":""}>Avstängd</option>
+              <option ${c.status==="Stängd"?"selected":""}>Stängd</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>💳 Abonnemangsstatus</label>
+            <input id="emgCompanySubscription" value="${escapeHtml(c.subscription??"")}">
+          </div>
+
+          <div class="field">
+            <label>📦 Abonnemang / Plan</label>
+            <input id="emgCompanyPlan" value="${escapeHtml(c.planName??"")}">
+          </div>
+
+          <div class="field">
+            <label>👤 Max antal anställda</label>
+            <input id="emgCompanyEmployeeLimit" type="number" value="${escapeHtml(c.employeeLimit??"")}">
+          </div>
+
+          <div class="field">
+            <label>💰 Pris</label>
+            <input id="emgCompanyPrice" type="number" value="${escapeHtml(c.price??"")}">
+          </div>
+
+          <div class="field">
+            <label>🔑 Företagsanvändare</label>
+            <input id="emgCompanyUsername" value="${escapeHtml(c.username??"")}">
+          </div>
+
+          <div class="field">
+            <label>🆔 Företags-ID</label>
+            <input value="${escapeHtml(String(c.id))}" readonly>
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h4>📋 Sammanfattning</h4>
+          <div class="grid two" style="margin-top:10px">
+            <div><span class="sub">Företag</span><br><strong>${escapeHtml(c.name||"—")}</strong></div>
+            <div><span class="sub">Org.nr</span><br><strong>${escapeHtml(c.org||"—")}</strong></div>
+            <div><span class="sub">Anställda</span><br><strong>${escapeHtml(c.employees??"—")}</strong></div>
+            <div><span class="sub">Projekt</span><br><strong>${escapeHtml(c.projects??"—")}</strong></div>
+            <div><span class="sub">Status</span><br><strong>${escapeHtml(c.status||"—")}</strong></div>
+            <div><span class="sub">Abonnemang</span><br><strong>${escapeHtml(c.subscription||"—")}</strong></div>
+            <div><span class="sub">Plan</span><br><strong>${escapeHtml(c.planName||"—")}</strong></div>
+            <div><span class="sub">Pris</span><br><strong>${escapeHtml(c.price??"—")} kr</strong></div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:14px">
+          <label>📝 Orsak till ändringen</label>
+          <textarea id="emgCompanyReason" rows="3"
+            placeholder="Beskriv varför företagsuppgifterna behöver ändras."></textarea>
+        </div>
+
+        <div class="actions" style="justify-content:flex-end;margin-top:12px">
+          <button class="btn primary" type="button"
+            onclick="saveEmergencyCompanyChange(this)">
+            💾 Spara ändring
+          </button>
+        </div>
+
+      </div>
+    `
+  );
+}
+
+function saveEmergencyCompanyChange(button){
+  if(!requireEmergencySession())return;
+
+  const c=emergencyCompany();
+  if(!c)return;
+
+  const reason=document.getElementById("emgCompanyReason")?.value.trim()||"";
+  if(!reason){
+    toast("Ange orsak till ändringen.");
+    return;
+  }
+
+  const old=JSON.stringify(c);
+
+  c.name=document.getElementById("emgCompanyNameEdit")?.value.trim()||c.name;
+  c.org=document.getElementById("emgCompanyOrg")?.value.trim()||c.org;
+  c.employees=document.getElementById("emgCompanyEmployees")?.value.trim()||c.employees;
+  c.projects=document.getElementById("emgCompanyProjects")?.value.trim()||c.projects;
+  c.status=document.getElementById("emgCompanyStatus")?.value||c.status;
+  c.subscription=document.getElementById("emgCompanySubscription")?.value.trim()||c.subscription;
+  c.planName=document.getElementById("emgCompanyPlan")?.value.trim()||c.planName;
+  c.employeeLimit=Number(document.getElementById("emgCompanyEmployeeLimit")?.value||c.employeeLimit||0);
+  c.price=Number(document.getElementById("emgCompanyPrice")?.value||c.price||0);
+  c.username=document.getElementById("emgCompanyUsername")?.value.trim()||c.username;
+
+  saveCompanies();
+  emergencySession.companyName=c.name;
+
+  emergencyAudit(
+    "EMERGENCY MODIFIED – Företag",
+    old+" → "+JSON.stringify(c)+
+    " · Orsak: "+reason+
+    " · Typ: EDIT EXISTING COMPANY RECORD"
+  );
+
+  emergencyOpenCompany();
+  toast("Alla företagsuppgifter är uppdaterade.");
+}
+
+
+function emergencyOpenEmployees(){
+  if(!requireEmergencySession())return;
+  const employees=emergencyCompanyEmployees();
+  emergencyAudit("Öppna Anställda","Visa alla anställda i aktuell företag");
+
+  renderEmergencyInlinePanel("employees","👥 Anställda",
+    `${employees.length} anställda. Välj en person för att redigera befintliga uppgifter.`,`
+      <div class="emergency-data-list">
+        ${employees.map((e,i)=>`
+          <div class="row emergency-record-row">
+            <div>
+              <b>${escapeHtml(e.name)}</b>
+              <div class="sub">${escapeHtml(e.role)} · ${escapeHtml(e.status)} · ${escapeHtml(e.hours)} timmar</div>
+            </div>
+            <button class="btn" onclick="editEmergencyEmployee(${i})">✏️ Edit</button>
+          </div>
+        `).join("") || `<div class="sub">Inga anställda hittades.</div>`}
+      </div>
+      <div id="emergencyEmployeeEditor" style="margin-top:12px"></div>
+    `);
+}
+
+function editEmergencyEmployee(index){
+  const arr=emergencyCompanyEmployees();
+  const e=arr[index];
+  if(!e)return;
+  document.getElementById("emergencyEmployeeEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ ${escapeHtml(e.name)}</h4>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Namn</label><input id="editEmpName" value="${escapeHtml(e.name)}"></div>
+        <div class="field"><label>Befattning</label><input id="editEmpRole" value="${escapeHtml(e.role)}"></div>
+        <div class="field"><label>Status</label><select id="editEmpStatus"><option ${e.status==="Aktiv"?"selected":""}>Aktiv</option><option ${e.status==="Avstängd"?"selected":""}>Avstängd</option></select></div>
+        <div class="field"><label>Totala timmar</label><input id="editEmpHours" value="${escapeHtml(e.hours)}"></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="editEmpReason" rows="2"></textarea></div>
+      <button class="btn primary" style="margin-top:10px" onclick="saveEmergencyEmployeeEdit(${index},this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencyEmployeeEdit(index,button){
+  const company=emergencyCompany();
+  const all=emergencyEmployees();
+  const target=all.filter(x=>x.company===company.name)[index];
+  if(!target)return;
+  const reason=document.getElementById("editEmpReason")?.value.trim()||"";
+  if(!reason){toast("Ange orsak.");return;}
+  const old=JSON.stringify(target);
+  target.name=document.getElementById("editEmpName").value.trim();
+  target.role=document.getElementById("editEmpRole").value.trim();
+  target.status=document.getElementById("editEmpStatus").value;
+  target.hours=document.getElementById("editEmpHours").value.trim();
+  saveEmergencyEmployees(all);
+  emergencyAudit("EMERGENCY MODIFIED – Anställd",old+" → "+JSON.stringify(target)+" · Orsak: "+reason+" · Typ: EDIT EXISTING RECORD");
+  emergencyOpenEmployees();
+  toast("Anställd ändrad.");
+}
+
+function emergencyOpenProjects(){
+  if(!requireEmergencySession())return;
+  const projects=emergencyCompanyProjects();
+  emergencyAudit("Öppna Projekt","Visa alla projekt i aktuell företag");
+
+  renderEmergencyInlinePanel("projects","📁 Projekt",
+    `${projects.length} projekt. Välj ett befintligt projekt för redigering.`,`
+      <div class="emergency-data-list">
+        ${projects.map((p,i)=>`
+          <div class="row emergency-record-row">
+            <div><b>${escapeHtml(p.name)}</b><div class="sub">${escapeHtml(p.place)} · ${escapeHtml(p.manager)} · ${escapeHtml(p.hours)} · ${escapeHtml(p.status)}</div></div>
+            <button class="btn" onclick="editEmergencyProject(${i})">✏️ Edit</button>
+          </div>`).join("") || `<div class="sub">Inga projekt hittades.</div>`}
+      </div>
+      <div id="emergencyProjectEditor" style="margin-top:12px"></div>
+    `);
+}
+
+function editEmergencyProject(index){
+  const arr=emergencyCompanyProjects(),p=arr[index];
+  if(!p)return;
+  document.getElementById("emergencyProjectEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ ${escapeHtml(p.name)}</h4>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Projekt</label><input id="editProjectName" value="${escapeHtml(p.name)}"></div>
+        <div class="field"><label>Arbetsplats</label><input id="editProjectPlace" value="${escapeHtml(p.place)}"></div>
+        <div class="field"><label>Ansvarig</label><input id="editProjectManager" value="${escapeHtml(p.manager)}"></div>
+        <div class="field"><label>Status</label><select id="editProjectStatus"><option ${p.status==="Pågår"?"selected":""}>Pågår</option><option ${p.status==="Klar"?"selected":""}>Klar</option><option ${p.status==="Pausad"?"selected":""}>Pausad</option></select></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="editProjectReason" rows="2"></textarea></div>
+      <button class="btn primary" style="margin-top:10px" onclick="saveEmergencyProjectEdit(${index},this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencyProjectEdit(index,button){
+  const company=emergencyCompany(),all=emergencyProjects();
+  const target=all.filter(x=>x.company===company.name)[index];
+  const reason=document.getElementById("editProjectReason")?.value.trim()||"";
+  if(!target||!reason){toast("Ange orsak.");return;}
+  const old=JSON.stringify(target);
+  target.name=document.getElementById("editProjectName").value.trim();
+  target.place=document.getElementById("editProjectPlace").value.trim();
+  target.manager=document.getElementById("editProjectManager").value.trim();
+  target.status=document.getElementById("editProjectStatus").value;
+  saveEmergencyProjects(all);
+  emergencyAudit("EMERGENCY MODIFIED – Projekt",old+" → "+JSON.stringify(target)+" · Orsak: "+reason+" · Typ: EDIT EXISTING RECORD");
+  emergencyOpenProjects();
+  toast("Projekt ändrat.");
+}
+
+function emergencyOpenPlanning(){
+  if(!requireEmergencySession())return;
+  const plans=emergencyCompanyPlanning();
+  emergencyAudit("Öppna Planering","Visa testdata för företagets planering");
+
+  renderEmergencyInlinePanel("planning","📅 Planering",
+    `${plans.length} planerade pass för den aktuella företaget.`,`
+      <div class="emergency-data-list">
+        ${plans.map(p=>`
+          <div class="row emergency-record-row">
+            <div><b>${escapeHtml(p.date)} · ${escapeHtml(p.project)}</b><div class="sub">${escapeHtml(p.employee)} · ${escapeHtml(p.start)}–${escapeHtml(p.end)} · ${escapeHtml(p.status)}</div></div>
+          </div>`).join("")}
+      </div>
+    `);
+}
+
+function editEmergencyPlanning(index){
+  const p=emergencyCompanyProjects()[index];
+  if(!p)return;
+  document.getElementById("emergencyPlanningEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ Redigera planering: ${escapeHtml(p.name)}</h4>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Projekt</label><input id="editPlanProject" value="${escapeHtml(p.name)}"></div>
+        <div class="field"><label>Ansvarig</label><select id="editPlanManager">${emergencyCompanyEmployees().map(e=>`<option ${e.name===p.manager?"selected":""}>${escapeHtml(e.name)}</option>`).join("")}</select></div>
+        <div class="field"><label>Arbetsplats</label><input id="editPlanPlace" value="${escapeHtml(p.place)}"></div>
+        <div class="field"><label>Status</label><select id="editPlanStatus"><option ${p.status==="Pågår"?"selected":""}>Pågår</option><option ${p.status==="Klar"?"selected":""}>Klar</option></select></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="editPlanReason" rows="2"></textarea></div>
+      <button class="btn primary" style="margin-top:10px" onclick="saveEmergencyPlanningEdit(${index},this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencyPlanningEdit(index,button){
+  const company=emergencyCompany(),all=emergencyProjects(),target=all.filter(x=>x.company===company.name)[index];
+  const reason=document.getElementById("editPlanReason")?.value.trim()||"";
+  if(!target||!reason){toast("Ange orsak.");return;}
+  const old=JSON.stringify(target);
+  target.name=document.getElementById("editPlanProject").value.trim();
+  target.manager=document.getElementById("editPlanManager").value;
+  target.place=document.getElementById("editPlanPlace").value.trim();
+  target.status=document.getElementById("editPlanStatus").value;
+  saveEmergencyProjects(all);
+  emergencyAudit("EMERGENCY MODIFIED – Planering",old+" → "+JSON.stringify(target)+" · Orsak: "+reason+" · Typ: EDIT EXISTING RECORD");
+  emergencyOpenPlanning();
+  toast("Planering ändrad.");
+}
+
+function emergencyOpenTimeReports(){
+  if(!requireEmergencySession())return;
+  const employees=emergencyCompanyEmployees();
+  const times=emergencyCompanyTime();
+  const total=times.reduce((s,t)=>s+emergencyNetHours(t),0);
+
+  emergencyAudit("Öppna Tidrapporter","Visa testdata för timmar per anställd");
+
+  renderEmergencyInlinePanel("time","⏱️ Tidrapport",
+    "Testdata: timmar från varje anställd visas separat.",`
+      <div class="card metric" style="margin-bottom:14px">
+        <span class="label">Totala arbetade timmar</span>
+        <div class="value">${emergencyFormatMinutes(total)}</div>
+      </div>
+
+      ${employees.map(e=>{
+        const rows=times.filter(t=>t.employee===e.name);
+        const sum=rows.reduce((s,t)=>s+emergencyNetHours(t),0);
+        return `
+          <div class="card" style="margin-bottom:10px">
+            <div class="head">
+              <div><h4>👤 ${escapeHtml(e.name)}</h4><div class="sub">${escapeHtml(e.role)}</div></div>
+              <strong>${emergencyFormatMinutes(sum)}</strong>
+            </div>
+            ${rows.map(t=>`
+              <div class="row emergency-record-row">
+                <div>
+                  <b>${escapeHtml(t.date)}</b>
+                  <div class="sub">${escapeHtml(t.project)} · ${escapeHtml(t.place)}</div>
+                  <div class="sub">${escapeHtml(t.start)}–${escapeHtml(t.end)} · Rast ${escapeHtml(t.break)} · ${t.locked?"🔒 Låst":"Öppen"}</div>
+                </div>
+                <button class="btn" onclick="editEmergencySeedTime('${escapeHtml(t.id)}')">✏️ Edit</button>
+              </div>`).join("")}
+          </div>`;
+      }).join("")}
+      <div id="emergencySeedTimeEditor"></div>
+    `);
+}
+
+function emergencyOpenLockedHours(){
+  if(!requireEmergencySession())return;
+  emergencyAudit("Öppna låsta timmar","Separate existing time records editor");
+
+  const panel=document.getElementById("emergencyCompanyPanel");
+  if(!panel)return;
+
+  let repair=document.getElementById("emergencyRepairArea");
+  if(repair)repair.remove();
+
+  repair=document.createElement("div");
+  repair.id="emergencyRepairArea";
+  repair.style.marginTop="15px";
+
+  const records=[
+    {id:"t1",employee:"Anna Andersson",date:"2026-08-05",start:"07:00",end:"15:00",place:"Gullmarsvägen 50"},
+    {id:"t2",employee:"Erik Johansson",date:"2026-08-06",start:"08:00",end:"16:00",place:"Änghalsvägen 2B"},
+    {id:"t3",employee:"Sara Nilsson",date:"2026-08-07",start:"09:00",end:"17:00",place:"Skolvägen 3"}
+  ];
+
+  repair.innerHTML=`
+    <div class="card emergency-inline-editor">
+      <div class="head">
+        <div>
+          <h3>🔓 Låsta tidrapporter</h3>
+          <p class="sub">Välj en befintlig registrering. Endast den valda timrapporten redigeras.</p>
+        </div>
+        <span class="badge gold">EDIT EXISTING</span>
+      </div>
+
+      <div class="emergency-time-records" style="margin-top:14px">
+        ${records.map(r=>`
+          <div class="row emergency-time-record" data-record="${r.id}">
+            <div>
+              <b>${escapeHtml(r.employee)}</b>
+              <div class="sub">${escapeHtml(r.date)} · ${escapeHtml(r.place)}</div>
+              <div class="sub"><strong>${escapeHtml(r.start)}–${escapeHtml(r.end)}</strong> · LOCKED</div>
+            </div>
+            <button class="btn" type="button" onclick="editEmergencyTimeRecord('${r.id}')">✏️ Edit</button>
+          </div>
+        `).join("")}
+      </div>
+
+      <div id="emergencyTimeEditor" style="margin-top:14px"></div>
+
+      <div class="actions" style="margin-top:10px">
+        <button class="btn" type="button" onclick="document.getElementById('emergencyRepairArea')?.remove()">Stäng redigering</button>
+      </div>
+    </div>
+  `;
+
+  const auditBottom=document.getElementById("emergencyAuditBottom");
+  if(auditBottom) panel.insertBefore(repair,auditBottom);
+  else panel.appendChild(repair);
+}
+
+const EMERGENCY_TIME_RECORDS={
+  t1:{employee:"Anna Andersson",date:"2026-08-05",start:"07:00",end:"15:00",place:"Gullmarsvägen 50"},
+  t2:{employee:"Erik Johansson",date:"2026-08-06",start:"08:00",end:"16:00",place:"Änghalsvägen 2B"},
+  t3:{employee:"Sara Nilsson",date:"2026-08-07",start:"09:00",end:"17:00",place:"Skolvägen 3"}
+};
+
+function editEmergencyTimeRecord(id){
+  if(!requireEmergencySession())return;
+  const r=EMERGENCY_TIME_RECORDS[id];
+  const editor=document.getElementById("emergencyTimeEditor");
+  if(!r||!editor)return;
+
+  editor.innerHTML=`
+    <div class="card" style="border:1px solid #e7d39a;background:#fffdf6">
+      <div class="head">
+        <div>
+          <h4>✏️ Redigera: ${escapeHtml(r.employee)}</h4>
+          <p class="sub">${escapeHtml(r.date)} · ${escapeHtml(r.place)} · befintlig låst post</p>
+        </div>
+        <span class="badge gold">LOCKED → EDIT</span>
+      </div>
+
+      <div class="grid two" style="margin-top:12px">
+        <div class="field"><label>Registrerad start</label><input value="${r.start}" readonly></div>
+        <div class="field"><label>Registrerad slut</label><input value="${r.end}" readonly></div>
+        <div class="field"><label>Ändra start</label><input id="editTimeStart" type="time" value="${r.start}"></div>
+        <div class="field"><label>Ändra slut</label><input id="editTimeEnd" type="time" value="${r.end}"></div>
+      </div>
+
+      <div class="field" style="margin-top:12px">
+        <label>Orsak</label>
+        <textarea id="editTimeReason" rows="3" placeholder="Varför ska den befintliga tiden korrigeras?"></textarea>
+      </div>
+
+      <div class="actions" style="justify-content:flex-end;margin-top:12px">
+        <button class="btn" type="button" onclick="document.getElementById('emergencyTimeEditor').innerHTML=''">Avbryt</button>
+        <button class="btn danger" type="button" onclick="saveEmergencyTimeRecord('${id}',this)">💾 Spara ändring</button>
+      </div>
+    </div>
+  `;
+}
+
+function saveEmergencyTimeRecord(id,button){
+  if(!requireEmergencySession())return;
+  const r=EMERGENCY_TIME_RECORDS[id];
+  if(!r)return;
+
+  const newStart=document.getElementById("editTimeStart")?.value||"";
+  const newEnd=document.getElementById("editTimeEnd")?.value||"";
+  const reason=document.getElementById("editTimeReason")?.value.trim()||"";
+
+  if(!newStart||!newEnd||!reason){toast("Fyll i nya tider och orsak.");return;}
+  if(newStart===r.start&&newEnd===r.end){toast("Ingen ändring har gjorts.");return;}
+
+  const oldStart=r.start,oldEnd=r.end;
+  r.start=newStart;r.end=newEnd;
+
+  emergencyAudit(
+    "EMERGENCY MODIFIED – Befintlig låst tidrapport",
+    r.employee+" · "+r.date+" · "+oldStart+"–"+oldEnd+
+    " → "+newStart+"–"+newEnd+" · Orsak: "+reason+
+    " · Typ: EDIT EXISTING RECORD · Record: "+id
+  );
+
+  document.getElementById("emergencyTimeEditor").innerHTML=
+    `<div class="success-box">✅ Tidrapport ${escapeHtml(r.date)} för ${escapeHtml(r.employee)} är ändrad. Endast denna post ändrades.</div>`;
+
+  toast("Befintlig tid ändrad.");
+}
+
+
+function confirmEmergencyLockedHourChange(button){
+  if(!requireEmergencySession())return;
+
+  const get=id=>document.getElementById(id)?.value||"";
+  const employee=get("emgEmployee");
+  const date=get("emgDate");
+  const oldStart=get("emgOldStart");
+  const oldEnd=get("emgOldEnd");
+  const newStart=get("emgNewStart");
+  const newEnd=get("emgNewEnd");
+  const reason=get("emgReason").trim();
+
+  if(!employee||!date||!oldStart||!oldEnd||!newStart||!newEnd||!reason){
+    toast("Fyll i alla fält och ange orsak.");
+    return;
+  }
+
+  if(oldStart===newStart && oldEnd===newEnd){
+    toast("Ingen ändring har gjorts.");
+    return;
+  }
+
+  /* Existing record is edited; no new time entry is created. */
+  emergencyAudit(
+    "EMERGENCY MODIFIED – Befintlig låst tidrapport",
+    employee+" · "+date+
+    " · "+oldStart+"–"+oldEnd+
+    " → "+newStart+"–"+newEnd+
+    " · Orsak: "+reason+
+    " · Typ: EDIT EXISTING RECORD"
+  );
+
+  document.getElementById("emergencyRepairArea")?.remove();
+
+  toast("Befintlig låst tid ändrad. EMERGENCY MODIFIED registrerad.");
+}
+
+
+function editEmergencySeedTime(id){
+  const r=emergencyCompanyTime().find(x=>x.id===id);
+  if(!r)return;
+  document.getElementById("emergencySeedTimeEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ Redigera befintlig tidrapport</h4>
+      <div class="sub">${escapeHtml(r.employee)} · ${escapeHtml(r.date)} · ${escapeHtml(r.project)}</div>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Start</label><input id="seedTimeStart" type="time" value="${r.start}"></div>
+        <div class="field"><label>Slut</label><input id="seedTimeEnd" type="time" value="${r.end}"></div>
+        <div class="field"><label>Rast</label><input id="seedTimeBreak" type="time" value="${r.break}"></div>
+        <div class="field"><label>Status</label><select id="seedTimeStatus"><option ${r.status==="Godkänd"?"selected":""}>Godkänd</option><option ${r.status==="Rapporterad"?"selected":""}>Rapporterad</option></select></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="seedTimeReason" rows="2"></textarea></div>
+      <button class="btn primary" style="margin-top:10px" onclick="saveEmergencySeedTime('${id}',this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencySeedTime(id,button){
+  const r=emergencyCompanyTime().find(x=>x.id===id);
+  const reason=document.getElementById("seedTimeReason")?.value.trim()||"";
+  if(!r||!reason){toast("Ange orsak.");return;}
+  const old=JSON.stringify(r);
+  r.start=document.getElementById("seedTimeStart").value;
+  r.end=document.getElementById("seedTimeEnd").value;
+  r.break=document.getElementById("seedTimeBreak").value;
+  r.status=document.getElementById("seedTimeStatus").value;
+  saveEmergencyTestData();
+  emergencyAudit("EMERGENCY MODIFIED – Tidrapport",old+" → "+JSON.stringify(r)+" · Orsak: "+reason+" · EDIT EXISTING RECORD");
+  emergencyOpenTimeReports();
+  toast("Befintlig tidrapport ändrad.");
+}
+
+function emergencyOpenReports(){
+  if(!requireEmergencySession())return;
+  const reports=emergencyCompanyReports();
+  emergencyAudit("Öppna Rapporter","Visa testdata för rapporter");
+
+  renderEmergencyInlinePanel("reports","📊 Rapporter",
+    `${reports.length} testrapporter från företagets anställda.`,`
+      <div class="emergency-data-list">
+        ${reports.map(r=>`
+          <div class="row emergency-record-row">
+            <div><b>${escapeHtml(r.employee)}</b><div class="sub">${escapeHtml(r.date)} · ${escapeHtml(r.type)} · ${escapeHtml(r.project)}</div><div class="sub">${escapeHtml(r.text)}</div></div>
+            <button class="btn" onclick="editEmergencySeedReport('${escapeHtml(r.id)}')">✏️ Edit</button>
+          </div>`).join("")}
+      </div>
+      <div id="emergencySeedReportEditor"></div>
+    `);
+}
+
+function editEmergencySeedReport(id){
+  const r=emergencyCompanyReports().find(x=>x.id===id);
+  if(!r)return;
+  document.getElementById("emergencySeedReportEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ ${escapeHtml(r.type)} – ${escapeHtml(r.employee)}</h4>
+      <div class="grid two">
+        <div class="field"><label>Datum</label><input id="seedReportDate" value="${r.date}"></div>
+        <div class="field"><label>Status</label><select id="seedReportStatus"><option>Inskickad</option><option ${r.status==="Godkänd"?"selected":""}>Godkänd</option><option>Korrigerad</option></select></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Rapport</label><textarea id="seedReportText" rows="4">${escapeHtml(r.text)}</textarea></div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="seedReportReason" rows="2"></textarea></div>
+      <button class="btn primary" onclick="saveEmergencySeedReport('${id}',this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencySeedReport(id,button){
+  const r=emergencyCompanyReports().find(x=>x.id===id);
+  const reason=document.getElementById("seedReportReason")?.value.trim()||"";
+  if(!r||!reason){toast("Ange orsak.");return;}
+  const old=JSON.stringify(r);
+  r.date=document.getElementById("seedReportDate").value;
+  r.status=document.getElementById("seedReportStatus").value;
+  r.text=document.getElementById("seedReportText").value;
+  saveEmergencyTestData();
+  emergencyAudit("EMERGENCY MODIFIED – Rapport",old+" → "+JSON.stringify(r)+" · Orsak: "+reason+" · EDIT EXISTING RECORD");
+  emergencyOpenReports();
+  toast("Rapport ändrad.");
+}
+
+
+
+function editEmergencyReport(index){
+  const r=emergencyReports()[index];
+  if(!r)return;
+  document.getElementById("emergencyReportEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ Rapport från ${escapeHtml(r.employee)}</h4>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Projekt</label><input id="editReportProject" value="${escapeHtml(r.project)}"></div>
+        <div class="field"><label>Status</label><select id="editReportStatus"><option>Inskickad</option><option>Godkänd</option><option>Korrigerad</option></select></div>
+        <div class="field"><label>Rapporterade timmar</label><input id="editReportHours" value="${escapeHtml(r.hours)}"></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="editReportReason" rows="2"></textarea></div>
+      <button class="btn primary" style="margin-top:10px" onclick="saveEmergencyReportEdit(${index},this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencyReportEdit(index,button){
+  const r=emergencyReports()[index];
+  const reason=document.getElementById("editReportReason")?.value.trim()||"";
+  if(!r||!reason){toast("Ange orsak.");return;}
+  emergencyAudit("EMERGENCY MODIFIED – Rapport",
+    r.employee+" · "+r.project+" · "+r.hours+
+    " → "+document.getElementById("editReportHours").value+
+    " · Orsak: "+reason+" · Typ: EDIT EXISTING RECORD");
+  emergencyOpenReports();
+  toast("Rapport ändrad.");
+}
+
+function emergencyOpenCustomers(){
+  if(!requireEmergencySession())return;
+  const customers=emergencyCompanyCustomers();
+  emergencyAudit("Öppna Kunder","Visa testdata för kunder");
+
+  renderEmergencyInlinePanel("customers","👤 Kunder",
+    `${customers.length} testkunder för den aktuella företaget.`,`
+      <div class="emergency-data-list">
+        ${customers.map(c=>`
+          <div class="row emergency-record-row">
+            <div><b>${escapeHtml(c.name)}</b><div class="sub">${escapeHtml(c.org)} · ${escapeHtml(c.contact)} · ${escapeHtml(c.phone)}</div><div class="sub">${escapeHtml(c.email)} · ${escapeHtml(c.address)}, ${escapeHtml(c.city)}</div></div>
+            <button class="btn" onclick="editEmergencySeedCustomer('${escapeHtml(c.id)}')">✏️ Edit</button>
+          </div>`).join("")}
+      </div>
+      <div id="emergencySeedCustomerEditor"></div>
+    `);
+}
+
+function editEmergencySeedCustomer(id){
+  const c=emergencyCompanyCustomers().find(x=>x.id===id);
+  if(!c)return;
+  document.getElementById("emergencySeedCustomerEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ ${escapeHtml(c.name)}</h4>
+      <div class="grid two">
+        <div class="field"><label>Kundnamn</label><input id="seedCustName" value="${escapeHtml(c.name)}"></div>
+        <div class="field"><label>Organisationsnummer</label><input id="seedCustOrg" value="${escapeHtml(c.org)}"></div>
+        <div class="field"><label>Kontaktperson</label><input id="seedCustContact" value="${escapeHtml(c.contact)}"></div>
+        <div class="field"><label>E-post</label><input id="seedCustEmail" value="${escapeHtml(c.email)}"></div>
+        <div class="field"><label>Telefon</label><input id="seedCustPhone" value="${escapeHtml(c.phone)}"></div>
+        <div class="field"><label>Ort</label><input id="seedCustCity" value="${escapeHtml(c.city)}"></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Adress</label><input id="seedCustAddress" value="${escapeHtml(c.address)}"></div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="seedCustReason" rows="2"></textarea></div>
+      <button class="btn primary" onclick="saveEmergencySeedCustomer('${id}',this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencySeedCustomer(id,button){
+  const c=emergencyCompanyCustomers().find(x=>x.id===id);
+  const reason=document.getElementById("seedCustReason")?.value.trim()||"";
+  if(!c||!reason){toast("Ange orsak.");return;}
+  const old=JSON.stringify(c);
+  c.name=document.getElementById("seedCustName").value;
+  c.org=document.getElementById("seedCustOrg").value;
+  c.contact=document.getElementById("seedCustContact").value;
+  c.email=document.getElementById("seedCustEmail").value;
+  c.phone=document.getElementById("seedCustPhone").value;
+  c.city=document.getElementById("seedCustCity").value;
+  c.address=document.getElementById("seedCustAddress").value;
+  saveEmergencyTestData();
+  emergencyAudit("EMERGENCY MODIFIED – Kund",old+" → "+JSON.stringify(c)+" · Orsak: "+reason+" · EDIT EXISTING RECORD");
+  emergencyOpenCustomers();
+  toast("Kund ändrad.");
+}
+
+
+
+function editEmergencyCustomer(index){
+  const c=emergencyCustomers()[index];
+  if(!c)return;
+  document.getElementById("emergencyCustomerEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ ${escapeHtml(c.name)}</h4>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Kund</label><input id="editCustomerName" value="${escapeHtml(c.name)}"></div>
+        <div class="field"><label>Ort</label><input id="editCustomerCity" value="${escapeHtml(c.city)}"></div>
+        <div class="field"><label>Arbetsplats</label><input value="${escapeHtml(c.workplace)}" readonly></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="editCustomerReason" rows="2"></textarea></div>
+      <button class="btn primary" style="margin-top:10px" onclick="saveEmergencyCustomerEdit(${index},this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencyCustomerEdit(index,button){
+  const c=emergencyCustomers()[index];
+  const reason=document.getElementById("editCustomerReason")?.value.trim()||"";
+  if(!c||!reason){toast("Ange orsak.");return;}
+  emergencyAudit("EMERGENCY MODIFIED – Kund",c.name+" → "+document.getElementById("editCustomerName").value+" · Orsak: "+reason+" · Typ: EDIT EXISTING RECORD");
+  emergencyOpenCustomers();
+  toast("Kund ändrad.");
+}
+
+function emergencyOpenWorkplaces(){
+  if(!requireEmergencySession())return;
+  const places=emergencyCompanyWorkplacesReal();
+  emergencyAudit("Öppna Arbetsplatser","Visa testdata för arbetsplatser");
+
+  renderEmergencyInlinePanel("workplaces","📍 Arbetsplatser",
+    `${places.length} arbetsplatser för den aktuella företaget.`,`
+      <div class="emergency-data-list">
+        ${places.map(w=>`
+          <div class="row emergency-record-row">
+            <div><b>${escapeHtml(w.name)}</b><div class="sub">${escapeHtml(w.address)}, ${escapeHtml(w.postalCode)} ${escapeHtml(w.city)}</div><div class="sub">${escapeHtml(w.customer)} · ${escapeHtml(w.project)} · ${escapeHtml(w.status)}</div></div>
+            <button class="btn" onclick="editEmergencySeedWorkplace('${escapeHtml(w.id)}')">✏️ Edit</button>
+          </div>`).join("")}
+      </div>
+      <div id="emergencySeedWorkplaceEditor"></div>
+    `);
+}
+
+function editEmergencySeedWorkplace(id){
+  const w=emergencyCompanyWorkplacesReal().find(x=>x.id===id);
+  if(!w)return;
+  document.getElementById("emergencySeedWorkplaceEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ ${escapeHtml(w.name)}</h4>
+      <div class="grid two">
+        <div class="field"><label>Namn</label><input id="seedWpName" value="${escapeHtml(w.name)}"></div>
+        <div class="field"><label>Adress</label><input id="seedWpAddress" value="${escapeHtml(w.address)}"></div>
+        <div class="field"><label>Postnummer</label><input id="seedWpPostal" value="${escapeHtml(w.postalCode)}"></div>
+        <div class="field"><label>Ort</label><input id="seedWpCity" value="${escapeHtml(w.city)}"></div>
+        <div class="field"><label>Kund</label><input id="seedWpCustomer" value="${escapeHtml(w.customer)}"></div>
+        <div class="field"><label>Projekt</label><input id="seedWpProject" value="${escapeHtml(w.project)}"></div>
+        <div class="field"><label>Status</label><select id="seedWpStatus"><option ${w.status==="Aktiv"?"selected":""}>Aktiv</option><option>Stängd</option></select></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="seedWpReason" rows="2"></textarea></div>
+      <button class="btn primary" onclick="saveEmergencySeedWorkplace('${id}',this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencySeedWorkplace(id,button){
+  const w=emergencyCompanyWorkplacesReal().find(x=>x.id===id);
+  const reason=document.getElementById("seedWpReason")?.value.trim()||"";
+  if(!w||!reason){toast("Ange orsak.");return;}
+  const old=JSON.stringify(w);
+  w.name=document.getElementById("seedWpName").value;
+  w.address=document.getElementById("seedWpAddress").value;
+  w.postalCode=document.getElementById("seedWpPostal").value;
+  w.city=document.getElementById("seedWpCity").value;
+  w.customer=document.getElementById("seedWpCustomer").value;
+  w.project=document.getElementById("seedWpProject").value;
+  w.status=document.getElementById("seedWpStatus").value;
+  saveEmergencyTestData();
+  emergencyAudit("EMERGENCY MODIFIED – Arbetsplats",old+" → "+JSON.stringify(w)+" · Orsak: "+reason+" · EDIT EXISTING RECORD");
+  emergencyOpenWorkplaces();
+  toast("Arbetsplats ändrad.");
+}
+
+
+
+function editEmergencyWorkplace(index){
+  const p=emergencyCompanyWorkplaces()[index];
+  if(!p)return;
+  document.getElementById("emergencyWorkplaceEditor").innerHTML=`
+    <div class="card emergency-edit-card">
+      <h4>✏️ ${escapeHtml(p)}</h4>
+      <div class="field"><label>Adress</label><input id="editWorkplaceAddress" value="${escapeHtml(p)}"></div>
+      <div class="field" style="margin-top:10px"><label>Orsak</label><textarea id="editWorkplaceReason" rows="2"></textarea></div>
+      <button class="btn primary" style="margin-top:10px" onclick="saveEmergencyWorkplaceEdit(${index},this)">💾 Spara ändring</button>
+    </div>`;
+}
+
+function saveEmergencyWorkplaceEdit(index,button){
+  const oldPlace=emergencyCompanyWorkplaces()[index];
+  const newPlace=document.getElementById("editWorkplaceAddress")?.value.trim()||"";
+  const reason=document.getElementById("editWorkplaceReason")?.value.trim()||"";
+  if(!oldPlace||!newPlace||!reason){toast("Fyll i adress och orsak.");return;}
+
+  const all=emergencyProjects();
+  all.filter(x=>x.company===emergencyCompany().name && x.place===oldPlace).forEach(x=>x.place=newPlace);
+  saveEmergencyProjects(all);
+
+  emergencyAudit("EMERGENCY MODIFIED – Arbetsplats",oldPlace+" → "+newPlace+" · Orsak: "+reason+" · Typ: EDIT EXISTING RECORD");
+  emergencyOpenWorkplaces();
+  toast("Arbetsplats ändrad.");
+}
+</script>
+
+
+<style id="tidpunkt-v37-emergency-permission">
+.permission-tile{
+  min-width:0;
+}
+.permission-name{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+</style>
+
+
+<style id="tidpunkt-v38-emergency">
+#emergencyCompanyPanel{border:1px solid #cfded8;}
+.emergency-active-banner{
+  position:sticky;
+  top:10px;
+  z-index:20;
+  margin:0 0 14px;
+  padding:9px 12px;
+  border:1px solid #e4c58a;
+  border-radius:9px;
+  background:#fffaf0;
+  font-size:12px;
+  font-weight:800;
+}
+</style>
+
+
+<style id="tidpunkt-v39-repair">
+#emergencyRepairArea .field input[readonly]{
+  background:#f3f6f5;
+  cursor:not-allowed;
+}
+#emergencyRepairArea .badge.gold{
+  background:#fff4d6;
+  color:#7a5a00;
+  border-color:#e7cc83;
+}
+</style>
+
+
+<style id="tidpunkt-v40-inline-repair">
+.emergency-inline-editor{border:1px solid #d8e2de}
+.emergency-time-record{padding:10px 0;border-bottom:1px solid #e5ebe8;gap:12px}
+.emergency-time-record:last-child{border-bottom:0}
+.emergency-time-record .btn{flex:0 0 auto}
+.emergency-inline-editor .field input[readonly]{background:#f2f5f4;cursor:not-allowed}
+@media(max-width:650px){
+  .emergency-time-record{align-items:flex-start;flex-direction:column}
+}
+</style>
+
+
+<style id="tidpunkt-v41-real-data">
+.emergency-data-list{display:flex;flex-direction:column;gap:0}
+.emergency-record-row{padding:11px 0;border-bottom:1px solid #e5ebe8;gap:12px}
+.emergency-record-row:last-child{border-bottom:0}
+.emergency-edit-card{margin-top:10px;border:1px solid #d8e2de}
+.emergency-plan-board{display:flex;flex-direction:column;gap:10px}
+.emergency-plan-card{padding:12px}
+</style>
+
+
+
+
+<style id="tidpunkt-v43-audit-absolute-bottom">
+#emergencyCompanyPanel #emergencyAuditBottom{
+  display:block !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  margin-top:28px !important;
+}
+</style>
+
+<style id="tidpunkt-v44-company-details">
+.emergency-company-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:16px;
+  border:1px solid #d8e2de;
+  border-radius:12px;
+  background:#fafcfb;
+}
+.emergency-company-hero h3{margin:4px 0 4px}
+.emergency-company-hero .eyebrow{
+  font-size:10px;
+  letter-spacing:.12em;
+  font-weight:800;
+  opacity:.6;
+}
+</style>
+
+<style id="tidpunkt-v45-test-data">
+.emergency-record-row{align-items:center}
+.emergency-record-row>div{min-width:0;flex:1}
+.emergency-record-row .btn{flex:0 0 auto}
+</style>
+
+<style id="tidpunkt-v46-test-data-status">
+#emergencyTestDataStatus{
+  margin:0 0 14px;
+  padding:9px 12px;
+  border:1px dashed #b8c9c2;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:800;
+  background:#f8fbfa;
+}
+</style>
+
+
+<style id="tidpunkt-v48-emergency-owner">
+[data-p="emergencyAccess"]{display:block}
+</style>
+<script>
+
+/* =========================================================
+   v0.49 — EMERGENCY SYSTEM RECOVERY
+   Local demo implementation.
+   Production: snapshots, integrity checks and rollback must
+   be server-side/transactional and authenticated.
+========================================================= */
+
+const EMERGENCY_RECOVERY_KEY="tidpunkt_emergency_recovery_v1";
+
+function emergencyRecoveryCompanyId(){
+  return emergencyCompanyId();
+}
+
+function emergencyRecoveryReadStore(){
+  try{
+    return JSON.parse(localStorage.getItem(EMERGENCY_RECOVERY_KEY)||"{}");
+  }catch(e){
+    return {};
+  }
+}
+
+function emergencyRecoveryWriteStore(store){
+  localStorage.setItem(EMERGENCY_RECOVERY_KEY,JSON.stringify(store));
+}
+
+function emergencyRecoverySetStatus(title,message,type="ok"){
+  const status=document.getElementById("emergencyRecoveryStatus");
+  const details=document.getElementById("emergencyRecoveryDetails");
+  if(!status)return;
+
+  status.innerHTML=`<strong>${escapeHtml(title)}</strong><br>${escapeHtml(message)}`;
+  status.dataset.type=type;
+
+  if(details)details.innerHTML="";
+}
+
+function emergencyRecoveryRequire(){
+  if(!requireEmergencySession())return false;
+
+  const role=String(emergencySession?.role||"").toLowerCase();
+  if(role!=="owner" && role!=="admin"){
+    emergencyRecoverySetStatus("Åtkomst nekad","Endast Owner eller Admin kan använda System Recovery.","error");
+    return false;
+  }
+  return true;
+}
+
+function emergencyRecoverySnapshotPayload(){
+  const company=emergencyCompany();
+  const id=emergencyRecoveryCompanyId();
+
+  return {
+    version:"0.49",
+    createdAt:new Date().toISOString(),
+    companyId:id,
+    company:company ? JSON.parse(JSON.stringify(company)) : null,
+    employees:JSON.parse(JSON.stringify(emergencyCompanyEmployees())),
+    projects:JSON.parse(JSON.stringify(emergencyCompanyProjects())),
+    planning:JSON.parse(JSON.stringify(emergencyCompanyPlanning())),
+    time:JSON.parse(JSON.stringify(emergencyCompanyTime())),
+    reports:JSON.parse(JSON.stringify(emergencyCompanyReports())),
+    customers:JSON.parse(JSON.stringify(emergencyCompanyCustomers())),
+    workplaces:JSON.parse(JSON.stringify(emergencyCompanyWorkplacesReal()))
+  };
+}
+
+function emergencyCreateSnapshot(){
+  if(!emergencyRecoveryRequire())return;
+
+  const store=emergencyRecoveryReadStore();
+  const id=String(emergencyRecoveryCompanyId());
+
+  const snapshot=emergencyRecoverySnapshotPayload();
+
+  if(!store[id])store[id]=[];
+  store[id].push(snapshot);
+
+  /* Keep the last 5 snapshots per company. */
+  store[id]=store[id].slice(-5);
+
+  emergencyRecoveryWriteStore(store);
+
+  emergencyAudit(
+    "RECOVERY – Snapshot Created",
+    "Company "+id+" · Snapshot "+snapshot.createdAt
+  );
+
+  emergencyRecoverySetStatus(
+    "💾 Säkerhetskopia skapad",
+    "Snapshot skapad innan fortsatt recovery-arbete."
+  );
+}
+
+function emergencyGetLastSnapshot(){
+  const store=emergencyRecoveryReadStore();
+  const list=store[String(emergencyRecoveryCompanyId())]||[];
+  return list.length ? list[list.length-1] : null;
+}
+
+function emergencyCheckIntegrity(){
+  if(!emergencyRecoveryRequire())return;
+
+  const c=emergencyCompany();
+  const checks=[];
+
+  checks.push({
+    name:"Company",
+    ok:!!c
+  });
+
+  checks.push({
+    name:"Employees",
+    ok:Array.isArray(emergencyCompanyEmployees())
+  });
+
+  checks.push({
+    name:"Projects",
+    ok:Array.isArray(emergencyCompanyProjects())
+  });
+
+  checks.push({
+    name:"Planning",
+    ok:Array.isArray(emergencyCompanyPlanning())
+  });
+
+  checks.push({
+    name:"Time reports",
+    ok:Array.isArray(emergencyCompanyTime())
+  });
+
+  checks.push({
+    name:"Reports",
+    ok:Array.isArray(emergencyCompanyReports())
+  });
+
+  checks.push({
+    name:"Customers",
+    ok:Array.isArray(emergencyCompanyCustomers())
+  });
+
+  checks.push({
+    name:"Workplaces",
+    ok:Array.isArray(emergencyCompanyWorkplacesReal())
+  });
+
+  const failed=checks.filter(x=>!x.ok);
+
+  const html=checks.map(x=>
+    `<div>${x.ok?"✅":"❌"} ${escapeHtml(x.name)}</div>`
+  ).join("");
+
+  document.getElementById("emergencyRecoveryDetails").innerHTML=html;
+
+  emergencyRecoverySetStatus(
+    failed.length ? "❌ Dataintegritet behöver kontrolleras" : "🛡️ Dataintegritet OK",
+    failed.length
+      ? failed.length+" kontroll(er) misslyckades."
+      : "Alla grundläggande Emergency-data kontrollerades utan fel."
+  );
+
+  emergencyAudit(
+    "RECOVERY – Integrity Check",
+    failed.length
+      ? failed.map(x=>x.name).join(", ")
+      : "OK"
+  );
+}
+
+function emergencyRunDiagnostics(){
+  if(!emergencyRecoveryRequire())return;
+
+  const diagnostics=[];
+
+  diagnostics.push({
+    name:"Emergency Session",
+    ok:isEmergencyActive()
+  });
+
+  diagnostics.push({
+    name:"Company Resolution",
+    ok:!!emergencyCompany()
+  });
+
+  diagnostics.push({
+    name:"Test Data Store",
+    ok:!!EMERGENCY_DATA
+  });
+
+  diagnostics.push({
+    name:"Recovery Store",
+    ok:!!localStorage.getItem(EMERGENCY_RECOVERY_KEY) || true
+  });
+
+  diagnostics.push({
+    name:"Emergency Audit",
+    ok:typeof emergencyAudit==="function"
+  });
+
+  const failed=diagnostics.filter(x=>!x.ok);
+
+  document.getElementById("emergencyRecoveryDetails").innerHTML=
+    diagnostics.map(x=>
+      `<div>${x.ok?"✅":"❌"} ${escapeHtml(x.name)}</div>`
+    ).join("");
+
+  emergencyRecoverySetStatus(
+    failed.length ? "❌ Systemfel hittades" : "🔍 Systemdiagnos klar",
+    failed.length
+      ? failed.length+" kontroll(er) behöver åtgärdas."
+      : "Emergency Recovery-komponenterna fungerar."
+  );
+
+  emergencyAudit(
+    "RECOVERY – System Diagnostics",
+    failed.length ? "FAILED" : "OK"
+  );
+}
+
+function emergencyRestoreLastSnapshot(){
+  if(!emergencyRecoveryRequire())return;
+
+  const snapshot=emergencyGetLastSnapshot();
+
+  if(!snapshot){
+    emergencyRecoverySetStatus(
+      "⚠️ Ingen säkerhetskopia",
+      "Det finns ingen snapshot att återställa."
+    );
+    return;
+  }
+
+  const confirmed=window.confirm(
+    "Återställ den senaste säkerhetskopian för denna företag?\\n\\n"+
+    "Detta ändrar endast Emergency-testdata för den aktuella företaget."
+  );
+
+  if(!confirmed)return;
+
+  const id=String(emergencyRecoveryCompanyId());
+
+  /* Restore the isolated Emergency test store. */
+  if(EMERGENCY_DATA.time[id])EMERGENCY_DATA.time[id]=snapshot.time;
+  if(EMERGENCY_DATA.reports[id])EMERGENCY_DATA.reports[id]=snapshot.reports;
+  if(EMERGENCY_DATA.customers[id])EMERGENCY_DATA.customers[id]=snapshot.customers;
+  if(EMERGENCY_DATA.workplaces[id])EMERGENCY_DATA.workplaces[id]=snapshot.workplaces;
+  if(EMERGENCY_DATA.planning[id])EMERGENCY_DATA.planning[id]=snapshot.planning;
+
+  saveEmergencyTestData();
+
+  emergencyAudit(
+    "RECOVERY – Snapshot Restored",
+    "Company "+id+" · Snapshot "+snapshot.createdAt
+  );
+
+  emergencyRecoverySetStatus(
+    "🔄 Säkerhetskopia återställd",
+    "Den senaste snapshoten har återställts."
+  );
+}
+
+function emergencyClearRecoveryStatus(){
+  if(!emergencyRecoveryRequire())return;
+
+  const status=document.getElementById("emergencyRecoveryStatus");
+  const details=document.getElementById("emergencyRecoveryDetails");
+
+  if(status)status.innerHTML="Ingen recovery-åtgärd körd ännu.";
+  if(details)details.innerHTML="";
+}
+
+</script>
+
+<style id="tidpunkt-v49-system-recovery">
+.emergency-recovery-section{
+  margin-top:20px;
+  border:1px solid #d8e2de;
+}
+.emergency-recovery-section .recovery-actions{
+  margin-top:12px;
+}
+.emergency-recovery-section .recovery-status{
+  padding:11px 13px;
+  border:1px solid #dfe8e4;
+  border-radius:9px;
+  background:#fafcfb;
+}
+.emergency-recovery-section .recovery-details{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  font-size:12px;
+}
+</style>
 </body>
 </html>
