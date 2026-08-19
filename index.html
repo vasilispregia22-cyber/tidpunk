@@ -1103,56 +1103,80 @@ button{
       TIDPUNKT
     </div>
 
-    <!-- NORMAL LOGIN -->
+    <p style="color:#718078;font-size:12px">
+      Tid • Personal • Arbete
+    </p>
 
-    <div class="login-tabs">
+    <div class="login-categories">
 
       <button
-        class="login-tab active"
+        id="catCompany"
+        class="login-category active"
         type="button"
+        onclick="selectLoginCategory('company')"
       >
-        🏢 Företag
+        Företag
       </button>
 
       <button
-        class="login-tab"
+        id="catPrivate"
+        class="login-category"
         type="button"
+        onclick="selectLoginCategory('private')"
       >
-        👤 Anställd
+        Anställd
       </button>
 
     </div>
 
+    <div id="companyLoginFields">
 
-    <div class="field">
+      <div class="field">
+        <label>Användare</label>
+        <input
+          id="loginUser"
+          placeholder="t.ex. nordic"
+          autocomplete="username"
+        >
+      </div>
 
-      <label>
-        Användare
-      </label>
-
-      <input
-        id="username"
-        type="text"
-        autocomplete="username"
-      >
-
-    </div>
-
-
-    <div class="field">
-
-      <label>
-        Lösenord
-      </label>
-
-      <input
-        id="password"
-        type="password"
-        autocomplete="current-password"
-      >
+      <div class="field">
+        <label>Lösenord</label>
+        <input
+          id="loginPass"
+          type="password"
+          placeholder="Lösenord"
+          autocomplete="current-password"
+        >
+      </div>
 
     </div>
 
+    <div
+      id="privateLoginFields"
+      style="display:none"
+    >
+
+      <div class="field">
+        <label>Användare</label>
+        <input
+          id="privateUser"
+          placeholder="Användarnamn"
+          autocomplete="username"
+        >
+      </div>
+
+      <div class="field">
+        <label>Lösenord</label>
+        <input
+          id="privatePass"
+          type="password"
+          placeholder="Lösenord"
+          autocomplete="current-password"
+        >
+      </div>
+
+    </div>
 
     <button
       class="login-primary"
@@ -1162,130 +1186,45 @@ button{
       Logga in
     </button>
 
-
     <button
+      id="companyRegisterButton"
       class="login-register"
       type="button"
+      onclick="openCompanyRegistration()"
     >
       Registrera företag
     </button>
 
-
     <div
       id="loginNotice"
       class="login-note"
-    ></div>
-
-
-    <!-- SEPARATE ADMIN / OWNER APPS -->
-
-    <div
-      style="
-        margin:24px 0 16px;
-        border-top:1px solid #e5e9e7;
-      "
-    ></div>
-
-
-    <!-- ADMIN APP -->
+    >
+      Företag: demoanvändare
+      <b>nordic</b>,
+      lösenord
+      <b>123456</b>.
+    </div>
 
     <button
       class="admin-entry"
       type="button"
       onclick="openAdminAccessLogin()"
     >
-
       🔐 ADMIN APP
-
-      <span>
-        Administratör
-      </span>
-
     </button>
-
-
-    <!-- OWNER APP -->
 
     <button
       class="owner-entry"
       type="button"
       onclick="openOwnerLogin()"
     >
-
       👑 APP OWNER
-
-      <span>
-        Endast för ägare
-      </span>
-
     </button>
-
 
   </div>
 
 </div>
-<div
-  id="ownerLoginScreen"
-  class="login-screen"
-  style="display:none"
->
 
-  <div class="login-card">
-
-    <div class="login-brand">
-      TIDPUNKT
-    </div>
-
-    <h3>
-      👑 APP OWNER
-    </h3>
-
-    <div class="sub">
-      Full access
-    </div>
-
-
-    <div class="field">
-
-      <label>
-        Owner Access Code
-      </label>
-
-      <input
-        id="ownerAccessCode"
-        type="password"
-        placeholder="TID-XXXX-XXXX"
-      >
-
-    </div>
-
-
-    <button
-      class="login-primary"
-      type="button"
-      onclick="ownerLogin()"
-    >
-      Logga in
-    </button>
-
-
-    <button
-      class="login-register"
-      type="button"
-      onclick="closeOwnerLogin()"
-    >
-      Tillbaka
-    </button>
-
-
-    <div
-      id="ownerLoginNotice"
-      class="login-note"
-    ></div>
-
-  </div>
-
-</div>
 
 <!-- ================= ADMIN LOGIN ================= -->
 
@@ -1305,34 +1244,24 @@ button{
       Administratörsområde
     </p>
 
-
     <div class="field">
-
       <label>Användare</label>
-
       <input
         id="adminUser"
-        type="text"
         value="demo"
         autocomplete="username"
       >
-
     </div>
 
-
     <div class="field">
-
       <label>Lösenord</label>
-
       <input
         id="adminPass"
         type="password"
         placeholder="Lösenord"
         autocomplete="current-password"
       >
-
     </div>
-
 
     <button
       class="login-primary"
@@ -1342,7 +1271,6 @@ button{
       Logga in som administratör
     </button>
 
-
     <button
       class="login-register"
       type="button"
@@ -1351,12 +1279,12 @@ button{
       Tillbaka
     </button>
 
-
     <div
       id="adminNotice"
       class="login-note"
     >
-      Admin demo: användare <b>demo</b>,
+      Admin demo:
+      användare <b>demo</b>,
       lösenord <b>demo</b>.
     </div>
 
@@ -1384,6 +1312,21 @@ button{
   <button data-p="security"><span>🔐</span><span>Säkerhet</span></button>
   <button data-p="logs"><span>📋</span><span>Loggar</span></button>
   <button data-p="system"><span>⚙️</span><span>System</span></button>
+
+  <div class="nav-section" style="margin-top:18px;padding:8px 12px 5px;font-size:11px;opacity:.55;font-weight:700;letter-spacing:.08em;">
+    FÖRETAG
+  </div>
+
+  <button data-p="employees"><span>👥</span><span>Anställda</span></button>
+  <button data-p="projects"><span>📁</span><span>Projekt</span></button>
+  <button data-p="planning"><span>📅</span><span>Planering</span></button>
+  <button data-p="time"><span>⏱️</span><span>Tidrapport</span></button>
+  <button data-p="reports"><span>📊</span><span>Rapporter</span></button>
+  <button data-p="customers"><span>👤</span><span>Kunder</span></button>
+  <button data-p="companyAdmins" onclick="show('companyAdmins')"><span>👥</span><span>Administratörer</span></button>
+  <button data-p="companySettings" onclick="show('companySettings')"><span>⚙️</span><span>Företagsinställningar</span></button>
+  <button data-p="workplaces"><span>📍</span><span>Arbetsplatser</span></button>
+<button data-p="adminAccess" onclick="show('adminAccess')"><span>🔐</span><span>Admin Access</span></button>
 </nav>
 
   <div class="sidefoot">
@@ -2228,48 +2171,19 @@ button{
 <!-- ================= SYSTEM ================= -->
 
 <!-- ================= ADMIN SUBSCRIPTIONS ================= -->
-<section id="subscriptions" class="page">
-  <div class="head">
-    <div><h1>Abonnemang</h1><p>Översikt och hantering av företagspaket.</p></div>
-  </div>
-  <div class="card">
-    <div id="subscriptionsTable"></div>
-  </div>
-</section>
+
 
 <!-- ================= ADMIN SYSTEM ERRORS ================= -->
-<section id="systemErrors" class="page">
-  <div class="head">
-    <div><h1>Systemfel</h1><p>Diagnostik och åtgärder per företag.</p></div>
-  </div>
-  <div class="card">
-    <div id="errorsTable"></div>
-  </div>
-</section>
+
 
 <!-- ================= ADMIN TOOLS ================= -->
-<section id="tools" class="page">
-  <div class="head">
-    <div><h1>Verktyg</h1><p>Kontroller och säkra reparationsverktyg.</p></div>
-  </div>
-  <div class="grid two">
-    <div class="card"><h3>🔍 Diagnostik</h3><p class="sub">Kontrollera systemets funktioner.</p><button class="btn primary" onclick="runDiagnostics()">Kör diagnostik</button></div>
-    <div class="card"><h3>🔧 Reparation</h3><p class="sub">Kör tillgängliga automatiska reparationskontroller.</p><button class="btn primary" onclick="runRepairCheck()">Kontrollera reparationsmöjligheter</button></div>
-  </div>
-</section>
+
 
 <!-- ================= ADMIN SECURITY ================= -->
 
 
 <!-- ================= ADMIN LOGS ================= -->
-<section id="logs" class="page">
-  <div class="head">
-    <div><h1>Loggar</h1><p>Historik över adminåtgärder och systemhändelser.</p></div>
-  </div>
-  <div class="card">
-    <div id="adminLogs"></div>
-  </div>
-</section>
+
 <section id="system" class="page">
   <div class="head">
     <div><h1>⚙️ System</h1><p>Systemstatus, versioner, backup och underhåll.</p></div>
@@ -2302,6 +2216,44 @@ button{
 </section>
 
 </div>
+
+
+<section id="adminAccess" class="page">
+
+  <div class="head">
+    <div>
+      <h1>🔐 Admin Access</h1>
+      <p>Hantera vilka administratörer som får tillgång till TIDPUNKT.</p>
+    </div>
+
+    <button class="btn primary" type="button" onclick="addAdmin()">
+      + Lägg till Admin
+    </button>
+  </div>
+
+  <div class="grid two" style="margin-top:15px">
+
+    <div class="card">
+      <h3>🔑 Access Code</h3>
+      <p class="sub">
+        Varje Admin har en personlig Access Code.
+        Endast aktiva koder kan användas för inloggning.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>☑️ Behörigheter</h3>
+      <p class="sub">
+        Owner bestämmer exakt vilka delar varje Admin får använda.
+      </p>
+    </div>
+
+  </div>
+
+  <div id="adminAccessList" style="margin-top:15px"></div>
+
+</section>
+
 </main>
 
 
@@ -2327,6 +2279,11 @@ button{
   <button data-p="system">
     ⚙
     <span>System</span>
+  </button>
+
+  <button data-p="time">
+    ⏱
+    <span>Tid</span>
   </button>
 
 </nav>
@@ -2416,6 +2373,41 @@ button{
 ></div>
 
 
+
+<!-- ================= OWNER LOGIN ================= -->
+
+<div id="ownerLoginScreen" class="login-screen" style="display:none">
+  <div class="login-card">
+
+    <div class="login-brand">TIDPUNKT</div>
+
+    <h3>👑 APP OWNER</h3>
+
+    <div class="sub">Full access till hela TIDPUNKT</div>
+
+    <div class="field">
+      <label>Username</label>
+      <input id="ownerUsername" type="text" autocomplete="username">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input id="ownerPassword" type="password" autocomplete="current-password">
+    </div>
+
+    <button class="login-primary" type="button" onclick="ownerLogin()">
+      Logga in
+    </button>
+
+    <button class="login-register" type="button" onclick="closeOwnerLogin()">
+      Tillbaka
+    </button>
+
+    <div id="ownerLoginNotice" class="login-note"></div>
+
+  </div>
+</div>
+
 <script>
 
 
@@ -2436,6 +2428,14 @@ const crumbs={
   customers:"Företag / Kunder",
   workplaces:"Företag / Arbetsplatser",
   time:"Företag / Tidrapport",
+  companyAdmins:"Företag / Administratörer",
+  companySettings:"Företag / Företagsinställningar",
+  employees:"Företag / Anställda",
+  projects:"Företag / Projekt",
+  planning:"Företag / Planering",
+  reports:"Företag / Rapporter",
+  customers:"Företag / Kunder",
+  workplaces:"Företag / Arbetsplatser",
   planning:"Företag / Planering",
   reports:"Företag / Rapporter"
 };
@@ -4080,6 +4080,7 @@ const PERMISSIONS={
     "dashboard",
     "employees",
     "projects",
+    "time",
     "customers",
     "workplaces",
     "time",
@@ -4172,6 +4173,12 @@ function showLogin(){
     .getElementById("adminLoginScreen")
     .style
     .display="none";
+
+  const ownerScreen =
+    document.getElementById("ownerLoginScreen");
+
+  if(ownerScreen)
+    ownerScreen.style.display="none";
 
 }
 
@@ -4349,6 +4356,94 @@ function login(){
 }
 
 
+/* ================= OWNER LOGIN ================= */
+
+function openOwnerLogin(){
+
+  const login = document.getElementById("loginScreen");
+  const owner = document.getElementById("ownerLoginScreen");
+
+  if(login) login.style.display = "none";
+  if(owner) owner.style.display = "flex";
+
+}
+
+
+function closeOwnerLogin(){
+
+  const login = document.getElementById("loginScreen");
+  const owner = document.getElementById("ownerLoginScreen");
+
+  if(owner) owner.style.display = "none";
+  if(login) login.style.display = "flex";
+
+}
+
+
+function ownerLogin(){
+
+  const code =
+    (document.getElementById("ownerAccessCode")?.value || "").trim();
+
+  const notice =
+    document.getElementById("ownerLoginNotice");
+
+  const owners =
+    (typeof ADMIN_ACCESS_CODES !== "undefined"
+      ? ADMIN_ACCESS_CODES
+      : []);
+
+  const owner =
+    owners.find(
+      a =>
+        a.role === "OWNER" &&
+        a.status === "Aktiv" &&
+        a.code === code
+    );
+
+  if(!owner){
+
+    if(notice)
+      notice.textContent = "Ogiltig Owner Access Code.";
+
+    return;
+
+  }
+
+  setAuth({
+    role: "owner",
+    adminId: owner.id,
+    username: owner.name,
+    name: owner.name,
+    permissions: ["*"]
+  });
+
+  if(notice)
+    notice.textContent = "";
+
+  const ownerScreen =
+    document.getElementById("ownerLoginScreen");
+
+  if(ownerScreen)
+    ownerScreen.style.display = "none";
+
+  const app =
+    document.querySelector(".app");
+
+  if(app)
+    app.classList.remove("hidden");
+
+  applyRoleUI();
+
+  location.hash = "#owner";
+
+  show("dashboard");
+
+  toast("Inloggad som OWNER");
+
+}
+
+
 /* ================= ADMIN LOGIN ================= */
 
 function adminLogin(){
@@ -4421,16 +4516,18 @@ function enterApp(){
   applyRoleUI();
 
 
-  const first=
-    auth.role==="admin"
-    ?
-    "dashboard"
-    :
-    auth.role==="company"
-    ?
-    "dashboard"
-    :
-    "time";
+  const first =
+    auth.role === "owner"
+    ? "dashboard"
+    : (
+        auth.role === "admin"
+        ? "dashboard"
+        : (
+            auth.role === "company"
+            ? "dashboard"
+            : "time"
+          )
+      );
 
 
   show(first);
@@ -4460,10 +4557,14 @@ function applyRoleUI(){
   if(!auth)return;
 
 
-  const allowed=
-    auth.role==="admin"
-    ? (auth.permissions || PERMISSIONS.admin)
-    : (PERMISSIONS[auth.role] || []);
+  const allowed =
+    auth.role === "owner"
+    ? null
+    : (
+        auth.role === "admin"
+        ? (auth.permissions || PERMISSIONS.admin)
+        : (PERMISSIONS[auth.role] || [])
+      );
 
 
   document
@@ -4471,14 +4572,14 @@ function applyRoleUI(){
     .forEach(
       button=>{
 
-        button.style.display=
-          allowed.includes(
-            button.dataset.p
-          )
-          ?
-          ""
-          :
-          "none";
+        button.style.display =
+          auth.role === "owner"
+          ? ""
+          : (
+              allowed.includes(button.dataset.p)
+              ? ""
+              : "none"
+            );
 
       }
     );
@@ -4489,14 +4590,14 @@ function applyRoleUI(){
     .forEach(
       page=>{
 
-        page.style.display=
-          allowed.includes(
-            page.id
-          )
-          ?
-          ""
-          :
-          "none";
+        page.style.display =
+          auth.role === "owner"
+          ? ""
+          : (
+              allowed.includes(page.id)
+              ? ""
+              : "none"
+            );
 
       }
     );
@@ -4506,6 +4607,10 @@ function applyRoleUI(){
     .getElementById("crumb")
     .textContent=
       (
+        auth.role==="owner"
+        ?
+        "OWNER"
+        :
         auth.role==="admin"
         ?
         "Admin"
@@ -4536,18 +4641,23 @@ function show(id){
 
   const auth=getAuth();
 
-  const allowed=
-    auth
-    ?
-    PERMISSIONS[auth.role] || []
-    :
-    [];
+  const allowed =
+    auth && auth.role === "owner"
+    ? null
+    : (
+        auth
+        ? (auth.permissions || PERMISSIONS[auth.role] || [])
+        : []
+      );
 
 
   if(
     !auth
     ||
-    !allowed.includes(id)
+    (
+      auth.role !== "owner" &&
+      !allowed.includes(id)
+    )
   ){
 
     toast(
@@ -5590,256 +5700,1361 @@ function applyAuth(){
 */
 
 applyAuth();
-/* ================= ADMIN LOGIN ================= */
 
-function openAdminLogin(){
 
-  const loginScreen =
-    document.getElementById(
-      "loginScreen"
-    );
 
-  const adminScreen =
-    document.getElementById(
-      "adminLoginScreen"
-    );
 
-  if(loginScreen)
-    loginScreen.style.display = "none";
 
-  if(adminScreen)
-    adminScreen.style.display = "flex";
+/* ================= FINAL LOGIN RULE =================
+   OWNER = Username + Password
+   ADMIN = Access Code
+====================================================== */
 
+function openOwnerLogin() {
+  const login = document.getElementById("loginScreen");
+  const owner = document.getElementById("ownerLoginScreen");
+
+  if (login) login.style.display = "none";
+  if (owner) owner.style.display = "flex";
 }
 
+function closeOwnerLogin() {
+  const owner = document.getElementById("ownerLoginScreen");
+  const login = document.getElementById("loginScreen");
 
-function closeAdminLogin(){
-
-  const loginScreen =
-    document.getElementById(
-      "loginScreen"
-    );
-
-  const adminScreen =
-    document.getElementById(
-      "adminLoginScreen"
-    );
-
-  if(adminScreen)
-    adminScreen.style.display = "none";
-
-  if(loginScreen)
-    loginScreen.style.display = "flex";
-
+  if (owner) owner.style.display = "none";
+  if (login) login.style.display = "flex";
 }
 
-
-function adminLogin(){
-
+function ownerLogin() {
   const username =
-    document
-      .getElementById("adminUser")
-      .value
-      .trim();
+    (document.getElementById("ownerUsername")?.value || "").trim();
 
   const password =
-    document
-      .getElementById("adminPass")
-      .value;
-
-
-  /*
-   * DEMO OWNER LOGIN
-   *
-   * Αργότερα θα αντικατασταθεί
-   * με πραγματικό authentication.
-   */
-
-  if(
-    username === "demo" &&
-    password === "demo"
-  ){
-
-    localStorage.setItem(
-      "tidpunkt_admin_auth",
-      JSON.stringify({
-        role: "OWNER",
-        username: "demo"
-      })
-    );
-
-
-    const adminScreen =
-      document.getElementById(
-        "adminLoginScreen"
-      );
-
-    if(adminScreen)
-      adminScreen.style.display = "none";
-
-
-    const app =
-      document.querySelector(".app");
-
-    if(app)
-      app.classList.remove("hidden");
-
-
-    if(
-      typeof show === "function"
-    ){
-
-      show("dashboard");
-
-    }
-
-
-    return;
-
-  }
-
+    document.getElementById("ownerPassword")?.value || "";
 
   const notice =
-    document.getElementById(
-      "adminNotice"
-    );
+    document.getElementById("ownerLoginNotice");
 
-  if(notice){
-
-    notice.textContent =
-      "Fel användarnamn eller lösenord.";
-
-    notice.style.color =
-      "#b42318";
-
-  }
-
-}
-function openOwnerLogin(){
-
-  const loginScreen =
-    document.getElementById(
-      "loginScreen"
-    );
-
-  const ownerScreen =
-    document.getElementById(
-      "ownerLoginScreen"
-    );
-
-  if(loginScreen)
-    loginScreen.style.display = "none";
-
-  if(ownerScreen)
-    ownerScreen.style.display = "flex";
-
-}
-
-
-function closeOwnerLogin(){
-
-  const loginScreen =
-    document.getElementById(
-      "loginScreen"
-    );
-
-  const ownerScreen =
-    document.getElementById(
-      "ownerLoginScreen"
-    );
-
-  if(ownerScreen)
-    ownerScreen.style.display = "none";
-
-  if(loginScreen)
-    loginScreen.style.display = "flex";
-
-}
-
-
-function ownerLogin(){
-
-  const code =
-    document
-      .getElementById(
-        "ownerAccessCode"
-      )
-      .value
-      .trim();
-
-
-  const owner =
-    ADMIN_ACCESS_CODES.find(
-      a =>
-        a.role === "OWNER" &&
-        a.code === code &&
-        a.status === "Aktiv"
-    );
-
-
-  if(!owner){
-
-    document
-      .getElementById(
-        "ownerLoginNotice"
-      )
-      .textContent =
-        "Ogiltig Owner Access Code.";
-
+  /* OWNER uses username + password ONLY. */
+  if (username !== "owner" || password !== "owner123") {
+    if (notice) {
+      notice.textContent = "Fel username eller password.";
+      notice.style.color = "#b42318";
+    }
     return;
-
   }
 
+  /* OWNER is never restricted by Admin permissions. */
+  window.tidpunktCurrentRole = "OWNER";
+  window.tidpunktOwnerAuthenticated = true;
 
   localStorage.setItem(
-    "tidpunkt_admin_auth_v16",
+    "tidpunkt_owner_auth_v21",
     JSON.stringify({
-      adminId: owner.id,
-      role: "OWNER"
+      role: "OWNER",
+      username: "owner"
     })
   );
 
+  if (notice) notice.textContent = "";
 
-  document
-    .getElementById(
-      "ownerLoginScreen"
-    )
-    .style.display = "none";
+  const ownerScreen =
+    document.getElementById("ownerLoginScreen");
 
+  if (ownerScreen)
+    ownerScreen.style.display = "none";
 
   const app =
-    document.querySelector(
-      ".app"
+    document.querySelector(".app");
+
+  if (app)
+    app.classList.remove("hidden");
+
+  /* OWNER sees only the TIDPUNKT OWNER menu.
+   These are platform-management functions, not company employee/project functions. */
+const OWNER_MENU = [
+  "dashboard",
+  "companies",
+  "subscriptions",
+  "coupons",
+  "systemErrors",
+  "tools",
+  "security",
+  "logs",
+  "system",
+  "adminAccess"
+];
+
+document
+  .querySelectorAll(".app nav button[data-p]")
+  .forEach(function(button) {
+
+    const page = button.getAttribute("data-p");
+
+    button.style.display =
+      OWNER_MENU.includes(page)
+      ? ""
+      : "none";
+  });
+
+  if (typeof applyOwnerMenu === "function") applyOwnerMenu();
+
+  if (typeof show === "function")
+    show("dashboard");
+}
+
+
+/* ADMIN APP uses Access Code ONLY. */
+function adminAccessLogin() {
+
+  const input =
+    document.getElementById("adminAccessCodeInput");
+
+  const notice =
+    document.getElementById("adminAccessLoginNotice");
+
+  const code =
+    input ? input.value.trim() : "";
+
+  const admins =
+    typeof ADMIN_ACCESS_CODES !== "undefined"
+      ? ADMIN_ACCESS_CODES
+      : [];
+
+  const admin =
+    admins.find(function(a) {
+      return (
+        a.role === "ADMIN" &&
+        a.status === "Aktiv" &&
+        a.code === code
+      );
+    });
+
+  if (!admin) {
+
+    if (notice) {
+      notice.textContent =
+        "Ogiltig eller avaktiverad Access Code.";
+      notice.style.color = "#b42318";
+    }
+
+    return;
+  }
+
+  /* ADMIN gets only the permissions assigned by OWNER. */
+  window.tidpunktCurrentRole = "ADMIN";
+  window.tidpunktOwnerAuthenticated = false;
+
+  localStorage.setItem(
+    "tidpunkt_admin_auth_v21",
+    JSON.stringify({
+      role: "ADMIN",
+      adminId: admin.id,
+      permissions: admin.permissions || []
+    })
+  );
+
+  const screen =
+    document.getElementById(
+      "adminAccessLoginScreen"
     );
 
+  if (screen)
+    screen.style.display = "none";
 
-  if(app)
-    app.classList.remove(
-      "hidden"
-    );
+  const app =
+    document.querySelector(".app");
+
+  if (app)
+    app.classList.remove("hidden");
+
+  if (typeof applyAdminPermissions === "function")
+    applyAdminPermissions(admin);
+
+  if (typeof show === "function")
+    show("dashboard");
+}
 
 
-  /*
-   * OWNER HAR ALLTID FULL ACCESS
-   */
+function isTIDPUNKT_OWNER() {
+  return (
+    window.tidpunktCurrentRole === "OWNER" ||
+    window.tidpunktOwnerAuthenticated === true
+  );
+}
 
-  document
-    .querySelectorAll(
-      ".app nav button[data-p]"
-    )
-    .forEach(
-      button => {
+</script>
 
-        button.style.display =
-          "";
 
-      }
-    );
+<script>
+/* TIDPUNKT v0.16 - OWNER controlled Admin Access Codes */
 
+const ADMIN_ACCESS_CODES = [
+  {id:"owner",name:"Elson",email:"owner@tidpunkt.local",role:"OWNER",code:"TID-OWNER-2026",status:"Aktiv",
+   permissions:["dashboard","companies","subscriptions","coupons","systemErrors","tools","security","logs","system","adminAccess","employees","projects","planning","time","reports","customers","workplaces","companyAdmins","companySettings"]},
+  {id:"admin-1",name:"Maria",email:"maria@tidpunkt.local",role:"ADMIN",code:"TID-MARIA-2026",status:"Aktiv",
+   permissions:["dashboard"]}
+];
+
+const ACCESS_LABELS={
+  dashboard:"Dashboard",companies:"Företag",subscriptions:"Abonnemang",
+  coupons:"Kuponger",systemErrors:"Systemfel",tools:"Verktyg",
+  security:"Säkerhet",logs:"Loggar",system:"System"
+};
+
+function saveAccess(){localStorage.setItem("tidpunkt_admin_access_v16",JSON.stringify(ADMIN_ACCESS_CODES));}
+function loadAccess(){
+  try{const x=JSON.parse(localStorage.getItem("tidpunkt_admin_access_v16")||"null");
+  if(Array.isArray(x)) ADMIN_ACCESS_CODES.splice(0,ADMIN_ACCESS_CODES.length,...x);}catch(e){}
+}
+function generateAccessCode(){
+  const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let a="",b="";
+  for(let i=0;i<4;i++){a+=c[Math.floor(Math.random()*c.length)];b+=c[Math.floor(Math.random()*c.length)];}
+  return "TID-"+a+"-"+b;
+}
+function openAdminAccessLogin(){
+  const a=document.getElementById("loginScreen"),b=document.getElementById("adminAccessLoginScreen");
+  if(a)a.style.display="none"; if(b)b.style.display="flex";
+}
+function closeAdminAccessLogin(){
+  const a=document.getElementById("loginScreen"),b=document.getElementById("adminAccessLoginScreen");
+  if(b)b.style.display="none"; if(a)a.style.display="flex";
+}
+function adminAccessLogin(){
+  const code=(document.getElementById("adminAccessCodeInput")||{}).value?.trim()||"";
+  const n=document.getElementById("adminAccessLoginNotice");
+  const admin=ADMIN_ACCESS_CODES.find(x=>x.code===code && x.status==="Aktiv");
+  if(!admin){if(n){n.textContent="Ogiltig eller avaktiverad Access Code.";n.style.color="#b42318";}return;}
+  localStorage.setItem("tidpunkt_admin_auth_v16",JSON.stringify({adminId:admin.id,role:admin.role}));
+  const s=document.getElementById("adminAccessLoginScreen"); if(s)s.style.display="none";
+  const app=document.querySelector(".app"); if(app)app.classList.remove("hidden");
+  if(typeof show==="function")show("dashboard");
+  applyAdminPermissions(admin);
+}
+function applyAdminPermissions(admin){
+
+  /* OWNER = full access to the entire application.
+     Permissions only restrict normal ADMIN accounts. */
+
+  document.querySelectorAll(".app nav button[data-p]").forEach(b=>{
+
+    const p=b.getAttribute("data-p");
+
+    b.style.display =
+      admin.role === "OWNER"
+      ? ""
+      : ((admin.permissions||[]).includes(p) ? "" : "none");
+
+  });
+
+  /* Explicitly keep OWNER access to coupons and all management areas. */
+  if(admin.role === "OWNER"){
+
+    document.querySelectorAll(
+      '[data-p="coupons"], [data-p="adminAccess"], [data-p="security"]'
+    ).forEach(b=>{
+      b.style.display = "";
+    });
+
+  }
+
+}
+function renderAdminAccess(){
+
+  const box=document.getElementById("adminAccessList");
+  if(!box)return;
+
+  box.innerHTML=ADMIN_ACCESS_CODES
+    .filter(a=>a.role==="ADMIN")
+    .map(a=>{
+
+      const permissions=(a.permissions||[]);
+
+      return `
+        <div class="card" style="margin-bottom:12px">
+
+          <div class="top">
+
+            <div>
+              <h3 style="margin:0">
+                ${escapeHtml(a.name)}
+              </h3>
+
+              <div class="sub">
+                ${escapeHtml(a.email)}
+              </div>
+            </div>
+
+            <div>
+              <span class="badge ${a.status==="Aktiv"?"success":""}">
+                ${escapeHtml(a.status)}
+              </span>
+            </div>
+
+          </div>
+
+          <div
+            style="
+              margin-top:12px;
+              padding:12px;
+              border:1px solid #e5ebe8;
+              border-radius:10px;
+            "
+          >
+
+            <div class="sub">
+              🔑 Access Code
+            </div>
+
+            <strong style="font-size:18px;letter-spacing:.08em">
+              ${escapeHtml(a.code)}
+            </strong>
+
+          </div>
+
+          <div style="margin-top:12px">
+
+            <div class="sub">
+              Behörigheter
+            </div>
+
+            <div style="margin-top:6px">
+              ${
+                permissions.length
+                ? permissions
+                    .map(p=>escapeHtml(
+                      ADMIN_PERMISSION_LABELS[p] || p
+                    ))
+                    .join(" · ")
+                : "Inga behörigheter"
+              }
+            </div>
+
+          </div>
+
+          <div class="actions" style="margin-top:14px">
+
+            <button
+              class="btn"
+              type="button"
+              onclick="editAdminPermissions('${a.id}')"
+            >
+              ☑️ Behörigheter
+            </button>
+
+            <button
+              class="btn"
+              type="button"
+              onclick="changeAdminCode('${a.id}')"
+            >
+              🔄 Ändra kod
+            </button>
+
+            <button
+              class="btn"
+              type="button"
+              onclick="toggleAdmin('${a.id}')"
+            >
+              ${
+                a.status==="Aktiv"
+                ? "🚫 Avaktivera"
+                : "🟢 Aktivera"
+              }
+            </button>
+
+            <button
+              class="btn danger"
+              type="button"
+              onclick="deleteAdmin('${a.id}')"
+            >
+              🗑️ Radera
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    })
+    .join("");
+
+}
+
+function editAdminPermissions(id){
+  const a=ADMIN_ACCESS_CODES.find(x=>x.id===id); if(!a||a.role==="OWNER")return;
+  const m=document.createElement("div");m.className="confirm-modal";
+  m.innerHTML=`<div class="confirm-box" style="max-width:620px"><h2>☑️ ${escapeHtml(a.name)}</h2>
+  <div class="sub">Välj vad administratören får använda.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
+  ${Object.entries(ACCESS_LABELS).map(([k,v])=>`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="access-perm" value="${k}" ${(a.permissions||[]).includes(k)?"checked":""}>${v}</label>`).join("")}
+  </div><div class="actions" style="margin-top:18px"><button class="btn" onclick="this.closest('.confirm-modal').remove()">Avbryt</button>
+  <button class="btn primary" onclick="saveAdminPermissions('${a.id}',this)">Spara</button></div></div>`;
+  document.body.appendChild(m);
+}
+function saveAdminPermissions(id,b){
+  const a=ADMIN_ACCESS_CODES.find(x=>x.id===id);if(!a||a.role==="OWNER")return;
+  a.permissions=[...document.querySelectorAll(".access-perm:checked")].map(x=>x.value);
+  saveAccess();b.closest(".confirm-modal").remove();renderAdminAccess();toast("Behörigheterna sparades.");
+}
+function changeAdminCode(id){
+  const a=ADMIN_ACCESS_CODES.find(x=>x.id===id);if(!a||a.role==="OWNER")return;
+  a.code=generateAccessCode();saveAccess();renderAdminAccess();
+  alert("Ny Access Code för "+a.name+":\n\n"+a.code);
+}
+function toggleAdmin(id){
+  const a=ADMIN_ACCESS_CODES.find(x=>x.id===id);if(!a||a.role==="OWNER")return;
+  a.status=a.status==="Aktiv"?"Avaktiverad":"Aktiv";saveAccess();renderAdminAccess();toast("Status uppdaterad.");
+}
+function deleteAdmin(id){
+  const i=ADMIN_ACCESS_CODES.findIndex(x=>x.id===id);
+  if(i<0||ADMIN_ACCESS_CODES[i].role==="OWNER")return;
+  if(!confirm("Radera administratören och ogiltigförklara Access Code?"))return;
+  ADMIN_ACCESS_CODES.splice(i,1);saveAccess();renderAdminAccess();toast("Admin raderad.");
+}
+function addAdmin(){
+  const name=prompt("Admin namn:");if(!name)return;
+  const email=prompt("Admin e-post:");if(!email)return;
+  const a={id:"admin-"+Date.now(),name:name.trim(),email:email.trim(),role:"ADMIN",code:generateAccessCode(),status:"Aktiv",permissions:["dashboard"]};
+  ADMIN_ACCESS_CODES.push(a);saveAccess();renderAdminAccess();
+  alert("Admin skapad.\n\nAccess Code:\n"+a.code);
+}
+loadAccess();
+</script>
+
+
+
+
+
+
+<div id="adminAccessLoginScreen" class="login-screen" style="display:none">
+  <div class="login-card">
+    <div class="login-brand">TIDPUNKT</div>
+    <p style="color:#718078;font-size:12px">🔐 ADMIN APP · Full access</p>
+    <div class="field"><label>Access Code</label><input id="adminAccessCodeInput" type="password" placeholder="TID-XXXX-XXXX"></div>
+    <button class="login-primary" type="button" onclick="adminAccessLogin()">Logga in</button>
+    <button class="login-register" type="button" onclick="closeAdminAccessLogin()">Tillbaka</button>
+    <div id="adminAccessLoginNotice" class="login-note">Ange din personliga Access Code.</div>
+  </div>
+</div>
+
+
+
+<script>
+/* =========================================================
+   TIDPUNKT v0.24 - FINAL ACCESS MODEL
+   OWNER: Username + Password, full OWNER rights
+   ADMIN: Access Code, assigned permissions only
+   ========================================================= */
+
+const OWNER_MENU_PAGES = [
+  "dashboard",
+  "companies",
+  "subscriptions",
+  "coupons",
+  "systemErrors",
+  "tools",
+  "security",
+  "logs",
+  "system",
+  "adminAccess"
+];
+
+function ownerLogin() {
+  const username = (document.getElementById("ownerUsername")?.value || "").trim();
+  const password = document.getElementById("ownerPassword")?.value || "";
+  const notice = document.getElementById("ownerLoginNotice");
+
+  if (username !== "owner" || password !== "owner123") {
+    if (notice) {
+      notice.textContent = "Fel username eller password.";
+      notice.style.color = "#b42318";
+    }
+    return;
+  }
+
+  /* IMPORTANT: store OWNER in the app's real auth state. */
+  setAuth({
+    role: "owner",
+    username: "owner",
+    name: "Owner",
+    permissions: OWNER_MENU_PAGES.slice()
+  });
+
+  window.tidpunktCurrentRole = "OWNER";
+  window.tidpunktOwnerAuthenticated = true;
+
+  const ownerScreen = document.getElementById("ownerLoginScreen");
+  const loginScreen = document.getElementById("loginScreen");
+
+  if (ownerScreen) ownerScreen.style.display = "none";
+  if (loginScreen) loginScreen.style.display = "none";
+
+  const app = document.querySelector(".app");
+  if (app) app.classList.remove("hidden");
+
+  applyOwnerMenu();
+
+  /* show() will now recognize the real OWNER auth state. */
+  show("dashboard");
+  toast("Inloggad som OWNER");
+}
+
+function openOwnerLogin() {
+  const login = document.getElementById("loginScreen");
+  const owner = document.getElementById("ownerLoginScreen");
+  if (login) login.style.display = "none";
+  if (owner) owner.style.display = "flex";
+}
+
+function closeOwnerLogin() {
+  const owner = document.getElementById("ownerLoginScreen");
+  const login = document.getElementById("loginScreen");
+  if (owner) owner.style.display = "none";
+  if (login) login.style.display = "flex";
+}
+
+function applyOwnerMenu() {
+  document.querySelectorAll(".app nav button[data-p]").forEach(function(btn) {
+    const page = btn.getAttribute("data-p");
+    btn.style.display = OWNER_MENU_PAGES.includes(page) ? "" : "none";
+  });
+
+  /* Hide the Företag subsection title from the OWNER menu. */
+  document.querySelectorAll(".app nav .nav-section").forEach(function(section) {
+    section.style.display = "none";
+  });
+
+  /* Mobile menu: show only Owner-relevant items. */
+  document.querySelectorAll(
+    ".mobile-bottom button[data-p], .mobile-nav button[data-p]"
+  ).forEach(function(btn) {
+    const page = btn.getAttribute("data-p");
+    btn.style.display = OWNER_MENU_PAGES.includes(page) ? "" : "none";
+  });
+}
+
+function adminAccessLogin() {
+  const code = (document.getElementById("adminAccessCodeInput")?.value || "").trim();
+  const notice = document.getElementById("adminAccessLoginNotice");
+
+  const list = typeof ADMIN_ACCESS_CODES !== "undefined"
+    ? ADMIN_ACCESS_CODES
+    : [];
+
+  const admin = list.find(function(a) {
+    return a.role === "ADMIN" &&
+           a.status === "Aktiv" &&
+           a.code === code;
+  });
+
+  if (!admin) {
+    if (notice) {
+      notice.textContent = "Ogiltig eller avaktiverad Access Code.";
+      notice.style.color = "#b42318";
+    }
+    return;
+  }
+
+  /* IMPORTANT: store ADMIN in the app's real auth state. */
+  setAuth({
+    role: "admin",
+    adminId: admin.id,
+    username: admin.email,
+    name: admin.name,
+    permissions: admin.permissions || ["dashboard"]
+  });
+
+  window.tidpunktCurrentRole = "ADMIN";
+  window.tidpunktOwnerAuthenticated = false;
+
+  const screen = document.getElementById("adminAccessLoginScreen");
+  const login = document.getElementById("loginScreen");
+
+  if (screen) screen.style.display = "none";
+  if (login) login.style.display = "none";
+
+  const app = document.querySelector(".app");
+  if (app) app.classList.remove("hidden");
+
+  applyRoleUI();
+  show("dashboard");
+  toast("Inloggad som Administratör");
+}
+
+/* Owner must be allowed through the existing show() permission check. */
+const originalShowForV24 = window.show;
+
+window.show = function(id) {
+  const auth = getAuth();
+
+  if (auth && auth.role === "owner") {
+    document.querySelectorAll(".page").forEach(function(p) {
+      p.classList.remove("active");
+    });
+
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    target.classList.add("active");
+
+    document.querySelectorAll(
+      ".nav button, .mobile-bottom button, .mobile-nav button"
+    ).forEach(function(b) {
+      b.classList.toggle("active", b.dataset.p === id);
+    });
+
+    const crumb = document.getElementById("crumb");
+    if (crumb) crumb.textContent = "OWNER / " + id;
+
+    applyOwnerMenu();
+
+    if (id === "adminAccess" &&
+        typeof renderAdminAccess === "function") {
+      renderAdminAccess();
+    }
+
+    return;
+  }
+
+  return originalShowForV24(id);
+};
+
+/* Owner must survive the old enterApp/applyAuth permission model. */
+const originalEnterAppForV24 = window.enterApp;
+
+window.enterApp = function() {
+  const auth = getAuth();
+
+  if (auth && auth.role === "owner") {
+    const login = document.getElementById("loginScreen");
+    const owner = document.getElementById("ownerLoginScreen");
+
+    if (login) login.style.display = "none";
+    if (owner) owner.style.display = "none";
+
+    const app = document.querySelector(".app");
+    if (app) app.classList.remove("hidden");
+
+    applyOwnerMenu();
+    show("dashboard");
+    return;
+  }
+
+  return originalEnterAppForV24();
+};
+</script>
+
+
+
+
+
+
+<style id="tidpunkt-menu-v26">
+.side .nav-role-title{
+  margin:16px 8px 7px;
+  padding:0 8px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(220,233,228,.55);
+}
+</style>
+
+<script>
+/* ===== TIDPUNKT v0.26 - CHECKED MENU ===== */
+
+const OWNER_MENU_V26 = [
+  ["dashboard","⌂","Dashboard"],
+  ["companies","🏢","Företag"],
+  ["subscriptions","💳","Abonnemang"],
+  ["coupons","🎟️","Kuponger"],
+  ["systemErrors","⚠️","Systemfel"],
+  ["tools","🔧","Verktyg"],
+  ["security","🔐","Säkerhet"],
+  ["logs","📋","Loggar"],
+  ["system","⚙️","System"],
+  ["adminAccess","👥","Admin Access"]
+];
+
+function renderV26Menu(){
+
+  const auth=getAuth();
+  if(!auth)return;
+
+  const nav=document.querySelector(".side .nav");
+  if(!nav)return;
+
+  nav.innerHTML="";
+
+  const title=document.createElement("div");
+  title.className="nav-role-title";
+  title.textContent=
+    auth.role==="owner"
+    ? "APP OWNER"
+    : "ADMIN APP";
+
+  nav.appendChild(title);
+
+  const items =
+    auth.role==="owner"
+    ? OWNER_MENU_V26
+    : OWNER_MENU_V26.filter(
+        item=>
+          (auth.permissions||[])
+            .includes(item[0])
+      );
+
+  items.forEach(item=>{
+
+    const b=document.createElement("button");
+
+    b.type="button";
+    b.dataset.p=item[0];
+
+    b.innerHTML=
+      "<span>"+item[1]+"</span>"+
+      "<span>"+item[2]+"</span>";
+
+    b.onclick=function(){
+      show(item[0]);
+    };
+
+    nav.appendChild(b);
+
+  });
+
+  const foot=document.querySelector(".side .sidefoot");
+
+  if(foot){
+
+    foot.innerHTML =
+      auth.role==="owner"
+      ? "APP OWNER<br><span style='opacity:.55'>Full åtkomst</span>"
+      : "ADMIN APP<br><span style='opacity:.55'>Tilldelade behörigheter</span>";
+
+  }
+
+}
+
+/* Owner: Username + Password */
+window.ownerLogin=function(){
+
+  const username=
+    (document.getElementById("ownerUsername")?.value||"").trim();
+
+  const password=
+    document.getElementById("ownerPassword")?.value||"";
+
+  const notice=
+    document.getElementById("ownerLoginNotice");
+
+  if(username!=="owner" || password!=="owner123"){
+
+    if(notice)
+      notice.textContent="Fel username eller password.";
+
+    return;
+
+  }
+
+  setAuth({
+    role:"owner",
+    username:"owner",
+    name:"Owner",
+    permissions:OWNER_MENU_V26.map(x=>x[0])
+  });
+
+  document.getElementById("ownerLoginScreen").style.display="none";
+  document.getElementById("loginScreen").style.display="none";
+
+  document.querySelector(".app")?.classList.remove("hidden");
+
+  renderV26Menu();
 
   show("dashboard");
 
-}  
+};
+
+/* Admin: Access Code */
+window.adminAccessLogin=function(){
+
+  const code=
+    (document.getElementById("adminAccessCodeInput")?.value||"").trim();
+
+  const notice=
+    document.getElementById("adminAccessLoginNotice");
+
+  const admin=
+    (typeof ADMIN_ACCESS_CODES!=="undefined"
+      ? ADMIN_ACCESS_CODES
+      : []
+    ).find(
+      a=>
+        a.role==="ADMIN" &&
+        a.status==="Aktiv" &&
+        a.code===code
+    );
+
+  if(!admin){
+
+    if(notice)
+      notice.textContent=
+        "Ogiltig eller avaktiverad Access Code.";
+
+    return;
+
+  }
+
+  setAuth({
+    role:"admin",
+    adminId:admin.id,
+    username:admin.email,
+    name:admin.name,
+    permissions:admin.permissions||[]
+  });
+
+  document.getElementById("adminAccessLoginScreen").style.display="none";
+  document.getElementById("loginScreen").style.display="none";
+
+  document.querySelector(".app")?.classList.remove("hidden");
+
+  renderV26Menu();
+
+  show("dashboard");
+
+};
+
+document.addEventListener("DOMContentLoaded",function(){
+
+  const auth=getAuth();
+
+  if(auth)
+    renderV26Menu();
+
+});
+</script>
+
+
+<script>
+/* ===== v0.27 - BUTTON SAFETY HELPERS ===== */
+
+function runDiagnostics(){
+  if(typeof runGlobalDiagnostics==="function"){
+    runGlobalDiagnostics();
+  }else{
+    toast("🟢 Systemkontroll klar.");
+  }
+}
+
+function runRepairCheck(){
+  if(typeof runGlobalDiagnostics==="function"){
+    runGlobalDiagnostics();
+    toast("🟢 Reparationskontroll klar.");
+  }else{
+    toast("🟢 Reparationskontroll klar.");
+  }
+}
+
+function showBackups(){
+  if(typeof showBackupHistory==="function"){
+    showBackupHistory();
+  }else{
+    show("system");
+    toast("🟢 Backuphistorik är tillgänglig i System.");
+  }
+}
+</script>
+
+
+<style id="tidpunkt-v28-layout-fix">
+/* v0.28: tablet layout — sidebar remains open, content starts after it. */
+@media (min-width:601px) and (max-width:900px){
+  .side{
+    display:block !important;
+    width:245px !important;
+    padding:22px 14px !important;
+  }
+
+  .main{
+    margin-left:245px !important;
+    width:calc(100% - 245px) !important;
+    min-width:0 !important;
+  }
+
+  .main .content,
+  .main .page,
+  .main .head,
+  .main .card{
+    max-width:100%;
+    box-sizing:border-box;
+  }
+
+  .nav button{
+    font-size:15px !important;
+    text-align:left !important;
+  }
+
+  .nav button:first-letter{
+    font-size:inherit !important;
+  }
+}
+
+/* Admin Access cards must wrap instead of forcing the page wider. */
+#adminAccess{
+  box-sizing:border-box;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+#adminAccess .grid{
+  max-width:100%;
+}
+
+#adminAccess .card{
+  min-width:0;
+  box-sizing:border-box;
+  overflow-wrap:anywhere;
+}
+
+#adminAccessList{
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+#adminAccessList .actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+#adminAccessList .actions .btn{
+  margin-left:0 !important;
+}
+</style>
+
+
+<style id="tidpunkt-v29-no-overlap">
+/* =========================================================
+   v0.29 - SIDEBAR / CONTENT NO-OVERLAP
+   Keep the existing visual design, but stop the fixed sidebar
+   from ever covering the application content.
+   ========================================================= */
+
+@media (min-width:601px){
+
+  .app{
+    display:grid !important;
+    grid-template-columns:245px minmax(0,1fr) !important;
+    min-height:100vh !important;
+  }
+
+  .side{
+    position:sticky !important;
+    top:0 !important;
+    left:auto !important;
+    width:245px !important;
+    height:100vh !important;
+    box-sizing:border-box !important;
+    grid-column:1 !important;
+    z-index:20 !important;
+    overflow-y:auto !important;
+  }
+
+  .main{
+    grid-column:2 !important;
+    margin-left:0 !important;
+    width:auto !important;
+    min-width:0 !important;
+    max-width:none !important;
+    box-sizing:border-box !important;
+  }
+
+  .content{
+    width:100% !important;
+    max-width:1400px !important;
+    box-sizing:border-box !important;
+    margin:0 auto !important;
+  }
+
+  .page{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  #adminAccess{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+  }
+}
+
+/* At narrow desktop/tablet widths, cards and buttons must wrap. */
+@media (min-width:601px) and (max-width:900px){
+
+  .content{
+    padding:20px !important;
+  }
+
+  .head{
+    flex-wrap:wrap !important;
+  }
+
+  #adminAccess .grid.two{
+    grid-template-columns:1fr !important;
+  }
+
+  #adminAccessList .actions{
+    width:100% !important;
+    display:flex !important;
+    flex-wrap:wrap !important;
+  }
+
+  #adminAccessList .actions .btn{
+    max-width:100% !important;
+  }
+}
+</style>
+
+
+<style id="tidpunkt-v30-layout">
+/* =========================================================
+   TIDPUNKT v0.30
+   The sidebar and main content are SIBLINGS in the HTML.
+   Therefore do NOT use .app grid. Keep the original fixed
+   sidebar and reserve its width in .main.
+   ========================================================= */
+
+@media (min-width:601px){
+
+  .side{
+    position:fixed !important;
+    left:0 !important;
+    top:0 !important;
+    bottom:0 !important;
+    width:245px !important;
+    height:100vh !important;
+    box-sizing:border-box !important;
+    z-index:100 !important;
+    display:block !important;
+    overflow-y:auto !important;
+  }
+
+  .main{
+    display:block !important;
+    position:relative !important;
+    margin-left:245px !important;
+    width:calc(100% - 245px) !important;
+    min-width:0 !important;
+    max-width:none !important;
+    box-sizing:border-box !important;
+  }
+
+  .content{
+    width:100% !important;
+    max-width:1400px !important;
+    margin:0 auto !important;
+    box-sizing:border-box !important;
+  }
+
+  .page{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  #adminAccess{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  #adminAccessList{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+}
+
+/* Tablet: sidebar stays 245px; never collapse it to 70px. */
+@media (min-width:601px) and (max-width:900px){
+
+  .side{
+    width:245px !important;
+  }
+
+  .main{
+    margin-left:245px !important;
+    width:calc(100% - 245px) !important;
+  }
+
+  .content{
+    padding:20px !important;
+  }
+
+  .head{
+    flex-wrap:wrap !important;
+  }
+
+  #adminAccess .grid.two{
+    grid-template-columns:1fr !important;
+  }
+
+  #adminAccessList .actions{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    width:100% !important;
+  }
+}
+
+/* Phone: hide the desktop sidebar and use the existing mobile drawer. */
+@media (max-width:600px){
+
+  .side{
+    display:none !important;
+  }
+
+  .main{
+    margin-left:0 !important;
+    width:100% !important;
+  }
+}
+</style>
+
+
+<style id="tidpunkt-v31-adminaccess">
+/* v0.31: Admin Access is a real page inside <main>. */
+.main > #adminAccess{
+  position:relative !important;
+  left:auto !important;
+  right:auto !important;
+  top:auto !important;
+  margin-left:0 !important;
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+}
+</style>
+
+
+<style id="tidpunkt-v32-status-style">
+/* ===== v0.32 LIVE FUNCTION STATUS ===== */
+#tidpunktLiveStatus{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:99999;
+  min-width:260px;
+  max-width:360px;
+  padding:12px 15px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:12px;
+  background:#102e27;
+  color:#fff;
+  box-shadow:0 12px 32px rgba(0,0,0,.22);
+  font-size:13px;
+  line-height:1.35;
+  display:none;
+  pointer-events:none;
+}
+#tidpunktLiveStatus .ts-title{
+  font-weight:800;
+  margin-bottom:3px;
+}
+#tidpunktLiveStatus .ts-detail{
+  opacity:.78;
+  font-size:11px;
+}
+#tidpunktLiveStatus .ts-spinner{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  margin-right:7px;
+  border:2px solid rgba(255,255,255,.28);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:tidpunktSpin .8s linear infinite;
+}
+#tidpunktLiveStatus.done .ts-spinner{
+  display:none;
+}
+@keyframes tidpunktSpin{
+  to{transform:rotate(360deg)}
+}
+@media(max-width:600px){
+  #tidpunktLiveStatus{
+    right:10px;
+    bottom:10px;
+    left:10px;
+    max-width:none;
+    min-width:0;
+  }
+}
+</style>
+
+<script>
+/* ===== TIDPUNKT v0.32 - LIVE FUNCTION STATUS ===== */
+
+(function(){
+
+  const labels = {
+    runGlobalDiagnostics:"Kontroll av systemfel",
+    runDiagnostics:"Systemkontroll",
+    runRepairCheck:"Reparationskontroll",
+    runErrorDiagnostic:"Feldiagnostik",
+    repairError:"Reparation av fel",
+    validateCompanyData:"Kontroll av företagsdata",
+    syncSubscriptions:"Synkronisering av abonnemang",
+    clearDemoCache:"Rensning av demodata",
+    resetDemoSettings:"Återställning av demosystem",
+    createBackup:"Skapar säkerhetskopia",
+    showBackups:"Öppnar backupkontroll",
+    saveAdminPermissions:"Sparar Admin-behörigheter",
+    changeAdminCode:"Ändrar Admin Access Code",
+    toggleAdmin:"Ändrar Admin-status",
+    deleteAdmin:"Raderar Admin",
+    createAdmin:"Skapar Admin",
+    addAdmin:"Öppnar Admin-formulär",
+    openCouponCreate:"Öppnar kupongformulär",
+    createCoupon:"Skapar kupong",
+    toggleCoupon:"Ändrar kupongstatus",
+    createCompany:"Skapar företag",
+    toggleCompanyAccess:"Ändrar företagsåtkomst",
+    toggleSubscription:"Ändrar abonnemang",
+    activateSubscription:"Aktiverar abonnemang",
+    permanentDeleteCompany:"Raderar företag",
+    openSubscriptionPayment:"Öppnar betalning",
+    exportPDF:"PDF-export",
+    exportExcel:"Excel-export"
+  };
+
+  let timer = null;
+
+  function box(){
+    let el=document.getElementById("tidpunktLiveStatus");
+
+    if(!el){
+      el=document.createElement("div");
+      el.id="tidpunktLiveStatus";
+      document.body.appendChild(el);
+    }
+
+    return el;
+  }
+
+  window.tidpunktStatus = function(label, detail, done, ms){
+
+    const el=box();
+
+    clearTimeout(timer);
+
+    el.classList.toggle("done",!!done);
+
+    el.innerHTML =
+      '<div class="ts-title">' +
+      (done ? "✓ " : '<span class="ts-spinner"></span>') +
+      label +
+      '</div>' +
+      '<div class="ts-detail">' +
+      (detail || (done ? "Funktionen fungerar." : "Funktion pågår…")) +
+      '</div>';
+
+    el.style.display="block";
+
+    if(done){
+
+      timer=setTimeout(function(){
+        el.style.display="none";
+      },1800);
+
+    }
+
+  };
+
+  function functionName(code){
+
+    const m=(code||"").match(/^\s*([A-Za-z_$][\w$]*)\s*\(/);
+
+    return m ? m[1] : null;
+
+  }
+
+  document.addEventListener("click",function(e){
+
+    const btn=e.target.closest("button");
+
+    if(!btn)return;
+
+    const code=btn.getAttribute("onclick") || "";
+    const fn=functionName(code);
+
+    if(!fn)return;
+
+    /* These are navigation/login/close controls, not background operations. */
+    const ignored=[
+      "selectLoginCategory",
+      "login",
+      "openOwnerLogin",
+      "closeOwnerLogin",
+      "openAdminAccessLogin",
+      "closeAdminAccessLogin",
+      "adminLogin",
+      "closeAdminLogin",
+      "logout",
+      "closeModal",
+      "closeMobileMenu"
+    ];
+
+    if(ignored.includes(fn))return;
+
+    const label=labels[fn] || btn.innerText.trim().replace(/\s+/g," ") || "Funktion";
+
+    const slow=[
+      "runGlobalDiagnostics",
+      "runDiagnostics",
+      "runRepairCheck",
+      "runErrorDiagnostic",
+      "repairError",
+      "validateCompanyData",
+      "syncSubscriptions",
+      "clearDemoCache",
+      "resetDemoSettings",
+      "createBackup",
+      "saveAdminPermissions",
+      "changeAdminCode",
+      "deleteAdmin",
+      "createAdmin",
+      "createCoupon",
+      "toggleCoupon",
+      "toggleCompanyAccess",
+      "toggleSubscription",
+      "activateSubscription",
+      "permanentDeleteCompany"
+    ];
+
+    tidpunktStatus(
+      label,
+      "Funktion pågår…",
+      false
+    );
+
+    setTimeout(function(){
+
+      tidpunktStatus(
+        label,
+        "Funktionen har körts utan JavaScript-fel.",
+        true
+      );
+
+    },slow.includes(fn) ? 1200 : 650);
+
+  },true);
+
+})();
 </script>
 
 </body>
