@@ -1103,80 +1103,56 @@ button{
       TIDPUNKT
     </div>
 
-    <p style="color:#718078;font-size:12px">
-      Tid • Personal • Arbete
-    </p>
+    <!-- NORMAL LOGIN -->
 
-    <div class="login-categories">
+    <div class="login-tabs">
 
       <button
-        id="catCompany"
-        class="login-category active"
+        class="login-tab active"
         type="button"
-        onclick="selectLoginCategory('company')"
       >
-        Företag
+        🏢 Företag
       </button>
 
       <button
-        id="catPrivate"
-        class="login-category"
+        class="login-tab"
         type="button"
-        onclick="selectLoginCategory('private')"
       >
-        Anställd
+        👤 Anställd
       </button>
 
     </div>
 
-    <div id="companyLoginFields">
 
-      <div class="field">
-        <label>Användare</label>
-        <input
-          id="loginUser"
-          placeholder="t.ex. nordic"
-          autocomplete="username"
-        >
-      </div>
+    <div class="field">
 
-      <div class="field">
-        <label>Lösenord</label>
-        <input
-          id="loginPass"
-          type="password"
-          placeholder="Lösenord"
-          autocomplete="current-password"
-        >
-      </div>
+      <label>
+        Användare
+      </label>
+
+      <input
+        id="username"
+        type="text"
+        autocomplete="username"
+      >
 
     </div>
 
-    <div
-      id="privateLoginFields"
-      style="display:none"
-    >
 
-      <div class="field">
-        <label>Användare</label>
-        <input
-          id="privateUser"
-          placeholder="Användarnamn"
-          autocomplete="username"
-        >
-      </div>
+    <div class="field">
 
-      <div class="field">
-        <label>Lösenord</label>
-        <input
-          id="privatePass"
-          type="password"
-          placeholder="Lösenord"
-          autocomplete="current-password"
-        >
-      </div>
+      <label>
+        Lösenord
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+      >
 
     </div>
+
 
     <button
       class="login-primary"
@@ -1186,37 +1162,130 @@ button{
       Logga in
     </button>
 
+
     <button
-      id="companyRegisterButton"
       class="login-register"
       type="button"
-      onclick="openCompanyRegistration()"
     >
       Registrera företag
     </button>
 
+
     <div
       id="loginNotice"
       class="login-note"
-    >
-      Företag: demoanvändare
-      <b>nordic</b>,
-      lösenord
-      <b>123456</b>.
-    </div>
+    ></div>
 
- <button
-  class="admin-entry"
-  type="button"
-  onclick="openAdminLogin()"
->
-  🔐 Admin App
-</button>
+
+    <!-- SEPARATE ADMIN / OWNER APPS -->
+
+    <div
+      style="
+        margin:24px 0 16px;
+        border-top:1px solid #e5e9e7;
+      "
+    ></div>
+
+
+    <!-- ADMIN APP -->
+
+    <button
+      class="admin-entry"
+      type="button"
+      onclick="openAdminAccessLogin()"
+    >
+
+      🔐 ADMIN APP
+
+      <span>
+        Administratör
+      </span>
+
+    </button>
+
+
+    <!-- OWNER APP -->
+
+    <button
+      class="owner-entry"
+      type="button"
+      onclick="openOwnerLogin()"
+    >
+
+      👑 APP OWNER
+
+      <span>
+        Endast för ägare
+      </span>
+
+    </button>
+
 
   </div>
 
 </div>
+<div
+  id="ownerLoginScreen"
+  class="login-screen"
+  style="display:none"
+>
 
+  <div class="login-card">
+
+    <div class="login-brand">
+      TIDPUNKT
+    </div>
+
+    <h3>
+      👑 APP OWNER
+    </h3>
+
+    <div class="sub">
+      Full access
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Owner Access Code
+      </label>
+
+      <input
+        id="ownerAccessCode"
+        type="password"
+        placeholder="TID-XXXX-XXXX"
+      >
+
+    </div>
+
+
+    <button
+      class="login-primary"
+      type="button"
+      onclick="ownerLogin()"
+    >
+      Logga in
+    </button>
+
+
+    <button
+      class="login-register"
+      type="button"
+      onclick="closeOwnerLogin()"
+    >
+      Tillbaka
+    </button>
+
+
+    <div
+      id="ownerLoginNotice"
+      class="login-note"
+    ></div>
+
+  </div>
+
+</div>
 
 <!-- ================= ADMIN LOGIN ================= -->
 
@@ -5646,6 +5715,131 @@ function adminLogin(){
   }
 
 }
+function openOwnerLogin(){
+
+  const loginScreen =
+    document.getElementById(
+      "loginScreen"
+    );
+
+  const ownerScreen =
+    document.getElementById(
+      "ownerLoginScreen"
+    );
+
+  if(loginScreen)
+    loginScreen.style.display = "none";
+
+  if(ownerScreen)
+    ownerScreen.style.display = "flex";
+
+}
+
+
+function closeOwnerLogin(){
+
+  const loginScreen =
+    document.getElementById(
+      "loginScreen"
+    );
+
+  const ownerScreen =
+    document.getElementById(
+      "ownerLoginScreen"
+    );
+
+  if(ownerScreen)
+    ownerScreen.style.display = "none";
+
+  if(loginScreen)
+    loginScreen.style.display = "flex";
+
+}
+
+
+function ownerLogin(){
+
+  const code =
+    document
+      .getElementById(
+        "ownerAccessCode"
+      )
+      .value
+      .trim();
+
+
+  const owner =
+    ADMIN_ACCESS_CODES.find(
+      a =>
+        a.role === "OWNER" &&
+        a.code === code &&
+        a.status === "Aktiv"
+    );
+
+
+  if(!owner){
+
+    document
+      .getElementById(
+        "ownerLoginNotice"
+      )
+      .textContent =
+        "Ogiltig Owner Access Code.";
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "tidpunkt_admin_auth_v16",
+    JSON.stringify({
+      adminId: owner.id,
+      role: "OWNER"
+    })
+  );
+
+
+  document
+    .getElementById(
+      "ownerLoginScreen"
+    )
+    .style.display = "none";
+
+
+  const app =
+    document.querySelector(
+      ".app"
+    );
+
+
+  if(app)
+    app.classList.remove(
+      "hidden"
+    );
+
+
+  /*
+   * OWNER HAR ALLTID FULL ACCESS
+   */
+
+  document
+    .querySelectorAll(
+      ".app nav button[data-p]"
+    )
+    .forEach(
+      button => {
+
+        button.style.display =
+          "";
+
+      }
+    );
+
+
+  show("dashboard");
+
+}  
 </script>
 
 </body>
