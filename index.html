@@ -2253,14 +2253,10 @@ button{
     <div class="field" style="margin-top:12px">
       <label>Behörigheter</label>
       <div class="card" style="padding:12px;margin-top:6px">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          ${Object.entries(ACCESS_LABELS).map(([k,v])=>`
-            <label style="display:flex;align-items:center;gap:8px;padding:7px 0;font-weight:600">
-              <input type="checkbox" class="access-new-permission" value="${k}">
-              ${escapeHtml(v)}
-            </label>
-          `).join("")}
-        </div>
+        <div
+          id="accessNewPermissions"
+          style="display:grid;grid-template-columns:1fr 1fr;gap:8px"
+        ></div>
       </div>
     </div>
 
@@ -6105,9 +6101,48 @@ function deleteAdmin(id){
   if(!confirm("Radera administratören och ogiltigförklara Access Code?"))return;
   ADMIN_ACCESS_CODES.splice(i,1);saveAccess();renderAdminAccess();toast("Admin raderad.");
 }
+function renderAccessPermissionChoices(){
+  const box=document.getElementById("accessNewPermissions");
+  if(!box)return;
+
+  box.innerHTML=Object.entries(ACCESS_LABELS)
+    .map(function(entry){
+      const k=entry[0];
+      const v=entry[1];
+
+      return `
+        <label class="permission-tile">
+          <input
+            type="checkbox"
+            class="access-new-permission"
+            value="${escapeHtml(k)}"
+          >
+          <span class="permission-check">✓</span>
+          <span class="permission-icon">
+            ${
+              k==="dashboard" ? "⌂" :
+              k==="companies" ? "🏢" :
+              k==="subscriptions" ? "💳" :
+              k==="coupons" ? "🎟️" :
+              k==="systemErrors" ? "⚠️" :
+              k==="tools" ? "🔧" :
+              k==="security" ? "🔐" :
+              k==="logs" ? "📋" :
+              k==="system" ? "⚙️" : "•"
+            }
+          </span>
+          <span class="permission-name">${escapeHtml(v)}</span>
+        </label>
+      `;
+    })
+    .join("");
+}
+
 function showAdminCreateForm(){
   const form=document.getElementById("adminCreateForm");
+
   if(form){
+    renderAccessPermissionChoices();
     form.style.display="block";
     form.scrollIntoView({behavior:"smooth",block:"start"});
   }
@@ -7113,6 +7148,116 @@ function showBackups(){
 }
 #adminAccessList .danger-box{
   border-radius:10px;
+}
+</style>
+
+
+<script>
+/* v0.34: render Admin permission choices only when the form is opened. */
+document.addEventListener("DOMContentLoaded",function(){
+  if(typeof renderAccessPermissionChoices==="function"){
+    renderAccessPermissionChoices();
+  }
+});
+</script>
+
+
+
+
+
+<style id="tidpunkt-v35-admin-permissions">
+/* =========================================================
+   v0.35 — Compact Admin Permission Tiles
+   ========================================================= */
+
+#adminCreateForm{
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+#accessNewPermissions{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+  width:100%;
+  box-sizing:border-box;
+}
+
+.permission-tile{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-height:42px;
+  padding:8px 10px;
+  border:1px solid #dfe7e3;
+  border-radius:9px;
+  background:#fff;
+  box-sizing:border-box;
+  cursor:pointer;
+  user-select:none;
+  transition:background .15s ease,border-color .15s ease,transform .15s ease;
+}
+
+.permission-tile:hover{
+  border-color:#b8ccc5;
+  background:#f8fbfa;
+}
+
+.permission-tile input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.permission-check{
+  width:17px;
+  height:17px;
+  flex:0 0 17px;
+  border:1.5px solid #aebdb7;
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:transparent;
+  font-size:11px;
+  font-weight:800;
+  box-sizing:border-box;
+}
+
+.permission-tile input:checked + .permission-check{
+  background:#126b58;
+  border-color:#126b58;
+  color:#fff;
+}
+
+.permission-icon{
+  width:20px;
+  flex:0 0 20px;
+  text-align:center;
+  font-size:15px;
+  line-height:1;
+}
+
+.permission-name{
+  font-size:12px;
+  font-weight:700;
+  color:#26332f;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+@media(max-width:900px){
+  #accessNewPermissions{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+
+@media(max-width:600px){
+  #accessNewPermissions{
+    grid-template-columns:1fr !important;
+  }
 }
 </style>
 
