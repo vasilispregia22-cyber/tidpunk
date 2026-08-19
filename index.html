@@ -5521,7 +5521,131 @@ function applyAuth(){
 */
 
 applyAuth();
+/* ================= ADMIN LOGIN ================= */
 
+function openAdminLogin(){
+
+  const loginScreen =
+    document.getElementById(
+      "loginScreen"
+    );
+
+  const adminScreen =
+    document.getElementById(
+      "adminLoginScreen"
+    );
+
+  if(loginScreen)
+    loginScreen.style.display = "none";
+
+  if(adminScreen)
+    adminScreen.style.display = "flex";
+
+}
+
+
+function closeAdminLogin(){
+
+  const loginScreen =
+    document.getElementById(
+      "loginScreen"
+    );
+
+  const adminScreen =
+    document.getElementById(
+      "adminLoginScreen"
+    );
+
+  if(adminScreen)
+    adminScreen.style.display = "none";
+
+  if(loginScreen)
+    loginScreen.style.display = "flex";
+
+}
+
+
+function adminLogin(){
+
+  const username =
+    document
+      .getElementById("adminUser")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("adminPass")
+      .value;
+
+
+  /*
+   * DEMO OWNER LOGIN
+   *
+   * Αργότερα θα αντικατασταθεί
+   * με πραγματικό authentication.
+   */
+
+  if(
+    username === "demo" &&
+    password === "demo"
+  ){
+
+    localStorage.setItem(
+      "tidpunkt_admin_auth",
+      JSON.stringify({
+        role: "OWNER",
+        username: "demo"
+      })
+    );
+
+
+    const adminScreen =
+      document.getElementById(
+        "adminLoginScreen"
+      );
+
+    if(adminScreen)
+      adminScreen.style.display = "none";
+
+
+    const app =
+      document.querySelector(".app");
+
+    if(app)
+      app.classList.remove("hidden");
+
+
+    if(
+      typeof show === "function"
+    ){
+
+      show("dashboard");
+
+    }
+
+
+    return;
+
+  }
+
+
+  const notice =
+    document.getElementById(
+      "adminNotice"
+    );
+
+  if(notice){
+
+    notice.textContent =
+      "Fel användarnamn eller lösenord.";
+
+    notice.style.color =
+      "#b42318";
+
+  }
+
+}
 </script>
 
 </body>
