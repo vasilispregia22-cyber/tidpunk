@@ -1675,7 +1675,6 @@ button{
       <h1>Säkerhet</h1>
       <p>Admins, åtkomst och individuella behörigheter.</p>
     </div>
-    <button class="btn primary" onclick="openAdminCreate()">+ Lägg till Admin</button>
   </div>
 
   <div class="grid three">
@@ -2218,41 +2217,74 @@ button{
 </div>
 
 
+
 <section id="adminAccess" class="page">
 
   <div class="head">
     <div>
       <h1>🔐 Admin Access</h1>
-      <p>Hantera vilka administratörer som får tillgång till TIDPUNKT.</p>
+      <p>Hantera administratörer, Access Codes och behörigheter.</p>
     </div>
-
-    <button class="btn primary" type="button" onclick="addAdmin()">
+    <button class="btn primary" type="button" onclick="showAdminCreateForm()">
       + Lägg till Admin
     </button>
   </div>
 
-  <div class="grid two" style="margin-top:15px">
+  <div id="adminCreateForm" class="card" style="display:none;margin-top:15px">
+    <div class="head" style="margin-bottom:12px">
+      <div>
+        <h3>+ Ny Admin</h3>
+        <p class="sub">Skapa Admin direkt här utan popup.</p>
+      </div>
+      <button class="btn" type="button" onclick="hideAdminCreateForm()">Avbryt</button>
+    </div>
 
+    <div class="grid two">
+      <div class="field">
+        <label>Namn</label>
+        <input id="accessNewAdminName" placeholder="Namn Efternamn">
+      </div>
+      <div class="field">
+        <label>E-post</label>
+        <input id="accessNewAdminEmail" type="email" placeholder="admin@example.com">
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:12px">
+      <label>Behörigheter</label>
+      <div class="card" style="padding:12px;margin-top:6px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          ${Object.entries(ACCESS_LABELS).map(([k,v])=>`
+            <label style="display:flex;align-items:center;gap:8px;padding:7px 0;font-weight:600">
+              <input type="checkbox" class="access-new-permission" value="${k}">
+              ${escapeHtml(v)}
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+
+    <div class="actions" style="justify-content:flex-end;margin-top:12px">
+      <button class="btn" type="button" onclick="hideAdminCreateForm()">Avbryt</button>
+      <button class="btn primary" type="button" onclick="createAccessAdmin()">Skapa Admin</button>
+    </div>
+  </div>
+
+  <div class="grid two" style="margin-top:15px">
     <div class="card">
       <h3>🔑 Access Code</h3>
-      <p class="sub">
-        Varje Admin har en personlig Access Code.
-        Endast aktiva koder kan användas för inloggning.
-      </p>
+      <p class="sub">Varje Admin har en personlig Access Code. Endast aktiva koder kan användas.</p>
     </div>
-
     <div class="card">
       <h3>☑️ Behörigheter</h3>
-      <p class="sub">
-        Owner bestämmer exakt vilka delar varje Admin får använda.
-      </p>
+      <p class="sub">Owner bestämmer exakt vilka delar varje Admin får använda.</p>
     </div>
-
   </div>
 
   <div id="adminAccessList" style="margin-top:15px"></div>
 
 </section>
+
 
 </main>
 
@@ -2713,7 +2745,7 @@ function adminPermissionText(admin){
 
 function canManageAdmins(){
   const auth=getAuth();
-  return !!auth && auth.role==="admin" && auth.adminId==="owner";
+  return !!auth && (auth.role==="owner" || (auth.role==="admin" && auth.adminId==="owner"));
 }
 
 function renderAdmins(){
@@ -2912,29 +2944,35 @@ function toggleAdminStatus(id){
   toast(admin.status==="Aktiv"?"Admin aktiverad.":"Admin avstängd.");
 }
 
+function requestDeleteAccessAdmin(id){
+  const row=document.querySelector('[data-admin-delete="'+id+'"]');
+  if(!row)return;
+
+  row.innerHTML=`
+    <div class="danger-box" style="margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <span>Radera denna Admin permanent?</span>
+      <span class="actions" style="margin:0">
+        <button class="btn" type="button" onclick="renderAdminAccess()">Avbryt</button>
+        <button class="btn danger" type="button" onclick="confirmDeleteAccessAdmin('${id}')">Radera</button>
+      </span>
+    </div>
+  `;
+}
+
+function confirmDeleteAccessAdmin(id){
+  const i=ADMIN_ACCESS_CODES.findIndex(x=>x.id===id);
+  if(i<0 || ADMIN_ACCESS_CODES[i].role==="OWNER") return;
+
+  const name=ADMIN_ACCESS_CODES[i].name;
+  ADMIN_ACCESS_CODES.splice(i,1);
+  saveAccess();
+  renderAdminAccess();
+  toast("Admin "+name+" har raderats.");
+}
+
+/* Backward-compatible function name used by older buttons. */
 function deleteAdmin(id){
-  if(!canManageAdmins()){
-    toast("Endast OWNER kan radera Admins.");
-    return;
-  }
-
-  const admin=ADMIN_USERS.find(a=>a.id===id);
-  if(!admin || admin.role==="OWNER"){
-    toast("OWNER kan inte raderas.");
-    return;
-  }
-
-  confirmAction(
-    "Radera Admin?",
-    `Är du säker på att du vill permanent radera <b>${escapeHtml(admin.name)}</b>?<br><br>Kontot kan inte användas igen efter raderingen.`,
-    ()=>{
-      ADMIN_USERS=ADMIN_USERS.filter(a=>a.id!==id);
-      saveAdminUsers();
-      renderAdmins();
-      addAdminLog("System",`Admin raderad: ${admin.name}`,"Success");
-      toast("Admin har raderats permanent.");
-    }
-  );
+  requestDeleteAccessAdmin(id);
 }
 
 function persistAdminData(){localStorage.setItem(ERROR_KEY,JSON.stringify(SYSTEM_ERRORS));localStorage.setItem(LOG_KEY,JSON.stringify(ADMIN_LOGS));localStorage.setItem(BACKUP_KEY,JSON.stringify(BACKUPS));}
@@ -3046,7 +3084,7 @@ function updateAdminDashboard(){
 
 function openCompanyDetail(id){
   const auth=getAuth();
-  if(!auth || auth.role!=="admin"){toast("Endast administratören kan öppna företagsdetaljer.");return;}
+  if(!auth || (auth.role!=="admin" && auth.role!=="owner")){toast("Du saknar behörighet.");return;}
   const c=C.find(x=>x.id===id); if(!c)return;
   const limit=Number(c.employeeLimit||30), count=Number(c.employees||0);
   const remaining=Math.max(limit-count,0), usage=Math.min(Math.round((count/limit)*100),100);
@@ -5266,11 +5304,11 @@ function toggleCompanyAccess(id){
   if(
     !auth
     ||
-    auth.role!=="admin"
+    auth.role!=="admin" && auth.role!=="owner"
   ){
 
     toast(
-      "Endast administratören kan ändra åtkomst."
+      "Du saknar behörighet att ändra åtkomst."
     );
 
     return;
@@ -5356,11 +5394,11 @@ function permanentDeleteCompany(id){
   if(
     !auth
     ||
-    auth.role!=="admin"
+    auth.role!=="admin" && auth.role!=="owner"
   ){
 
     toast(
-      "Endast administratören kan radera företag."
+      "Du saknar behörighet att radera företag."
     );
 
     return;
@@ -5976,103 +6014,52 @@ function renderAdminAccess(){
         <div class="card" style="margin-bottom:12px">
 
           <div class="top">
-
             <div>
-              <h3 style="margin:0">
-                ${escapeHtml(a.name)}
-              </h3>
-
-              <div class="sub">
-                ${escapeHtml(a.email)}
-              </div>
+              <h3 style="margin:0">${escapeHtml(a.name)}</h3>
+              <div class="sub">${escapeHtml(a.email)}</div>
             </div>
-
-            <div>
-              <span class="badge ${a.status==="Aktiv"?"success":""}">
-                ${escapeHtml(a.status)}
-              </span>
-            </div>
-
+            <span class="badge ${a.status==="Aktiv"?"success":""}">
+              ${escapeHtml(a.status)}
+            </span>
           </div>
 
-          <div
-            style="
-              margin-top:12px;
-              padding:12px;
-              border:1px solid #e5ebe8;
-              border-radius:10px;
-            "
-          >
-
-            <div class="sub">
-              🔑 Access Code
-            </div>
-
-            <strong style="font-size:18px;letter-spacing:.08em">
-              ${escapeHtml(a.code)}
-            </strong>
-
+          <div style="margin-top:12px;padding:12px;border:1px solid #e5ebe8;border-radius:10px">
+            <div class="sub">🔑 Access Code</div>
+            <strong style="font-size:18px;letter-spacing:.08em">${escapeHtml(a.code)}</strong>
           </div>
 
           <div style="margin-top:12px">
-
-            <div class="sub">
-              Behörigheter
-            </div>
-
+            <div class="sub">Behörigheter</div>
             <div style="margin-top:6px">
               ${
                 permissions.length
-                ? permissions
-                    .map(p=>escapeHtml(
-                      ADMIN_PERMISSION_LABELS[p] || p
-                    ))
-                    .join(" · ")
+                ? permissions.map(p=>escapeHtml(ACCESS_LABELS[p]||p)).join(" · ")
                 : "Inga behörigheter"
               }
             </div>
-
           </div>
 
-          <div class="actions" style="margin-top:14px">
+          <div class="actions" style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px">
 
-            <button
-              class="btn"
-              type="button"
-              onclick="editAdminPermissions('${a.id}')"
-            >
+            <button class="btn" type="button" onclick="editAdminPermissions('${a.id}')">
               ☑️ Behörigheter
             </button>
 
-            <button
-              class="btn"
-              type="button"
-              onclick="changeAdminCode('${a.id}')"
-            >
+            <button class="btn" type="button" onclick="changeAdminCode('${a.id}')">
               🔄 Ändra kod
             </button>
 
-            <button
-              class="btn"
-              type="button"
-              onclick="toggleAdmin('${a.id}')"
-            >
-              ${
-                a.status==="Aktiv"
-                ? "🚫 Avaktivera"
-                : "🟢 Aktivera"
-              }
+            <button class="btn" type="button" onclick="toggleAdmin('${a.id}')">
+              ${a.status==="Aktiv" ? "🚫 Avaktivera" : "🟢 Aktivera"}
             </button>
 
-            <button
-              class="btn danger"
-              type="button"
-              onclick="deleteAdmin('${a.id}')"
-            >
+            <button class="btn danger" type="button" onclick="requestDeleteAccessAdmin('${a.id}')">
               🗑️ Radera
             </button>
 
           </div>
+
+          <div data-admin-delete="${a.id}" style="margin-top:10px"></div>
 
         </div>
       `;
@@ -6099,9 +6086,14 @@ function saveAdminPermissions(id,b){
   saveAccess();b.closest(".confirm-modal").remove();renderAdminAccess();toast("Behörigheterna sparades.");
 }
 function changeAdminCode(id){
-  const a=ADMIN_ACCESS_CODES.find(x=>x.id===id);if(!a||a.role==="OWNER")return;
-  a.code=generateAccessCode();saveAccess();renderAdminAccess();
-  alert("Ny Access Code för "+a.name+":\n\n"+a.code);
+  const a=ADMIN_ACCESS_CODES.find(x=>x.id===id);
+  if(!a || a.role==="OWNER") return;
+
+  a.code=generateAccessCode();
+  saveAccess();
+  renderAdminAccess();
+
+  toast("Ny Access Code skapad för "+a.name+": "+a.code);
 }
 function toggleAdmin(id){
   const a=ADMIN_ACCESS_CODES.find(x=>x.id===id);if(!a||a.role==="OWNER")return;
@@ -6113,12 +6105,61 @@ function deleteAdmin(id){
   if(!confirm("Radera administratören och ogiltigförklara Access Code?"))return;
   ADMIN_ACCESS_CODES.splice(i,1);saveAccess();renderAdminAccess();toast("Admin raderad.");
 }
-function addAdmin(){
-  const name=prompt("Admin namn:");if(!name)return;
-  const email=prompt("Admin e-post:");if(!email)return;
-  const a={id:"admin-"+Date.now(),name:name.trim(),email:email.trim(),role:"ADMIN",code:generateAccessCode(),status:"Aktiv",permissions:["dashboard"]};
-  ADMIN_ACCESS_CODES.push(a);saveAccess();renderAdminAccess();
-  alert("Admin skapad.\n\nAccess Code:\n"+a.code);
+function showAdminCreateForm(){
+  const form=document.getElementById("adminCreateForm");
+  if(form){
+    form.style.display="block";
+    form.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+}
+
+function hideAdminCreateForm(){
+  const form=document.getElementById("adminCreateForm");
+  if(form) form.style.display="none";
+}
+
+function createAccessAdmin(){
+  if(!canManageAdmins()){
+    toast("Endast OWNER kan lägga till Admins.");
+    return;
+  }
+
+  const name=(document.getElementById("accessNewAdminName")?.value||"").trim();
+  const email=(document.getElementById("accessNewAdminEmail")?.value||"").trim();
+  const permissions=[...document.querySelectorAll(".access-new-permission:checked")].map(x=>x.value);
+
+  if(!name || !email){
+    toast("Fyll i namn och e-post.");
+    return;
+  }
+
+  if(!permissions.length){
+    toast("Välj minst en behörighet.");
+    return;
+  }
+
+  const a={
+    id:"admin-"+Date.now(),
+    name,
+    email,
+    role:"ADMIN",
+    code:generateAccessCode(),
+    status:"Aktiv",
+    permissions
+  };
+
+  ADMIN_ACCESS_CODES.push(a);
+  saveAccess();
+  renderAdminAccess();
+  hideAdminCreateForm();
+
+  const n=document.getElementById("accessNewAdminName");
+  const e=document.getElementById("accessNewAdminEmail");
+  if(n)n.value="";
+  if(e)e.value="";
+  document.querySelectorAll(".access-new-permission").forEach(x=>x.checked=false);
+
+  toast("Admin skapad. Access Code: "+a.code);
 }
 loadAccess();
 </script>
@@ -6919,6 +6960,10 @@ function showBackups(){
     deleteAdmin:"Raderar Admin",
     createAdmin:"Skapar Admin",
     addAdmin:"Öppnar Admin-formulär",
+    showAdminCreateForm:"Öppnar Admin-formulär",
+    createAccessAdmin:"Skapar Admin",
+    requestDeleteAccessAdmin:"Förbereder radering av Admin",
+    confirmDeleteAccessAdmin:"Raderar Admin",
     openCouponCreate:"Öppnar kupongformulär",
     createCoupon:"Skapar kupong",
     toggleCoupon:"Ändrar kupongstatus",
@@ -7056,6 +7101,20 @@ function showBackups(){
 
 })();
 </script>
+
+
+<style id="tidpunkt-v33-inline-admin">
+#adminCreateForm{
+  border:1px solid var(--line);
+}
+#adminCreateForm .field input{
+  width:100%;
+  box-sizing:border-box;
+}
+#adminAccessList .danger-box{
+  border-radius:10px;
+}
+</style>
 
 </body>
 </html>
